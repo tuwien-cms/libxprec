@@ -14,16 +14,11 @@ union double_pattern {
  */
 static bool greater_in_magnitude(double x, double y)
 {
-    if(std::numeric_limits<double>::is_iec559) {
-        static const uint64_t exp_mask = 0x7ff0000000000000UL;
-        double_pattern x_u = {x}, y_u = {y};
-        return (x_u.pattern & exp_mask) >= (y_u.pattern & exp_mask);
-    } else {
-        int x_exp, y_exp;
-        std::frexp(x, &x_exp);
-        std::frexp(y, &y_exp);
-        return x_exp >= y_exp;
-    }
+    static_assert(std::numeric_limits<double>::is_iec559);
+    double_pattern x_u = {x}, y_u = {y};
+
+    // Shift out sign bit
+    return (x_u.pattern << 1) >= (y_u.pattern << 1);
 }
 
 static bool greater_in_magnitude(DDouble x, DDouble y)

@@ -12,9 +12,15 @@
 #include <limits>
 #include <type_traits>
 
+class PowerOfTwo;
+class ExDouble;
+class DDouble;
 
 /**
- * Class for wrapping a power of two
+ * Class for wrapping a power of two.
+ *
+ * Double-double can be multiplied by powers of two much quicker and at no
+ * loss of precision, since we simply scale all hunks.
  */
 class PowerOfTwo
 {
@@ -40,6 +46,20 @@ private:
 };
 
 /**
+ * Class wrapping a double, but marking it for extended precision computation
+ *
+ */
+class ExDouble {
+public:
+    constexpr ExDouble(double x) : _x(x) { }
+
+    constexpr operator double () const { return _x; }
+
+private:
+    double _x;
+};
+
+/**
  * Class for double-double arithmetic.
  *
  * Emulates quadruple precision with a pair of doubles.  This roughly doubles
@@ -48,7 +68,6 @@ private:
  */
 class DDouble {
 public:
-    constexpr DDouble(float x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(double x=0) : _hi(x), _lo(0.0) { }
     constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
 
