@@ -12,6 +12,33 @@
 #include <limits>
 #include <type_traits>
 
+
+/**
+ * Class for wrapping a power of two
+ */
+class PowerOfTwo
+{
+public:
+    explicit constexpr PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
+
+    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b)
+    {
+        return PowerOfTwo(a._x * b._x);
+    }
+
+    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
+    {
+        return PowerOfTwo(a._x / b._x);
+    }
+
+    constexpr operator double () const { return _x; }
+
+private:
+    explicit constexpr PowerOfTwo(double x) : _x(x) { }
+
+    double _x;
+};
+
 /**
  * Class for double-double arithmetic.
  *
@@ -21,19 +48,37 @@
  */
 class DDouble {
 public:
+    constexpr DDouble(float x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(double x=0) : _hi(x), _lo(0.0) { }
     constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
 
-    constexpr DDouble(std::int64_t x) : _hi(x), _lo(x - _hi) { }
-    constexpr DDouble(std::uint64_t x) : _hi(x), _lo(x - _hi) { }
-    constexpr DDouble(std::int32_t x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(std::uint32_t x) : _hi(x), _lo(0.0) { }
+    // TODO: requires extended precision to work.
+    constexpr DDouble(int64_t x) : _hi(x), _lo((long double)x - _hi) {}
+    constexpr DDouble(uint64_t x) : _hi(x), _lo((long double)x - _hi) {}
+    constexpr DDouble(int32_t x) : _hi(x), _lo(0.0) { }
+    constexpr DDouble(uint32_t x) : _hi(x), _lo(0.0) { }
+    constexpr DDouble(int16_t x) : _hi(x), _lo(0.0) { }
+    constexpr DDouble(uint16_t x) : _hi(x), _lo(0.0) { }
+
+    // Ensure that trivially_*_constructible work.
+    DDouble(const DDouble&) = default;
+    DDouble(DDouble&&) = default;
+    DDouble& operator=(const DDouble &other) = default;
+    DDouble& operator=(DDouble &&other) = default;
 
     /**
      * Construct DDouble from hi and low part.
+     *
      * You MUST ensure that abs(hi) > epsilon * abs(lo).
      */
     constexpr DDouble(double hi, double lo) : _hi(hi), _lo(lo) { }
+
+    /**
+     * Construct DDouble from hi and low part.
+     *
+     * You MUST ensure that abs(a) >= abs(b).
+     */
+    static DDouble fast_sum(double a, double b);
 
     /** Perform DDouble-accurate sum of two doubles */
     static DDouble sum(double a, double b);
@@ -55,7 +100,7 @@ public:
 
     /** Convert DDouble to different type */
     template <typename T>
-    constexpr T as() const;
+    constexpr T as() const { return static_cast<T>(_hi) + static_cast<T>(_lo); }
 
     friend DDouble operator+(DDouble x, double y);
     friend DDouble operator+(DDouble x, DDouble y);
@@ -73,6 +118,14 @@ public:
     friend DDouble operator/(DDouble x, double y);
     friend DDouble operator/(DDouble x, DDouble y);
 
+    friend DDouble operator*(DDouble x, PowerOfTwo y) {
+        return DDouble(x.hi() * y, x.lo() * y);
+    }
+    friend DDouble operator*(PowerOfTwo x, DDouble y) { return y * x; }
+    friend DDouble operator/(DDouble x, PowerOfTwo y) {
+        return DDouble(x.hi() / y, x.lo() / y);
+    }
+
     DDouble &operator+=(double y) { return *this = *this + y; }
     DDouble &operator-=(double y) { return *this = *this - y; }
     DDouble &operator*=(double y) { return *this = *this * y; }
@@ -82,6 +135,9 @@ public:
     DDouble &operator-=(DDouble y) { return *this = *this - y; }
     DDouble &operator*=(DDouble y) { return *this = *this * y; }
     DDouble &operator/=(DDouble y) { return *this = *this / y; }
+
+    DDouble &operator*=(PowerOfTwo y) { return *this = *this * y; }
+    DDouble &operator/=(PowerOfTwo y) { return *this = *this / y; }
 
     friend bool operator==(DDouble x, DDouble y);
     friend bool operator!=(DDouble x, DDouble y);
@@ -102,13 +158,17 @@ public:
     friend bool operator>=(double x, DDouble y) { return DDouble(x) >= y; }
     friend bool operator> (double x, DDouble y) { return DDouble(x) > y; }
 
-protected:
-    static DDouble fast_sum(double a, double b);
+    friend void swap(DDouble &x, DDouble &y)
+    {
+        std::swap(x._hi, y._hi);
+        std::swap(x._lo, y._lo);
+    }
 
 private:
     double _hi;
     double _lo;
 };
+
 
 // C++ forbids overloading functions in the std namespace, which is why we
 // define it outside of that.
@@ -331,15 +391,6 @@ inline bool operator>(DDouble x, DDouble y)
 {
     return x.hi() > y.hi() || (x.hi() == y.hi() && x.lo() > y.lo());
 }
-
-template <>
-inline constexpr long double DDouble::as<long double>() const
-{
-    return (long double) hi() + lo();
-}
-
-template <> inline constexpr double DDouble::as<double>() const { return hi(); }
-template <> inline constexpr float DDouble::as<float>() const { return hi(); }
 
 inline DDouble ldexp(DDouble a, int n)
 {
