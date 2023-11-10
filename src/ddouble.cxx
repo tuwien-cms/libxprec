@@ -34,10 +34,10 @@ DDouble sqrt(DDouble a)
         return sqrt_hi;
 
     double x = 1.0 / sqrt_hi;
-    double ax = a.hi() * x;
-    DDouble ax_squared = DDouble::product(ax, ax);
+    ExDouble ax = a.hi() * x;
+    DDouble ax_squared = ax * ax;
     double diff = (a - ax_squared).hi() * x * 0.5;
-    return DDouble::sum(ax, diff);
+    return ax + diff;
 }
 
 DDouble hypot(DDouble x, DDouble y)

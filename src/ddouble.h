@@ -1,8 +1,5 @@
 /* Small double-double arithmetic library.
  *
- * Most of the basic numerical algorithms are directly lifted from:
- * M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
- *
  * Copyright (C) 2022 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
@@ -22,20 +19,12 @@ class DDouble;
  * Double-double can be multiplied by powers of two much quicker and at no
  * loss of precision, since we simply scale all hunks.
  */
-class PowerOfTwo
-{
+class PowerOfTwo {
 public:
     explicit constexpr PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
 
-    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b)
-    {
-        return PowerOfTwo(a._x * b._x);
-    }
-
-    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
-    {
-        return PowerOfTwo(a._x / b._x);
-    }
+    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
+    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
 
     constexpr operator double () const { return _x; }
 
@@ -48,12 +37,45 @@ private:
 /**
  * Class wrapping a double, but marking it for extended precision computation
  *
+ * Doing arithmetic with these objects, even though they hold only a double,
+ * will return a DDouble object and be accurate within double-double
+ * arithmetic. However, it is usually much faster than first converting an
+ * operand to a full double-double.
+ *
+ * Note that this means that arithmetic with these object DOES NOT return
+ * an object of this ExDouble, and therefore also in-place operators are not
+ * defined.
  */
 class ExDouble {
 public:
     constexpr ExDouble(double x) : _x(x) { }
 
     constexpr operator double () const { return _x; }
+
+    friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
+
+    /**
+     * Add small number to this.
+     *
+     * WARNING: You must ensure that b is small than this in magnitude!
+     */
+    DDouble fast_sum(double b) const;
+
+    friend DDouble operator+(ExDouble a, ExDouble b);
+    friend DDouble operator+(double a, ExDouble b);
+    friend DDouble operator+(ExDouble a, double b);
+
+    friend DDouble operator-(ExDouble a, ExDouble b);
+    friend DDouble operator-(ExDouble a, double b);
+    friend DDouble operator-(double a, ExDouble b);
+
+    friend DDouble operator*(ExDouble a, ExDouble b);
+    friend DDouble operator*(double a, ExDouble b);
+    friend DDouble operator*(ExDouble a, double b);
+
+    friend DDouble operator/(PowerOfTwo x, ExDouble y);
+
+    friend DDouble sqrt(ExDouble x);
 
 private:
     double _x;
@@ -89,38 +111,19 @@ public:
     /**
      * Construct DDouble from hi and low part.
      *
-     * You MUST ensure that abs(hi) > epsilon * abs(lo).
+     * WARNING: You MUST ensure that abs(hi) > epsilon * abs(lo).
      */
     constexpr DDouble(double hi, double lo) : _hi(hi), _lo(lo) { }
-
-    /**
-     * Construct DDouble from hi and low part.
-     *
-     * You MUST ensure that abs(a) >= abs(b).
-     */
-    static DDouble fast_sum(double a, double b);
-
-    /** Perform DDouble-accurate sum of two doubles */
-    static DDouble sum(double a, double b);
-
-    /** Perform DDouble-accurate product of two doubles */
-    static DDouble product(double a, double b);
-
-    /** Perform DDouble-accurate reciprocal (1/x) of a double x */
-    static DDouble reciprocal(double a);
-
-    /** Perform DDouble-accurate square root of a double x */
-    static DDouble sqrt(double a);
-
-    /** Get high part of the DDouble */
-    constexpr double hi() const { return _hi; }
-
-    /** Get low part of the DDouble */
-    constexpr double lo() const { return _lo; }
 
     /** Convert DDouble to different type */
     template <typename T>
     constexpr T as() const { return static_cast<T>(_hi) + static_cast<T>(_lo); }
+
+    /** Get high part of a ddouble */
+    constexpr double hi() const { return _hi; }
+
+    /** Get low part of a ddouble */
+    constexpr double lo() const { return _lo; }
 
     friend DDouble operator+(DDouble x, double y);
     friend DDouble operator+(DDouble x, DDouble y);
@@ -129,7 +132,8 @@ public:
     friend DDouble operator-(DDouble x, double y) { return x + (-y); }
     friend DDouble operator-(double x, DDouble y) { return x + (-y); }
     friend DDouble operator-(DDouble x, DDouble y) { return x + (-y); }
-    friend DDouble operator-(DDouble x) { return DDouble(-x.hi(), -x.lo()); }
+
+    friend DDouble operator-(DDouble x) { return DDouble(-x._hi, -x._lo); }
 
     friend DDouble operator*(DDouble x, double y);
     friend DDouble operator*(DDouble x, DDouble y);
@@ -138,13 +142,9 @@ public:
     friend DDouble operator/(DDouble x, double y);
     friend DDouble operator/(DDouble x, DDouble y);
 
-    friend DDouble operator*(DDouble x, PowerOfTwo y) {
-        return DDouble(x.hi() * y, x.lo() * y);
-    }
+    friend DDouble operator*(DDouble x, PowerOfTwo y);
     friend DDouble operator*(PowerOfTwo x, DDouble y) { return y * x; }
-    friend DDouble operator/(DDouble x, PowerOfTwo y) {
-        return DDouble(x.hi() / y, x.lo() / y);
-    }
+    friend DDouble operator/(DDouble x, PowerOfTwo y);
 
     DDouble &operator+=(double y) { return *this = *this + y; }
     DDouble &operator-=(double y) { return *this = *this - y; }
@@ -178,17 +178,12 @@ public:
     friend bool operator>=(double x, DDouble y) { return DDouble(x) >= y; }
     friend bool operator> (double x, DDouble y) { return DDouble(x) > y; }
 
-    friend void swap(DDouble &x, DDouble &y)
-    {
-        std::swap(x._hi, y._hi);
-        std::swap(x._lo, y._lo);
-    }
+    friend void swap(DDouble &x, DDouble &y);
 
 private:
     double _hi;
     double _lo;
 };
-
 
 // C++ forbids overloading functions in the std namespace, which is why we
 // define it outside of that.
@@ -269,223 +264,8 @@ public:
     static constexpr bool traps = false;
     static constexpr bool tinyness_before = false;
 };
+
 } /* namespace std */
 
 
-// ======================== Implementation ===========================
-
-inline DDouble DDouble::fast_sum(double a, double b)
-{
-    // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
-    // Algorithm 1: cost 3 flops
-    double s = a + b;
-    double z = s - a;
-    double t = b - z;
-    return DDouble(s, t);
-}
-
-inline DDouble DDouble::sum(double a, double b)
-{
-    // Algorithm 2: cost 6 flops
-    double s = a + b;
-    double aprime = s - b;
-    double bprime = s - aprime;
-    double delta_a = a - aprime;
-    double delta_b = b - bprime;
-    double t = delta_a + delta_b;
-    return DDouble(s, t);
-}
-
-inline DDouble DDouble::product(double a, double b)
-{
-    // Algorithm 3: cost 2 flops
-    double pi = a * b;
-    double rho = std::fma(a, b, -pi);
-    return DDouble(pi, rho);
-}
-
-inline DDouble DDouble::reciprocal(double a)
-{
-    // Lifted from DoubleFloats.jl
-    double hi = 1 / a;
-    double lo = std::fma(-hi, a, 1.0) / a;
-    return DDouble(hi, lo);
-}
-
-inline DDouble DDouble::sqrt(double a)
-{
-    // Lifted from DoubleFloats.jl
-    double hi = std::sqrt(a);
-    double lo = std::fma(-hi, hi, a) / (2 * hi);
-    return DDouble(hi, lo);
-}
-
-inline DDouble operator+(DDouble x, double y)
-{
-    // Algorithm 4: cost 10 flops, error 2 u^2
-    DDouble s = DDouble::sum(x.hi(), y);
-    double v = x.lo() + s.lo();
-    return DDouble::fast_sum(s.hi(), v);
-}
-
-inline DDouble operator+(DDouble x, DDouble y)
-{
-    // Algorithm 6: cost 20 flops, error 3 u^2 + 13 u^3
-    DDouble s = DDouble::sum(x.hi(), y.hi());
-    DDouble t = DDouble::sum(x.lo(), y.lo());
-    double c = s.lo() + t.hi();
-    DDouble v = DDouble::fast_sum(s.hi(), c);
-    double w = t.lo() + v.lo();
-    return DDouble::fast_sum(v.hi(), w);
-}
-
-inline DDouble operator*(DDouble x, double y)
-{
-    // Algorithm 9: cost 6 flops, error 2 u^2
-    DDouble c = DDouble::product(x.hi(), y);
-    double cl3 = std::fma(x.lo(), y, c.lo());
-    return DDouble::fast_sum(c.hi(), cl3);
-}
-
-inline DDouble operator*(DDouble x, DDouble y)
-{
-    // Algorithm 12: cost 9 flops, error 5 u^2
-    DDouble c = DDouble::product(x.hi(), y.hi());
-    double tl0 = x.lo() * y.lo();
-    double tl1 = std::fma(x.hi(), y.lo(), tl0);
-    double cl2 = std::fma(x.lo(), y.hi(), tl1);
-    double cl3 = c.lo() + cl2;
-    return DDouble::fast_sum(c.hi(), cl3);
-}
-
-inline DDouble operator/(DDouble x, double y)
-{
-    // Algorithm 15: cost 10 flops, error 3 u^2
-    double th = x.hi() / y;
-    DDouble pi = DDouble::product(th, y);
-    double delta_h = x.hi() - pi.hi();
-    double delta_tee = delta_h - pi.lo();
-    double delta = delta_tee + x.lo();
-    double tl = delta / y;
-    return DDouble::fast_sum(th, tl);
-}
-
-inline DDouble operator/(DDouble x, DDouble y)
-{
-    // Algorithm 18: cost 31 flops, error 10 u^2
-    double th = 1 / y.hi();
-    double rh = 1 - y.hi() * th;
-    double rl = -y.lo() * th;
-    DDouble e = DDouble::fast_sum(rh, rl);
-    DDouble delta = e * th;
-    DDouble m = delta + th;
-    return x * m;
-}
-
-inline bool operator==(DDouble x, DDouble y)
-{
-    return x.hi() == y.hi() && x.lo() == y.lo();
-}
-
-inline bool operator!=(DDouble x, DDouble y)
-{
-    return x.hi() != y.hi() || x.lo() != y.lo();
-}
-
-inline bool operator<=(DDouble x, DDouble y)
-{
-    return x.hi() < y.hi() || (x.hi() == y.hi() && x.lo() <= y.lo());
-}
-
-inline bool operator<(DDouble x, DDouble y)
-{
-    return x.hi() < y.hi() || (x.hi() == y.hi() && x.lo() < y.lo());
-}
-
-inline bool operator>=(DDouble x, DDouble y)
-{
-    return x.hi() > y.hi() || (x.hi() == y.hi() && x.lo() >= y.lo());
-}
-
-inline bool operator>(DDouble x, DDouble y)
-{
-    return x.hi() > y.hi() || (x.hi() == y.hi() && x.lo() > y.lo());
-}
-
-inline DDouble ldexp(DDouble a, int n)
-{
-    return DDouble(std::ldexp(a.hi(), n), std::ldexp(a.lo(), n));
-}
-
-inline bool signbit(DDouble a)
-{
-    return std::signbit(a.hi());
-}
-
-inline DDouble copysign(DDouble mag, double sgn)
-{
-    // The sign is determined by the hi part, however, the sign of hi and lo
-    // need not be the same, so we cannot merely broadcast copysign to both
-    // parts.
-    return signbit(mag) != std::signbit(sgn) ? -mag : mag;
-}
-
-inline DDouble copysign(DDouble mag, DDouble sgn)
-{
-    return copysign(mag, sgn.hi());
-}
-
-inline DDouble copysign(double mag, DDouble sgn)
-{
-    return DDouble(std::copysign(mag, sgn.hi()));
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::min() noexcept
-{
-    // Whereas the maximum exponent is the same for double and DDouble,
-    // Denormalization in the low part means that the min exponent for
-    // normalized values is lower.
-    return DDouble(_double::min() / _double::epsilon());
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::max() noexcept
-{
-    return DDouble(_double::max(),
-                    _double::max() * _double::epsilon() / _double::radix);
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::lowest() noexcept
-{
-    return DDouble(_double::lowest(),
-                    _double::lowest() / _double::epsilon() / _double::radix);
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::epsilon() noexcept
-{
-    return DDouble(_double::epsilon() * _double::epsilon() / _double::radix);
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::round_error() noexcept
-{
-    return DDouble(_double::round_error());
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::infinity() noexcept
-{
-    return DDouble(_double::infinity(), _double::infinity());
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::quiet_NaN() noexcept
-{
-    return DDouble(_double::quiet_NaN(), _double::quiet_NaN());
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::signaling_NaN() noexcept
-{
-    return DDouble(_double::signaling_NaN(), _double::signaling_NaN());
-}
-
-constexpr DDouble std::numeric_limits<DDouble>::denorm_min() noexcept
-{
-    return DDouble(_double::denorm_min());
-}
+#include "ddouble-impl.h"
