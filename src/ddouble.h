@@ -63,8 +63,9 @@ public:
     // Ensure that trivially_*_constructible work.
     DDouble(const DDouble&) = default;
     DDouble(DDouble&&) = default;
-    DDouble& operator=(const DDouble &other) = default;
-    DDouble& operator=(DDouble &&other) = default;
+    DDouble &operator=(const DDouble &other) = default;
+    DDouble &operator=(DDouble &&other) = default;
+    ~DDouble() = default;
 
     /**
      * Construct DDouble from hi and low part.
