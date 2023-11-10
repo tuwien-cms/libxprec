@@ -1,31 +1,6 @@
 #include "ddouble.h"
 #include <cstring>
 
-union double_pattern {
-    double number;
-    uint64_t pattern;
-};
-
-/**
- * Return true if x is greater or equal in magnitude as y.
- *
- * Return true if the xponent of y does not exceed the exponent of x.  NaN
- * and Inf are considered maximum magnitude, 0 is considered minimum magnitude.
- */
-static bool greater_in_magnitude(double x, double y)
-{
-    static_assert(std::numeric_limits<double>::is_iec559);
-    double_pattern x_u = {x}, y_u = {y};
-
-    // Shift out sign bit
-    return (x_u.pattern << 1) >= (y_u.pattern << 1);
-}
-
-static bool greater_in_magnitude(DDouble x, DDouble y)
-{
-    return greater_in_magnitude(x.hi(), y.hi());
-}
-
 DDouble sqrt(DDouble a)
 {
     // From: Karp, High Precision Division and Square Root, 1993
@@ -60,15 +35,15 @@ DDouble hypot(DDouble x, DDouble y)
         // For large values, scale down to avoid overflow
         x *= SMALL;
         y *= SMALL;
-        return sqrt(x * x + y * y) * LARGE;
+        return sqrt((x * x).add_small(y * y)) * LARGE;
     } else if (greater_in_magnitude(SMALL, x.hi())) {
         // For small values, scale up to avoid underflow
         x *= LARGE;
         y *= LARGE;
-        return sqrt(x * x + y * y) * SMALL;
+        return sqrt((x * x).add_small(y * y)) * SMALL;
     } else {
         // We're fine
-        return sqrt(x * x + y * y);
+        return sqrt((x * x).add_small(y * y));
     }
 }
 

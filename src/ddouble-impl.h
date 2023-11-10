@@ -10,6 +10,30 @@
  */
 #pragma once
 #include "ddouble.h"
+#include <cassert>
+
+/**
+ * Return true if x is greater or equal in magnitude as y.
+ *
+ * Return true if the xponent of y does not exceed the exponent of x.  NaN
+ * and Inf are considered maximum magnitude, 0 is considered minimum magnitude.
+ */
+inline bool greater_in_magnitude(double x, double y)
+{
+    static_assert(std::numeric_limits<double>::is_iec559);
+    union {
+        double number;
+        uint64_t pattern;
+    } x_u = {x}, y_u = {y};
+
+    // Shift out sign bit
+    return (x_u.pattern << 1) >= (y_u.pattern << 1);
+}
+
+inline bool greater_in_magnitude(DDouble x, DDouble y)
+{
+    return greater_in_magnitude(x.hi(), y.hi());
+}
 
 // -------------------------------------------------------------------------
 // PowerOfTwo
@@ -24,9 +48,10 @@ inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
     return PowerOfTwo(a._x / b._x);
 }
 
-inline DDouble ExDouble::fast_sum(double b) const {
+inline DDouble ExDouble::add_small(double b) const {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
+    assert(greater_in_magnitude(_x, b));
     double s = _x + b;
     double z = s - _x;
     double t = b - z;
@@ -101,7 +126,7 @@ inline DDouble operator+(DDouble x, double y)
     // Algorithm 4: cost 10 flops, error 2 u^2
     DDouble s = ExDouble(x._hi) + y;
     double v = x._lo + s._lo;
-    return ExDouble(s._hi).fast_sum(v);
+    return ExDouble(s._hi).add_small(v);
 }
 
 inline DDouble operator+(DDouble x, DDouble y)
@@ -110,9 +135,28 @@ inline DDouble operator+(DDouble x, DDouble y)
     DDouble s = ExDouble(x._hi) + y._hi;
     DDouble t = ExDouble(x._lo) + y._lo;
     double c = s._lo + t._hi;
-    DDouble v = ExDouble(s._hi).fast_sum(c);
+    DDouble v = ExDouble(s._hi).add_small(c);
     double w = t._lo + v._lo;
-    return ExDouble(v._hi).fast_sum(w);
+    return ExDouble(v._hi).add_small(w);
+}
+
+inline DDouble DDouble::add_small(double y)
+{
+    // Algorithm 4 modified: cost 7 flops, error 2 u^2
+    DDouble s = ExDouble(_hi).add_small(y);
+    double v = _lo + s._lo;
+    return ExDouble(s._hi).add_small(v);
+}
+
+inline DDouble DDouble::add_small(DDouble y)
+{
+    // Algorithm 6: cost 17 flops, error 3 u^2 + 13 u^3
+    DDouble s = ExDouble(_hi).add_small(y._hi);
+    DDouble t = ExDouble(_lo) + y._lo;
+    double c = s._lo + t._hi;
+    DDouble v = ExDouble(s._hi).add_small(c);
+    double w = t._lo + v._lo;
+    return ExDouble(v._hi).add_small(w);
 }
 
 inline DDouble operator*(DDouble x, double y)
@@ -120,7 +164,7 @@ inline DDouble operator*(DDouble x, double y)
     // Algorithm 9: cost 6 flops, error 2 u^2
     DDouble c = ExDouble(x._hi) * y;
     double cl3 = std::fma(x._lo, y, c._lo);
-    return ExDouble(c.hi()).fast_sum(cl3);
+    return ExDouble(c.hi()).add_small(cl3);
 }
 
 inline DDouble operator*(DDouble x, DDouble y)
@@ -131,7 +175,7 @@ inline DDouble operator*(DDouble x, DDouble y)
     double tl1 = std::fma(x._hi, y._lo, tl0);
     double cl2 = std::fma(x._lo, y._hi, tl1);
     double cl3 = c._lo + cl2;
-    return ExDouble(c._hi).fast_sum(cl3);
+    return ExDouble(c._hi).add_small(cl3);
 }
 
 inline DDouble operator/(DDouble x, double y)
@@ -143,7 +187,7 @@ inline DDouble operator/(DDouble x, double y)
     double delta_tee = delta_h - pi._lo;
     double delta = delta_tee + x._lo;
     double tl = delta / y;
-    return th.fast_sum(tl);
+    return th.add_small(tl);
 }
 
 inline DDouble operator/(DDouble x, DDouble y)
@@ -152,7 +196,7 @@ inline DDouble operator/(DDouble x, DDouble y)
     double th = 1 / y._hi;
     ExDouble rh = 1 - y._hi * th;
     ExDouble rl = -y._lo * th;
-    DDouble e = rh.fast_sum(rl);
+    DDouble e = rh.add_small(rl);
     DDouble delta = e * th;
     DDouble m = delta + th;
     return x * m;

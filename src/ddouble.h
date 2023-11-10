@@ -59,7 +59,7 @@ public:
      *
      * WARNING: You must ensure that b is small than this in magnitude!
      */
-    DDouble fast_sum(double b) const;
+    DDouble add_small(double b) const;
 
     friend DDouble operator+(ExDouble a, ExDouble b);
     friend DDouble operator+(double a, ExDouble b);
@@ -124,6 +124,9 @@ public:
 
     /** Get low part of a ddouble */
     constexpr double lo() const { return _lo; }
+
+    DDouble add_small(double y);
+    DDouble add_small(DDouble y);
 
     friend DDouble operator+(DDouble x, double y);
     friend DDouble operator+(DDouble x, DDouble y);
