@@ -30,6 +30,7 @@ FetchContent_MakeAvailable(Catch2)
 find_package(MPFR REQUIRED)
 
 add_executable(tests
+    test/use-mpfr.cxx
     test/arith.cxx
     test/convert.cxx
     )

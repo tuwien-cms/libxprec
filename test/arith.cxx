@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include <mpfr.h>
+#include "use-mpfr.h"
 
 #include "ddouble.h"
 
