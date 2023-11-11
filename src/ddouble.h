@@ -125,7 +125,18 @@ public:
     /** Get low part of a ddouble */
     constexpr double lo() const { return _lo; }
 
+    /**
+     * Add small number to this.
+     *
+     * WARNING: You must ensure that b is small than this in magnitude!
+     */
     DDouble add_small(double y);
+
+    /**
+     * Add small number to this.
+     *
+     * WARNING: You must ensure that b is small than this in magnitude!
+     */
     DDouble add_small(DDouble y);
 
     friend DDouble operator+(DDouble x, double y);

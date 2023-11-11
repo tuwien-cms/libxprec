@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/config/cmake")
 
 project(
     ddouble
@@ -25,9 +26,14 @@ FetchContent_Declare(
     )
 FetchContent_MakeAvailable(Catch2)
 
+# MPFR is required for tests
+find_package(MPFR REQUIRED)
+
 add_executable(tests
     test/arith.cxx
     test/convert.cxx
     )
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain ddouble)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(tests PRIVATE gmp)
+target_link_libraries(tests PRIVATE ddouble)
 target_include_directories(tests PRIVATE src)

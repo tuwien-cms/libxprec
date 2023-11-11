@@ -48,7 +48,8 @@ inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
     return PowerOfTwo(a._x / b._x);
 }
 
-inline DDouble ExDouble::add_small(double b) const {
+inline DDouble ExDouble::add_small(double b) const
+{
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
     assert(greater_in_magnitude(_x, b));
