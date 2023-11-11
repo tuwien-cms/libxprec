@@ -38,8 +38,8 @@ find_library(MPFR_LIBRARY
     )
 mark_as_advanced(MPFR_LIBRARY)
 
-function(mpfr_find_version version)
-    set(filename "${MPFR_INCLUDE_DIR}/mpfr.h")
+# Function to extract version string from header file
+function(mpfr_find_version version filename)
     file(READ "${filename}" header)
 
     string(REGEX MATCH
@@ -60,10 +60,12 @@ function(mpfr_find_version version)
     set("${version}" "${_version}" PARENT_SCOPE)
 endfunction()
 
-mpfr_find_version(MPFR_VERSION)
+if(MPFR_INCLUDE_DIR)
+    mpfr_find_version(MPFR_VERSION "${MPFR_INCLUDE_DIR}/mpfr.h")
+endif()
 
 find_package_handle_standard_args(MPFR
-    REQUIRED_VARS MPFR_INCLUDE_DIR MPFR_LIBRARY
+    REQUIRED_VARS MPFR_LIBRARY MPFR_INCLUDE_DIR
     VERSION_VAR MPFR_VERSION
     )
 
