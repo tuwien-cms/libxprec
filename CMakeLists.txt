@@ -34,6 +34,6 @@ add_executable(tests
     test/convert.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(tests PRIVATE mpfr)
+target_link_libraries(tests PRIVATE MPFR::MPFR)
 target_link_libraries(tests PRIVATE ddouble)
 target_include_directories(tests PRIVATE src)

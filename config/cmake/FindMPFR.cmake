@@ -1,55 +1,81 @@
 # Find MPFR library
 #
+# Understands the following envirnoment variables:
+#
+#  - MPFR_ROOT         : path to mpfr
+#
+# Allows the following cache variables (detected by default):
+#
+#  - MPFR_INCLUDE_DIR  : directory to include file
+#  - MPFR_LIBRARY      : path to library
+#
 # Sets the following variables:
 #
+#  - MPFR_FOUND        : if MPFR has been found
 #  - MPFR_INCLUDE_DIRS : header files
 #  - MPFR_LIBRARIES    : libraries
 #  - MPFR_VERSION      : version of the libarary
 #
+# Imported targets:
+#
+#  - MPFR::MPFR        : imported target if library has been found
+#
 include(FindPackageHandleStandardArgs)
 
-find_path(
-    MPFR_INCLUDE_DIRS
+find_path(MPFR_INCLUDE_DIR
     NAMES mpfr.h
-    PATHS ${INCLUDE_INSTALL_DIR}
-    DOC "GNU MPFR - include directories")
+    HINTS ENV MPFR_ROOT
+    PATH_SUFFIXES include
+    DOC "GNU MPFR - include directory"
+    )
+mark_as_advanced(MPFR_INCLUDE_DIR)
 
-find_library(
-    MPFR_LIBRARIES
+find_library(MPFR_LIBRARY
     NAMES mpfr
-    PATHS ${LIB_INSTALL_DIR}
-    DOC "GNU MPFR - libraries")
+    HINTS ENV MPFR_ROOT
+    PATH_SUFFIXES lib
+    DOC "GNU MPFR - library"
+    )
+mark_as_advanced(MPFR_LIBRARY)
 
 function(mpfr_find_version version)
-    foreach(incdir "${MPFR_INCLUDE_DIRS}")
-        set(filename "${incdir}/mpfr.h")
-        if (EXISTS "${filename}")
-            file(READ "${filename}" header)
+    set(filename "${MPFR_INCLUDE_DIR}/mpfr.h")
+    file(READ "${filename}" header)
 
-            string(REGEX MATCH
-                "define[ \t]+MPFR_VERSION_MAJOR[ \t]+([0-9]+)"
-                match "${header}")
-            set(_version "${CMAKE_MATCH_1}")
+    string(REGEX MATCH
+        "define[ \t]+MPFR_VERSION_MAJOR[ \t]+([0-9]+)"
+        match "${header}")
+    set(_version "${CMAKE_MATCH_1}")
 
-            string(REGEX MATCH
-                "define[ \t]+MPFR_VERSION_MINOR[ \t]+([0-9]+)"
-                match "${header}")
-            set(_version "${_version}.${CMAKE_MATCH_1}")
+    string(REGEX MATCH
+        "define[ \t]+MPFR_VERSION_MINOR[ \t]+([0-9]+)"
+        match "${header}")
+    set(_version "${_version}.${CMAKE_MATCH_1}")
 
-            string(REGEX MATCH
-                "define[ \t]+MPFR_VERSION_PATCHLEVEL[ \t]+([0-9]+)"
-                match "${header}")
-            set(_version "${_version}.${CMAKE_MATCH_1}")
+    string(REGEX MATCH
+        "define[ \t]+MPFR_VERSION_PATCHLEVEL[ \t]+([0-9]+)"
+        match "${header}")
+    set(_version "${_version}.${CMAKE_MATCH_1}")
 
-            set("${version}" "${_version}" PARENT_SCOPE)
-            break()
-        endif()
-    endforeach()
+    set("${version}" "${_version}" PARENT_SCOPE)
 endfunction()
 
 mpfr_find_version(MPFR_VERSION)
 
 find_package_handle_standard_args(MPFR
-    REQUIRED_VARS MPFR_INCLUDE_DIRS MPFR_LIBRARIES
+    REQUIRED_VARS MPFR_INCLUDE_DIR MPFR_LIBRARY
     VERSION_VAR MPFR_VERSION
     )
+
+if(MPFR_FOUND)
+    set(MPFR_INCLUDE_DIRS "${MPFR_INCLUDE_DIR}")
+    set(MPFR_LIBRARIES "${MPFR_LIBRARY}")
+
+    if(NOT TARGET MPFR::MPFR)
+        add_library(MPFR::MPFR UNKNOWN IMPORTED)
+        set_target_properties(MPFR::MPFR PROPERTIES
+            IMPORTED_LOCATION "${MPFR_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${MPFR_INCLUDE_DIR}"
+            )
+    endif()
+endif()
