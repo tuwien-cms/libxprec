@@ -6,9 +6,9 @@ TEST_CASE("basic", "[mpfr]")
 {
     MPFloat x, y;
 
-    x = 3.0;
+    x = 3;
     REQUIRE(x == 3.0);
-    REQUIRE(x + x == 2.0 * x);
+    REQUIRE(x + x == x * 2.0);
     REQUIRE(x - x == 0.0);
 
     y = x;
