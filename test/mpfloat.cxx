@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include "catch2-addons.h"
 #include "mpfloat.h"
 
 TEST_CASE("basic", "[mpfr]")
@@ -15,4 +16,14 @@ TEST_CASE("basic", "[mpfr]")
 
     x = 3.5;
     REQUIRE(x != y);
+}
+
+TEST_CASE("test_that", "[mpfr]")
+{
+    MPFloat x = 1.0;
+    MPFloat y = x + 1e-30;
+
+    REQUIRE(x != y);
+    REQUIRE_THAT(x, WithinAbs(y, 1e-25));
+    REQUIRE_THAT(x, WithinRel(y, 1e-30));
 }

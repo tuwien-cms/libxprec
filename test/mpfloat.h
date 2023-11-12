@@ -197,11 +197,20 @@ public:
     _DECLARE_UNARY_OP(sinpi, mpfr_sinpi)
     _DECLARE_UNARY_OP(tanpi, mpfr_tanpi)
 
-private:
-    mpfr_ptr _x;
+    #define _DECLARE_BINARY_FUNC(op, func)                                   \
+        friend MPFloat op(const MPFloat &left, const MPFloat &right) {       \
+            return MPFloat::binary_op(                                       \
+                func, (mpfr_srcptr)left._x, (mpfr_srcptr)right._x);          \
+        }
+
+    _DECLARE_BINARY_FUNC(atan2, mpfr_atan2)
+    _DECLARE_BINARY_FUNC(hypot, mpfr_hypot)
+    _DECLARE_BINARY_FUNC(pow, mpfr_pow)
 
     static const mpfr_prec_t precision = 140;
     static const mpfr_rnd_t round = MPFR_RNDN;
+private:
+    mpfr_ptr _x;
 
     template <typename L, typename R>
     static MPFloat binary_op(int (*op)(mpfr_ptr, L, R, mpfr_rnd_t),
