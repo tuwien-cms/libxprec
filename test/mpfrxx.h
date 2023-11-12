@@ -71,7 +71,7 @@ public:
         friend MPFloat op(long right, const MPFloat &left) {                 \
             return MPFloat::binary_op(                                       \
                 mpfr_ ## func ## _si, (mpfr_srcptr)left._x, right);          \
-        }                                                                    \
+        }
 
     #define _DECLARE_BINARY_OP_LEFT(op, func)                                \
         friend MPFloat op(double right, const MPFloat &left) {               \
@@ -85,7 +85,7 @@ public:
         friend MPFloat op(long right, const MPFloat &left) {                 \
             return MPFloat::binary_op(                                       \
                 mpfr_si_ ## func, right, (mpfr_srcptr)left._x);              \
-        }                                                                    \
+        }
 
     _DECLARE_BINARY_OP_COMM(operator+, add)
     _DECLARE_BINARY_OP_LEFT(operator-, sub)
@@ -99,12 +99,24 @@ public:
         }                                                                    \
         MPFloat &op(double right) {                                          \
             return inplace_op(mpfr_ ## func ## _d, right);                   \
-        }                                                                    \
+        }
 
     _DECLARE_INPLACE_OP(operator+=, add)
     _DECLARE_INPLACE_OP(operator-=, sub)
     _DECLARE_INPLACE_OP(operator*=, mul)
     _DECLARE_INPLACE_OP(operator/=, div)
+
+
+    #define _DECLARE_RELATIONAL_OP(op, func)                                 \
+        friend bool op(const MPFloat &left, const MPFloat &right) {          \
+            return mpfr_ ## func ## _p(left._x, right._x);                   \
+        }
+
+    _DECLARE_RELATIONAL_OP(operator<,  less)
+    _DECLARE_RELATIONAL_OP(operator>,  greater)
+    _DECLARE_RELATIONAL_OP(operator<=, lessequal)
+    _DECLARE_RELATIONAL_OP(operator>=, greaterequal)
+    _DECLARE_RELATIONAL_OP(operator==, equal)
 
 private:
     mpfr_ptr _x;
@@ -114,7 +126,7 @@ private:
 
     template <typename L, typename R>
     static MPFloat binary_op(int (*op)(mpfr_ptr, L, R, mpfr_rnd_t), 
-                                       L left, R right)
+                             L left, R right)
     {
         MPFloat res;
         op(res._x, left, right, round);
@@ -128,5 +140,4 @@ private:
         op(_x, _x, right, round);
         return *this;
     }
-
 };
