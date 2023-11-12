@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include "use-mpfr.h"
+#include "mpfrxx.h"
 
 #include "ddouble.h"
 
@@ -43,4 +44,8 @@ TEST_CASE("mpfr", "")
     mpfr_clear (t);
     mpfr_clear (u);
     mpfr_free_cache ();
+
+    MPFloat x;
+    MPFloat y = x;
+    x = y;
 }
