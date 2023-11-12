@@ -14,8 +14,6 @@ public:
             throw std::runtime_error("margin must be non-negative");
     }
 
-    // Performs equivalent check of std::fabs(lhs - rhs) <= margin
-    // But without the subtraction to allow for INFINITY in comparison
     bool match(const T &matchee) const override
     {
         return abs(matchee - _target) <= _margin;

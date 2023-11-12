@@ -22,8 +22,17 @@ public:
     MPFloat(float x) : MPFloat() { *this = x; }
     MPFloat(double x) : MPFloat() { *this = x; }
     MPFloat(long double x) : MPFloat() { *this = x; }
+    MPFloat(bool x) : MPFloat() { *this = x; }
+    MPFloat(unsigned char x) : MPFloat() { *this = x; }
+    MPFloat(unsigned short x) : MPFloat() { *this = x; }
+    MPFloat(unsigned int x) : MPFloat() { *this = x; }
     MPFloat(unsigned long x) : MPFloat() { *this = x; }
+    MPFloat(unsigned long long x) : MPFloat() { *this = x; }
+    MPFloat(signed char x) : MPFloat() { *this = x; }
+    MPFloat(short x) : MPFloat() { *this = x; }
+    MPFloat(int x) : MPFloat() { *this = x; }
     MPFloat(long x) : MPFloat() { *this = x; }
+    MPFloat(long long x) : MPFloat() { *this = x; }
 
     MPFloat(const MPFloat &other) : MPFloat() { mpfr_set(_x, other._x, round); }
 
@@ -51,8 +60,17 @@ public:
     _DECLARE_ASSIGN(float, mpfr_set_flt)
     _DECLARE_ASSIGN(double, mpfr_set_d)
     _DECLARE_ASSIGN(long double, mpfr_set_ld)
+    _DECLARE_ASSIGN(bool, mpfr_set_ui)
+    _DECLARE_ASSIGN(unsigned char, mpfr_set_ui)
+    _DECLARE_ASSIGN(unsigned short, mpfr_set_ui)
+    _DECLARE_ASSIGN(unsigned int, mpfr_set_ui)
     _DECLARE_ASSIGN(unsigned long, mpfr_set_ui)
+    _DECLARE_ASSIGN(unsigned long long, mpfr_set_uj)
+    _DECLARE_ASSIGN(signed char, mpfr_set_si)
+    _DECLARE_ASSIGN(short, mpfr_set_si)
+    _DECLARE_ASSIGN(int, mpfr_set_si)
     _DECLARE_ASSIGN(long, mpfr_set_si)
+    _DECLARE_ASSIGN(long long, mpfr_set_sj)
 
 
     #define _DECLARE_BINARY_OP_RIGHT(op, func)                               \
@@ -197,6 +215,7 @@ public:
     _DECLARE_UNARY_OP(sinpi, mpfr_sinpi)
     _DECLARE_UNARY_OP(tanpi, mpfr_tanpi)
 
+
     #define _DECLARE_BINARY_FUNC(op, func)                                   \
         friend MPFloat op(const MPFloat &left, const MPFloat &right) {       \
             return MPFloat::binary_op(                                       \
@@ -207,8 +226,10 @@ public:
     _DECLARE_BINARY_FUNC(hypot, mpfr_hypot)
     _DECLARE_BINARY_FUNC(pow, mpfr_pow)
 
+
     static const mpfr_prec_t precision = 140;
     static const mpfr_rnd_t round = MPFR_RNDN;
+
 private:
     mpfr_ptr _x;
 
