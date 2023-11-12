@@ -7,9 +7,9 @@ TEST_CASE("basic", "[mpfr]")
     MPFloat x, y;
 
     x = 3;
-    REQUIRE(x == 3.0);
-    REQUIRE(x + x == x * 2.0);
-    REQUIRE(x - x == 0.0);
+    REQUIRE(x == 3);
+    REQUIRE(x + x == x * 2);
+    REQUIRE(x - x == 0);
 
     y = x;
     REQUIRE(x == y);
@@ -20,7 +20,7 @@ TEST_CASE("basic", "[mpfr]")
 
 TEST_CASE("test_that", "[mpfr]")
 {
-    MPFloat x = 1.0;
+    MPFloat x = 1;
     MPFloat y = x + 1e-30;
 
     REQUIRE(x != y);
