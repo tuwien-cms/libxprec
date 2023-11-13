@@ -12,6 +12,8 @@
 #include "ddouble.h"
 #include <cassert>
 
+#include <iostream>
+
 /**
  * Return true if x is greater or equal in magnitude as y.
  *
@@ -52,7 +54,7 @@ inline DDouble ExDouble::add_small(double b) const
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
-    assert(greater_in_magnitude(_x, b));
+    assert(_x == 0 || greater_in_magnitude(_x, b));
     double s = _x + b;
     double z = s - _x;
     double t = b - z;
