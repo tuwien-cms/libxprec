@@ -31,6 +31,13 @@ TEST_CASE("greater_in_magnitude", "")
     REQUIRE(!greater_in_magnitude(1e200, NAN));
 }
 
+TEST_CASE("Relational", "[rel]")
+{
+    REQUIRE(DDouble(1.0) > 0);
+    REQUIRE(DDouble(1.0) - ldexp(1.0, -80) < 1);
+    REQUIRE(DDouble(3.0) <= DDouble(3.0));
+}
+
 TEST_CASE("Divide", "[arith]")
 {
     REQUIRE((DDouble(3) / DDouble(2)).as<double>() == 1.5);

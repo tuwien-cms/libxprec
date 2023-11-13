@@ -16,6 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(ddouble SHARED
     src/ddouble.cxx
     )
+target_compile_options(ddouble PRIVATE -Wall -Wextra)
+
 
 # Require Catch2 for tests
 include(FetchContent)
@@ -38,3 +40,4 @@ target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)
 target_link_libraries(tests PRIVATE ddouble)
 target_include_directories(tests PRIVATE src)
+target_compile_options(tests PRIVATE -Wall -Wextra)

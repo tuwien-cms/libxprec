@@ -3,7 +3,7 @@
 
 TEST_CASE("int", "[convert]" )
 {
-    int64_t large = 1L << 63 - 1;
+    int64_t large = (1UL << 63) - 1;
     REQUIRE(DDouble(large).as<int64_t>() == large);
     REQUIRE(DDouble(-large).as<int64_t>() == -large);
 
