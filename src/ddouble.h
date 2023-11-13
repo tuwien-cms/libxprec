@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <iostream>
 #include <type_traits>
 
 class PowerOfTwo;
@@ -193,6 +194,8 @@ public:
     friend bool operator> (double x, DDouble y) { return DDouble(x) > y; }
 
     friend void swap(DDouble &x, DDouble &y);
+
+    friend std::ostream &operator<<(std::ostream &out, DDouble x);
 
 private:
     double _hi;

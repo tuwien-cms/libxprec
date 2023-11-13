@@ -58,5 +58,5 @@ TEST_CASE("hypot", "[fn]")
     CMP_BINARY(hypot, ldexp(3.0, 600), ldexp(1.0, 570), 1e-31);
     CMP_BINARY(hypot, ldexp(-3.0, 600), ldexp(1.0, 640), 1e-31);
     CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1e-31);
-    CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(9.0, -640), 1e-31);
+    CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1e-31);
 }

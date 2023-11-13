@@ -1,7 +1,10 @@
 #pragma once
-#include <new>
-#include <utility>
 #include <cstdlib>
+#include <iostream>
+#include <new>
+#include <sstream>
+#include <string>
+#include <utility>
 
 #include <mpfr.h>
 
@@ -68,6 +71,13 @@ public:
         *this = x.hi();
         *this += x.lo();
         return *this;
+    }
+    DDouble as_ddouble() const
+    {
+        double hi = mpfr_get_d(_x, round);
+        MPFloat lo_f = (*this) - hi;
+        double lo = mpfr_get_d(lo_f._x, round);
+        return DDouble(hi, lo);
     }
 
     #define _DECLARE_BINARY_OP_RIGHT(op, func)                               \
@@ -230,6 +240,20 @@ public:
     _DECLARE_BINARY_FUNC(pow, mpfr_pow)
 
 
+    friend std::ostream &operator<<(std::ostream &out, const MPFloat &x)
+    {
+        std::string fmt = formatcode(out);
+
+        char *str = nullptr;
+        if (mpfr_asprintf(&str, fmt.c_str(), round, x._x) >= 0) {
+            out << str;
+            mpfr_free_str(str);
+        } else {
+            out.setstate(std::ios::failbit);
+        }
+        return out;
+    }
+
     static const mpfr_prec_t precision = 140;
     static const mpfr_rnd_t round = MPFR_RNDN;
 
@@ -256,5 +280,27 @@ private:
     static int mpfr_notequal_p(mpfr_srcptr left, mpfr_srcptr right)
     {
         return !mpfr_equal_p(left, right);
+    }
+
+    static std::string formatcode(const std::ostream &out)
+    {
+        std::ostringstream res;
+        const std::ios::fmtflags ioflags = out.flags();
+
+        res << '%';
+        if (ioflags & std::ios::showpos)
+            res << '+';
+        if (out.width() > 0)
+            res << out.width();
+        // this is a bit hacky
+        res << '.' << out.precision();
+        res << "R*";
+        if ((ioflags & std::ios::floatfield) == std::ios::fixed)
+            res << (out.flags() & std::ios_base::uppercase ? 'F' : 'f');
+        else if ((ioflags & std::ios::floatfield) == std::ios::scientific)
+            res << (out.flags() & std::ios_base::uppercase ? 'E' : 'e');
+        else
+            res << (out.flags() & std::ios_base::uppercase ? 'G' : 'g');;
+        return res.str();
     }
 };
