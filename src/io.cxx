@@ -2,23 +2,44 @@
 #include <array>
 #include <sstream>
 
-void dump(std::ostream &out, DDouble x)
+class FormatSentry
 {
-    std::ostream::sentry s(out);
-    if (!s)
-        return;
+public:
+    explicit FormatSentry(std::ostream &str)
+        : stream_(str)
+        , saved_(nullptr)
+    {
+        saved_.copyfmt(stream_);
+    }
 
-    out << "DDouble("
-        << std::to_string(x.hi()) << "," << std::to_string(x.lo())
-        << ")";
+    ~FormatSentry() { stream_.copyfmt(saved_); }
+
+    operator bool () const { return stream_.good(); }
+
+private:
+    // make it non-copyable and -movable
+    FormatSentry(const FormatSentry &) = delete;
+    FormatSentry &operator=(const FormatSentry &) = delete;
+
+    std::ostream &stream_;
+    std::ios saved_;
+};
+
+std::ostream &dump(std::ostream &out, DDouble x)
+{
+    FormatSentry s(out);
+    if (!s)
+        return out;
+
+    out.width(0);
+    out.precision(16);
+    out.setf(std::ios_base::scientific);
+    out << "DDouble(" << x.hi() << "," << x.lo() << ")";
+    return out;
 }
 
 std::ostream &operator<<(std::ostream &out, DDouble x)
 {
-    std::ostream::sentry s(out);
-    if (!s)
-        return out;
-
     // XXX this needs some work
     dump(out, x);
 
