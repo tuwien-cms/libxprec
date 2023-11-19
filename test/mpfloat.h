@@ -229,10 +229,6 @@ public:
     _DECLARE_UNARY_OP(asinh, mpfr_asinh)
     _DECLARE_UNARY_OP(atanh, mpfr_atanh)
 
-    _DECLARE_UNARY_OP(cospi, mpfr_cospi)
-    _DECLARE_UNARY_OP(sinpi, mpfr_sinpi)
-    _DECLARE_UNARY_OP(tanpi, mpfr_tanpi)
-
 
     #define _DECLARE_BINARY_FUNC(op, func)                                   \
         friend MPFloat op(const MPFloat &left, const MPFloat &right) {       \
