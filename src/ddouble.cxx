@@ -52,23 +52,28 @@ DDouble hypot(DDouble x, DDouble y)
     }
 }
 
-static DDouble square(DDouble x)
-{
-    // TODO: DoubleFloats has a nice implementation we could try at some point
-    return x * x;
-}
-
 DDouble pow(DDouble x, int n)
 {
     if (n < 0) {
         DDouble res = pow(x, -n);
         return reciprocal(res);
     }
+    if (n == 0) {
+        // XXX handle nan's etc.
+        return DDouble(1.0);
+    }
 
-    DDouble res = n & 1 ? x : DDouble(1.0);
+    // Get first non-zero power
+    while ((n & 1) == 0) {
+        n >>= 1;
+        x *= x;
+    }
+
+    // Multiply and square
+    DDouble res = x;
     while (n >>= 1) {
-        x = square(x);
-        if (n & 1)
+        x *= x;
+        if ((n & 1) == 1)
             res *= x;
     }
     return res;
