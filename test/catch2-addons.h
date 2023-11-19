@@ -1,5 +1,8 @@
 #pragma once
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <iostream>
+
+using std::abs;
 
 template <typename T, typename R>
 class WithinAbsMatcher
@@ -16,7 +19,8 @@ public:
 
     bool match(const T &matchee) const override
     {
-        return abs(matchee - _target) <= _margin;
+        T diff = matchee - _target;
+        return diff <= _margin && diff >= -_margin;
     }
 
     std::string describe() const override
@@ -40,6 +44,7 @@ template <typename T, typename R>
 WithinAbsMatcher<T, decltype(R() * abs(T()))>
 WithinRel(const T &target, const R &eps)
 {
+    using std::abs;
     auto margin = eps * abs(target);
     return WithinAbsMatcher<T,decltype(margin)>(target, margin);
 }

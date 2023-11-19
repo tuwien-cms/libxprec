@@ -47,8 +47,24 @@ DDouble hypot(DDouble x, DDouble y)
     }
 }
 
-DDouble exp(DDouble x)
+static DDouble square(DDouble x)
 {
-    // X
-    return 0;
+    // TODO: DoubleFloats has a nice implementation we could try at some point
+    return x * x;
+}
+
+DDouble pow(DDouble x, int n)
+{
+    if (n < 0) {
+        DDouble res = pow(x, -n);
+        return 1.0 / res;
+    }
+
+    DDouble res = n & 1 ? x : DDouble(1.0);
+    while (n >>= 1) {
+        x = square(x);
+        if (n & 1)
+            res *= x;
+    }
+    return res;
 }

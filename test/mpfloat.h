@@ -254,7 +254,7 @@ public:
         return out;
     }
 
-    static const mpfr_prec_t precision = 140;
+    static const mpfr_prec_t precision = 200;
     static const mpfr_rnd_t round = MPFR_RNDN;
 
 private:
@@ -293,7 +293,8 @@ private:
         if (out.width() > 0)
             res << out.width();
         // this is a bit hacky
-        res << '.' << out.precision();
+        //res << '.' << out.precision();
+        res << ".35";
         res << "R*";
         if ((ioflags & std::ios::floatfield) == std::ios::fixed)
             res << (out.flags() & std::ios_base::uppercase ? 'F' : 'f');

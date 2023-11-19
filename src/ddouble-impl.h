@@ -195,15 +195,28 @@ inline DDouble operator/(DDouble x, double y)
 
 inline DDouble operator/(DDouble x, DDouble y)
 {
-    // Algorithm 18: cost 31 flops, error 10 u^2
-    double th = 1 / y._hi;
-    ExDouble rh = 1 - y._hi * th;
-    ExDouble rl = -y._lo * th;
-    DDouble e = rh.add_small(rl);
-    DDouble delta = e * th;
-    DDouble m = delta + th;
-    return x * m;
+    // Algorithm 17: cost 18 flops, error 15 u^2
+    double th = x._hi / y._hi;
+    DDouble r = y * th;
+    double pi_h = x._hi - r._hi;
+    double delta_l = x._lo - r._lo;
+    double delta = pi_h + delta_l;
+    double tl = delta / y._hi;
+    return ExDouble(th).add_small(tl);
 }
+
+// // XXX: there is some bug here.
+// inline DDouble operator/(DDouble x, DDouble y)
+// {
+//     // Algorithm 18: cost 31 flops, error 10 u^2
+//     double th = 1 / y._hi;
+//     ExDouble rh = 1 - y._hi * th;
+//     ExDouble rl = -(y._lo * th);
+//     DDouble e = rh.add_small(rl);
+//     DDouble delta = e * th;
+//     DDouble m = delta + th;
+//     return x * m;
+// }
 
 inline DDouble operator*(DDouble x, PowerOfTwo y)
 {
@@ -283,6 +296,11 @@ inline DDouble copysign(DDouble mag, DDouble sgn)
 inline DDouble copysign(double mag, DDouble sgn)
 {
     return DDouble(std::copysign(mag, sgn.hi()));
+}
+
+inline DDouble abs(DDouble x)
+{
+    return signbit(x) ? -x : x;
 }
 
 // -------------------------------------------------------------------------

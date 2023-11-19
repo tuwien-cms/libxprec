@@ -208,6 +208,7 @@ private:
 // Type-generic code should use argument-dependent lookup (ADL), i.e., use
 // "using std::sin" and then call "sin".
 
+DDouble abs(DDouble a);
 DDouble acos(DDouble a);
 DDouble acosh(DDouble a);
 DDouble asin(DDouble a);
@@ -224,6 +225,7 @@ DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
 DDouble log(DDouble a);
 DDouble pow(DDouble a, DDouble b);
+DDouble pow(DDouble a, int b);
 DDouble sin(DDouble a);
 DDouble sinh(DDouble a);
 DDouble sqrt(DDouble a);

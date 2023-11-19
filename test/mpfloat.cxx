@@ -8,6 +8,9 @@ TEST_CASE("basic", "[mpfr]")
 
     x = 3;
     REQUIRE(x == 3);
+
+    x = -5;
+    REQUIRE(x == -5);
     REQUIRE(x + x == x * 2);
     REQUIRE(x - x == 0);
 
