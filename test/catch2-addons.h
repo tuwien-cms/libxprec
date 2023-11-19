@@ -1,3 +1,8 @@
+/* Convenience functions for Catch2
+ *
+ * Copyright (C) 2022 Markus Wallerberger and others
+ * SPDX-License-Identifier: MIT
+ */
 #pragma once
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <iostream>

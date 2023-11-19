@@ -1,3 +1,8 @@
+/* Mathematical functions to quad precision.
+ *
+ * Copyright (C) 2022 Markus Wallerberger and others
+ * SPDX-License-Identifier: MIT
+ */
 #include "ddouble.h"
 #include <cstring>
 

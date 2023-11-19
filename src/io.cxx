@@ -1,3 +1,8 @@
+/* Input/Output functions.
+ *
+ * Copyright (C) 2022 Markus Wallerberger and others
+ * SPDX-License-Identifier: MIT
+ */
 #include "ddouble.h"
 #include <array>
 #include <sstream>
