@@ -21,12 +21,19 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out project
+        uses: actions/checkout@v2
 
-      - uses: threeal/cmake-action@v1.3.0
+      - name: Install dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt install libmpfr-dev catch2
+
+      - name: CMake configure and build
+        uses: threeal/cmake-action@v1.3.0
         with:
           run-build: true
 
-      - name: test
+      - name: Run tests
         run: |
           build/tests
