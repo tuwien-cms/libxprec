@@ -1,0 +1,32 @@
+name: Build/test suite
+
+on:
+  push:
+    branches:
+      mainline
+  pull_request:
+    branches:
+      mainline
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+
+    name: |
+      test ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: threeal/cmake-action@v1.3.0
+        with:
+          run-build: true
+
+      - name: test
+        run: |
+          build/tests

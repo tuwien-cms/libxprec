@@ -93,7 +93,7 @@ private:
  */
 class DDouble {
 public:
-    constexpr DDouble(double x=0) : _hi(x), _lo(0.0) { }
+    constexpr DDouble(double x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
 
     // TODO: requires extended precision to work.
@@ -105,6 +105,7 @@ public:
     constexpr DDouble(uint16_t x) : _hi(x), _lo(0.0) { }
 
     // Ensure that trivially_*_constructible work.
+    DDouble() = default;
     DDouble(const DDouble&) = default;
     DDouble(DDouble&&) = default;
     DDouble &operator=(const DDouble &other) = default;
