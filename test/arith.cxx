@@ -67,6 +67,13 @@ TEST_CASE("Divide", "[arith]")
     CMP_BINARY(operator/, -149, 53.25, 1e-30);
 }
 
+TEST_CASE("Divide pow2", "[arith]")
+{
+    CMP_BINARY(operator/, 1, 137, 1e-31);
+    REQUIRE_THAT(reciprocal(ExDouble(137)),
+                 WithinRel(MPFloat(1) / 137, 1e-21));
+}
+
 TEST_CASE("sqrt", "[fn]")
 {
     CMP_UNARY(sqrt, 2, 1e-31);

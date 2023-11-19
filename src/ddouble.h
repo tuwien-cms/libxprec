@@ -74,7 +74,7 @@ public:
     friend DDouble operator*(double a, ExDouble b);
     friend DDouble operator*(ExDouble a, double b);
 
-    friend DDouble operator/(PowerOfTwo x, ExDouble y);
+    friend DDouble reciprocal(ExDouble y);
 
     friend DDouble sqrt(ExDouble x);
 
@@ -160,6 +160,8 @@ public:
     friend DDouble operator*(DDouble x, PowerOfTwo y);
     friend DDouble operator*(PowerOfTwo x, DDouble y) { return y * x; }
     friend DDouble operator/(DDouble x, PowerOfTwo y);
+
+    friend DDouble reciprocal(DDouble y);
 
     DDouble &operator+=(double y) { return *this = *this + y; }
     DDouble &operator-=(double y) { return *this = *this - y; }

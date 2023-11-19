@@ -97,19 +97,13 @@ inline DDouble operator*(ExDouble a, ExDouble b)
 inline DDouble operator*(double a, ExDouble b) { return ExDouble(a) * b; }
 inline DDouble operator*(ExDouble a, double b) { return a * ExDouble(b); }
 
-inline DDouble operator/(PowerOfTwo x, ExDouble y)
+inline DDouble reciprocal(ExDouble y)
 {
-    // Algorithm lifted from DoubleFloats.jl
-    // TODO: figure out if this also works with arbitrary float x
-    double a = x, b = y;
-
-    // Compute high part first
-    double hi = a / b;
-
-    // We should have a == hi * b + lo * b. Store the difference, rounded
-    // correctly:
-    double lo = std::fma(-hi, b, a) / b;
-    return DDouble(hi, lo);
+    // Part of Algorithm 18 for y_lo = 0
+    double th = 1.0 / (double) y;
+    double rh = std::fma(-(double) y, th, 1.0);
+    DDouble delta = ExDouble(rh) * th;
+    return delta + th;
 }
 
 inline DDouble sqrt(ExDouble x)
@@ -193,30 +187,34 @@ inline DDouble operator/(DDouble x, double y)
     return th.add_small(tl);
 }
 
-inline DDouble operator/(DDouble x, DDouble y)
-{
-    // Algorithm 17: cost 18 flops, error 15 u^2
-    double th = x._hi / y._hi;
-    DDouble r = y * th;
-    double pi_h = x._hi - r._hi;
-    double delta_l = x._lo - r._lo;
-    double delta = pi_h + delta_l;
-    double tl = delta / y._hi;
-    return ExDouble(th).add_small(tl);
-}
-
-// // XXX: there is some bug here.
 // inline DDouble operator/(DDouble x, DDouble y)
 // {
-//     // Algorithm 18: cost 31 flops, error 10 u^2
-//     double th = 1.0 / y._hi;
-//     double rh = 1.0 - y._hi * th;
-//     double rl = -(y._lo * th);
-//     DDouble e = ExDouble(rh).add_small(rl);
-//     DDouble delta = e * th;
-//     DDouble m = delta + th;
-//     return x * m;
+//     // Algorithm 17: cost 18 flops, error 15 u^2
+//     double th = x._hi / y._hi;
+//     DDouble r = y * th;
+//     double pi_h = x._hi - r._hi;
+//     double delta_l = x._lo - r._lo;
+//     double delta = pi_h + delta_l;
+//     double tl = delta / y._hi;
+//     return ExDouble(th).add_small(tl);
 // }
+
+inline DDouble reciprocal(DDouble y)
+{
+    // Part of Algorithm 18
+    double th = 1.0 / y._hi;
+    double rh = std::fma(-y._hi, th, 1.0);
+    double rl = -y._lo * th;
+    DDouble e = ExDouble(rh).add_small(rl);
+    DDouble delta = e * th;
+    return delta + th;
+}
+
+inline DDouble operator/(DDouble x, DDouble y)
+{
+    // Algorithm 18: cost 31 flops, error 10 u^2
+    return x * reciprocal(y);
+}
 
 inline DDouble operator*(DDouble x, PowerOfTwo y)
 {

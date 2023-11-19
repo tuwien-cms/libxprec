@@ -62,7 +62,7 @@ DDouble pow(DDouble x, int n)
 {
     if (n < 0) {
         DDouble res = pow(x, -n);
-        return 1.0 / res;
+        return reciprocal(res);
     }
 
     DDouble res = n & 1 ? x : DDouble(1.0);
