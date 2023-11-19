@@ -201,7 +201,7 @@ inline DDouble operator/(DDouble x, double y)
 
 inline DDouble reciprocal(DDouble y)
 {
-    // Part of Algorithm 18
+    // Part of Algorithm 18: cost 22 flops, error 2.3 u^2
     double th = 1.0 / y._hi;
     double rh = std::fma(-y._hi, th, 1.0);
     double rl = -y._lo * th;
