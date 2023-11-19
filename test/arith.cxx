@@ -1,3 +1,8 @@
+/* Tests
+ *
+ * Copyright (C) 2022 Markus Wallerberger and others
+ * SPDX-License-Identifier: MIT
+ */
 #include <catch2/catch_test_macros.hpp>
 #include "ddouble.h"
 #include "mpfloat.h"
@@ -48,10 +53,12 @@ TEST_CASE("Relational", "[rel]")
 
 TEST_CASE("Mul", "[arith]")
 {
-    DDouble x = DDouble(1.25, -ldexp(1.0, -60));
+    DDouble x = DDouble(1.25, -ldexp(1.125, -85));
     CMP_BINARY(operator*, x, x, 1e-31);
-}
+    CMP_BINARY(operator*, -3.25, x, 1e-31);
 
+    CMP_BINARY_1(operator*, x, -139818.125, 1e-31);
+}
 
 TEST_CASE("Divide", "[arith]")
 {
@@ -86,14 +93,11 @@ TEST_CASE("pow", "[fn]")
     CMP_BINARY_1(pow, -2.75, 27, 1e-31);
 
     // Something is very weird with powers ...
-    //CMP_BINARY_1(pow, 2., -17, 1e-30);
-    //CMP_BINARY_1(pow, -1.5, -8, 1e-30);
-
-    //CMP_BINARY_1(pow, 1.5, 17, 1e-30);
-    //REQUIRE_THAT(pow(pow(DDouble(1.5), 17), -17),
-    //             WithinRel(DDouble(1.5), 1e-30)
-    //             );
+    CMP_BINARY_1(pow, 2., -17, 1e-30);
+    CMP_BINARY_1(pow, -1.5, -8, 1e-30);
+    CMP_BINARY_1(pow, 1.5, 17, 1e-30);
     CMP_BINARY_1(pow, -2.25, -10, 1e-30);
+
     REQUIRE_THAT(pow(pow(DDouble(-2.25), -10), -10),
                  WithinRel(pow(DDouble(-2.25), 100), 1e-30));
 }

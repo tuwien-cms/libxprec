@@ -209,10 +209,10 @@ inline DDouble operator/(DDouble x, DDouble y)
 // inline DDouble operator/(DDouble x, DDouble y)
 // {
 //     // Algorithm 18: cost 31 flops, error 10 u^2
-//     double th = 1 / y._hi;
-//     ExDouble rh = 1 - y._hi * th;
-//     ExDouble rl = -(y._lo * th);
-//     DDouble e = rh.add_small(rl);
+//     double th = 1.0 / y._hi;
+//     double rh = 1.0 - y._hi * th;
+//     double rl = -(y._lo * th);
+//     DDouble e = ExDouble(rh).add_small(rl);
 //     DDouble delta = e * th;
 //     DDouble m = delta + th;
 //     return x * m;
