@@ -74,9 +74,11 @@ public:
     friend DDouble operator*(double a, ExDouble b);
     friend DDouble operator*(ExDouble a, double b);
 
-    friend DDouble reciprocal(ExDouble y);
+    friend DDouble operator/(ExDouble a, ExDouble b);
+    friend DDouble operator/(double a, ExDouble b);
+    friend DDouble operator/(ExDouble a, double b);
 
-    friend DDouble sqrt(ExDouble x);
+    friend DDouble reciprocal(ExDouble y);
 
 private:
     double _x;

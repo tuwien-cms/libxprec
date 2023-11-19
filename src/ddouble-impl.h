@@ -106,14 +106,14 @@ inline DDouble reciprocal(ExDouble y)
     return delta + th;
 }
 
-inline DDouble sqrt(ExDouble x)
+inline DDouble operator/(ExDouble a, ExDouble b)
 {
-    // Lifted from DoubleFloats.jl
-    double a = x;
-    double hi = std::sqrt(a);
-    double lo = std::fma(-hi, hi, a) / (2 * hi);
-    return DDouble(hi, lo);
+    // Algorithm 18 for this special case
+    return reciprocal(a) * (double)b;
 }
+
+inline DDouble operator/(double a, ExDouble b) { return ExDouble(a) / b; }
+inline DDouble operator/(ExDouble a, double b) { return a / ExDouble(b); }
 
 // -------------------------------------------------------------------------
 // DDouble arithmetic
