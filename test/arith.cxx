@@ -109,9 +109,11 @@ TEST_CASE("pow", "[fn]")
                  WithinRel(pow(DDouble(-2.25), 100), 1e-30));
 }
 
-TEST_CASE("exp_small", "[exp]")
+TEST_CASE("exp", "[exp]")
 {
-    CMP_UNARY(exp, 1e-4, 1e-30);
+    CMP_UNARY(exp, 0.0, 1e-31);
+    CMP_UNARY(exp, 1.0, 1e-31);
+    CMP_UNARY(exp, 1e-4, 1e-31);
 
     // Small values shall be very accurate
     DDouble x = 0.25;
@@ -127,4 +129,6 @@ TEST_CASE("exp_small", "[exp]")
         if (x < 670)
             CMP_UNARY(exp, -x, 5e-32);
     }
+
+    REQUIRE(exp(DDouble(-1000)) == 0);
 }

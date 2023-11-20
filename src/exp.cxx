@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 #include "ddouble.h"
+#include <cmath>
 
 static DDouble expm1_kernel(DDouble x)
 {
@@ -143,7 +144,6 @@ static DDouble exp_halves(int x)
     assert(x <= 1439);
 
     Product res;
-
     int x_halves = x % 32;
     if (x_halves)
         res *= EXP_HALVES[x_halves-1];
@@ -157,6 +157,13 @@ static DDouble exp_halves(int x)
 
 DDouble exp(DDouble x)
 {
+    if (std::isnan(x.hi()))
+        return x;
+    if (x >= 709.0)
+        return DDouble(INFINITY, 0);
+    if (x <= -709.0)
+        return DDouble(0);
+
     // x = y/2 + z
     double y = round(2 * x.hi());
     DDouble z = x - y/2;
