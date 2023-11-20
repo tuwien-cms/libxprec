@@ -173,3 +173,18 @@ DDouble exp(DDouble x)
     DDouble exp_y = exp_halves(int(y));
     return exp_z * exp_y;
 }
+
+DDouble expm1(DDouble x)
+{
+    if (std::isnan(x.hi()))
+        return x;
+    if (x >= 709.0)
+        return DDouble(INFINITY, 0);
+    if (x <= -709.0)
+        return DDouble(-1);
+
+    if (abs(x.hi()) < 0.25)
+        return expm1_kernel(x);
+    else
+        return exp(x) - 1.0;
+}
