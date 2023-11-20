@@ -31,6 +31,30 @@ static DDouble expm1_kernel(DDouble x)
     return r;
 }
 
+class Product
+{
+public:
+    constexpr Product() : _isempty(true), _res(1) { }
+
+    template <typename T>
+    Product &operator*=(const T &x)
+    {
+        if (_isempty)
+            _res = x;
+        else
+            _res *= x;
+
+        _isempty = false;
+        return *this;
+    }
+
+    constexpr operator DDouble () const { return _res; }
+
+private:
+    bool _isempty;
+    DDouble _res;
+};
+
 static DDouble exp_halves(int x)
 {
     const static DDouble EXP_HALVES[31] = {
@@ -117,17 +141,18 @@ static DDouble exp_halves(int x)
         return reciprocal(exp_halves(-x));
     }
     assert(x <= 1439);
-    int x_halves = x % 32;
-    int x_sixteens = x / 32;
 
-    if (!x_halves && !x_sixteens)
-        return 1;
-    else if (x_halves && !x_sixteens)
-        return EXP_HALVES[x_halves-1];
-    else if (!x_halves && x_sixteens)
-        return EXP_SIXTEENS[x_sixteens-1];
-    else
-        return EXP_HALVES[x_halves-1] * EXP_SIXTEENS[x_sixteens-1];
+    Product res;
+
+    int x_halves = x % 32;
+    if (x_halves)
+        res *= EXP_HALVES[x_halves-1];
+
+    int x_sixteens = x / 32;
+    if (x_sixteens)
+        res *= EXP_SIXTEENS[x_sixteens-1];
+
+    return res;
 }
 
 DDouble exp(DDouble x)
