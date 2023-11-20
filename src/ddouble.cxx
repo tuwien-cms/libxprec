@@ -85,15 +85,14 @@ static DDouble expm1_kernel(DDouble x)
     // digits, so no matter what strategy we choose here, the convergence
     // needs to go out to x = log(1.5) = 0.22
 
-    // Convergence of the CF approx to, admittedly on 8e-32
-    assert(greater_in_magnitude(0.5, x.hi()));
+    // Convergence of the CF approx to 2e-32
+    assert(greater_in_magnitude(0.3, x.hi()));
 
     // Continued fraction expansion of the exponential function
     //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
     DDouble xsq = x * x;
     DDouble r;
-    r = xsq / 38.0 + 34.0;
-    r = xsq / r + 30.0;
+    r = xsq / 34.0 + 30.0;
     r = xsq / r + 26.0;
     r = xsq / r + 22.0;
     r = xsq / r + 18.0;
@@ -106,17 +105,20 @@ static DDouble expm1_kernel(DDouble x)
     return r;
 }
 
+//#include "mpfloat.h"
+
 DDouble exp(DDouble x)
 {
     // x = y/2 + z
-    double y = round(x.hi());
-    DDouble z = x - y;
+    double y = round(2 * x.hi());
+    DDouble z = x - y/2;
 
     // exp(z + y/4) = (1 + expm1(z)) exp(1/4)^y
     DDouble exp_z = 1.0 + expm1_kernel(z);
 
-    const static DDouble EULER(2.718281828459045, 1.4456468917292502e-16);
-    DDouble exp_y = pow(EULER, int(y));
+    const static DDouble EXP_HALF(1.6487212707001282, -4.731568479435833e-17);
+    DDouble exp_y = pow(EXP_HALF, int(y));
+    //DDouble exp_y= exp(MPFloat(y/2)).as_ddouble();
 
     return exp_z * exp_y;
 }
