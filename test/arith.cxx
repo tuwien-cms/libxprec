@@ -120,12 +120,11 @@ TEST_CASE("exp_small", "[exp]")
         CMP_UNARY(exp, -x, 5e-32);
     }
 
-    // Larger, less so, but let's strive for 10 ulps
+    // Larger, less so, but let's still strive for 1 ulps
     x = 0.125;
-    double tol = 5e-31;
-    while ((x *= 1.0041) < 690.0) {
-        CMP_UNARY(exp, x, tol);
+    while ((x *= 1.0041) < 708.0) {
+        CMP_UNARY(exp, x, 5e-32);
         if (x < 670)
-            CMP_UNARY(exp, -x, tol);
+            CMP_UNARY(exp, -x, 5e-32);
     }
 }
