@@ -114,16 +114,18 @@ TEST_CASE("exp_small", "[exp]")
     CMP_UNARY(exp, 1e-4, 1e-30);
 
     // Small values shall be very accurate
-    DDouble x = 1e-2;
+    DDouble x = 0.25;
     while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(exp, x, 2.5e-32);
-        CMP_UNARY(exp, -x, 2.5e-32);
+        CMP_UNARY(exp, x, 5e-32);
+        CMP_UNARY(exp, -x, 5e-32);
     }
 
-    x = 1e-2;
-    while ((x *= 1.021) < 680.0) {
-        CMP_UNARY(exp, x, 1e-27);
-        CMP_UNARY(exp, -x, 1e-27);
+    // Larger, less so, but let's strive for 10 ulps
+    x = 0.125;
+    double tol = 5e-31;
+    while ((x *= 1.0041) < 690.0) {
+        CMP_UNARY(exp, x, tol);
+        if (x < 670)
+            CMP_UNARY(exp, -x, tol);
     }
-
 }

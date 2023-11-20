@@ -79,35 +79,25 @@ DDouble pow(DDouble x, int n)
     return res;
 }
 
-static DDouble expm1_taylor(DDouble x)
+static DDouble expm1_kernel(DDouble x)
 {
-    // For the absolute error to be < epsilon/2
-    assert(greater_in_magnitude(1.1815e-3, x.hi()));
+    // We need to make sure that (1 + x) does not lose possible significant
+    // digits, so no matter what strategy we choose here, the convergence
+    // needs to go out to x = log(1.5) = 0.22
 
-    // Taylor series up to order 8
-    //  1 + x ( 1 + x/2 ( 1 + x/3 ( ... (1 + x/8)...)
-    DDouble r;
-    r = x * PowerOfTwo(-3) + 1.0;
-    r = x * r / 7.0 + 1.0;
-    r = x * r / 6.0 + 1.0;
-    r = x * r / 5.0 + 1.0;
-    r = x * r * PowerOfTwo(-2) + 1.0;
-    r = x * r / 3.0 + 1.0;
-    r = x * r * PowerOfTwo(-1) + 1.0;
-    r = x * r;
-    return r;
-}
-
-static DDouble expm1_cf(DDouble x)
-{
-    // For the absolute error to be < epsilon/2
-    assert(greater_in_magnitude(1.085e-2, x.hi()));
+    // Convergence of the CF approx to, admittedly on 8e-32
+    assert(greater_in_magnitude(0.5, x.hi()));
 
     // Continued fraction expansion of the exponential function
-    //  4*div + div_d + 4*add_d + add_sm + mul_p = 193 flops
+    //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
     DDouble xsq = x * x;
     DDouble r;
-    r = xsq / 18.0 + 14.0;
+    r = xsq / 38.0 + 34.0;
+    r = xsq / r + 30.0;
+    r = xsq / r + 26.0;
+    r = xsq / r + 22.0;
+    r = xsq / r + 18.0;
+    r = xsq / r + 14.0;
     r = xsq / r + 10.0;
     r = xsq / r + 6.0;
     r = (-x).add_small(xsq / r) + 2.0;
@@ -116,24 +106,17 @@ static DDouble expm1_cf(DDouble x)
     return r;
 }
 
-static DDouble reduce_mod2(DDouble x, int n, double &quot)
-{
-    double hi = ldexp(x.hi(), -n);
-    hi = ldexp(modf(hi, &quot), n);
-    return DDouble(hi, x.lo());
-}
-
 DDouble exp(DDouble x)
 {
-    // 1/128
-    double y;
-    DDouble z = reduce_mod2(x, -7, y);
+    // x = y/2 + z
+    double y = round(x.hi());
+    DDouble z = x - y;
 
-    // exp(z + y/128) = exp(z) exp(1/128)^y
-    DDouble exp_z = 1.0 + expm1_cf(z);
+    // exp(z + y/4) = (1 + expm1(z)) exp(1/4)^y
+    DDouble exp_z = 1.0 + expm1_kernel(z);
 
-    const static DDouble EXP128TH(1.007843097206448, -6.872774751042842e-17);
-    DDouble exp_y = pow(EXP128TH, int(y));
+    const static DDouble EULER(2.718281828459045, 1.4456468917292502e-16);
+    DDouble exp_y = pow(EULER, int(y));
 
     return exp_z * exp_y;
 }
