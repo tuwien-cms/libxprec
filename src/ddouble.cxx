@@ -78,3 +78,62 @@ DDouble pow(DDouble x, int n)
     }
     return res;
 }
+
+static DDouble expm1_taylor(DDouble x)
+{
+    // For the absolute error to be < epsilon/2
+    assert(greater_in_magnitude(1.1815e-3, x.hi()));
+
+    // Taylor series up to order 8
+    //  1 + x ( 1 + x/2 ( 1 + x/3 ( ... (1 + x/8)...)
+    DDouble r;
+    r = x * PowerOfTwo(-3) + 1.0;
+    r = x * r / 7.0 + 1.0;
+    r = x * r / 6.0 + 1.0;
+    r = x * r / 5.0 + 1.0;
+    r = x * r * PowerOfTwo(-2) + 1.0;
+    r = x * r / 3.0 + 1.0;
+    r = x * r * PowerOfTwo(-1) + 1.0;
+    r = x * r;
+    return r;
+}
+
+static DDouble expm1_cf(DDouble x)
+{
+    // For the absolute error to be < epsilon/2
+    assert(greater_in_magnitude(1.085e-2, x.hi()));
+
+    // Continued fraction expansion of the exponential function
+    //  4*div + div_d + 4*add_d + add_sm + mul_p = 193 flops
+    DDouble xsq = x * x;
+    DDouble r;
+    r = xsq / 18.0 + 14.0;
+    r = xsq / r + 10.0;
+    r = xsq / r + 6.0;
+    r = (-x).add_small(xsq / r) + 2.0;
+    r = x / r;
+    r *= PowerOfTwo(1);
+    return r;
+}
+
+static DDouble reduce_mod2(DDouble x, int n, double &quot)
+{
+    double hi = ldexp(x.hi(), -n);
+    hi = ldexp(modf(hi, &quot), n);
+    return DDouble(hi, x.lo());
+}
+
+DDouble exp(DDouble x)
+{
+    // 1/128
+    double y;
+    DDouble z = reduce_mod2(x, -7, y);
+
+    // exp(z + y/128) = exp(z) exp(1/128)^y
+    DDouble exp_z = 1.0 + expm1_cf(z);
+
+    const static DDouble EXP128TH(1.007843097206448, -6.872774751042842e-17);
+    DDouble exp_y = pow(EXP128TH, int(y));
+
+    return exp_z * exp_y;
+}
