@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Library
 add_library(ddouble SHARED
     src/ddouble.cxx
+    src/exp.cxx
     src/io.cxx
     )
 target_compile_options(ddouble PRIVATE -Wall -Wextra)
