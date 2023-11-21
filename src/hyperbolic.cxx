@@ -33,6 +33,7 @@ static DDouble reciprocal_factorial(int n)
         {1.6117375710961184e-24,-3.6846573564509766e-41}
         };
 
+    assert((n + 2) * sizeof(DDouble) < sizeof(RECIPROCAL_FACTORIAL));
     if (n <= 1)
         return DDouble(1.0);
     else
