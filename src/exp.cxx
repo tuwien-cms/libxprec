@@ -219,6 +219,9 @@ DDouble log1p(DDouble x)
     //
     //   log(1 + x) = log(1 + x0) + 2 (x - x0)/(2 + x + x0) + O(x - x0)^3
     //
+    // One need not worry about cancellation in the denominator for
+    // x close to -1, since that is where we have an intrinsic loss of
+    // precision anyway
     DDouble x0 = expm1(log_x);
     DDouble corr = PowerOfTwo(1) * (x - x0) / (2 + x + x0);
     log_x += corr;
