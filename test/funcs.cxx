@@ -125,3 +125,21 @@ TEST_CASE("cosh", "[hyp]")
         CMP_UNARY(cosh, -x, 5e-32);
     }
 }
+
+TEST_CASE("tanh", "[hyp]")
+{
+    CMP_UNARY(tanh, INFINITY, 1e-31);
+    CMP_UNARY(tanh, -INFINITY, 1e-31);
+
+    DDouble x = 0.2;
+    while ((x *= 0.9) > 1e-290) {
+        CMP_UNARY(tanh, x, 5e-32);
+        CMP_UNARY(tanh, -x, 5e-32);
+    }
+
+    x = 0.2;
+    while ((x *= 1.05) < 1e300) {
+        CMP_UNARY(tanh, x, 8e-32);
+        CMP_UNARY(tanh, -x, 8e-32);
+    }
+}
