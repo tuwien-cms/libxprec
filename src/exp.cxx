@@ -159,13 +159,13 @@ DDouble exp(DDouble x)
 {
     if (std::isnan(x.hi()))
         return x;
-    if (x >= 709.0)
+    if (x.hi() >= 709.0)
         return DDouble(INFINITY, 0);
-    if (x <= -709.0)
+    if (x.hi() <= -709.0)
         return DDouble(0);
 
     // x = y/2 + z
-    double y = round(2 * x.hi());
+    double y = std::round(2 * x.hi());
     DDouble z = x - y/2;
 
     // exp(z + y/4) = (1 + expm1(z)) exp(1/4)^y
@@ -176,15 +176,12 @@ DDouble exp(DDouble x)
 
 DDouble expm1(DDouble x)
 {
-    if (std::isnan(x.hi()))
-        return x;
-    if (x >= 709.0)
-        return DDouble(INFINITY, 0);
-    if (x <= -709.0)
-        return DDouble(-1);
-
-    if (abs(x.hi()) < 0.25)
+    // For small values, we call the expm kernel directly
+    if (std::abs(x.hi()) < 0.25)
         return expm1_kernel(x);
-    else
-        return exp(x) - 1.0;
+
+    DDouble res = exp(x);
+    if (x.hi() < 75)
+        res -= 1.0;
+    return res;
 }

@@ -132,3 +132,26 @@ TEST_CASE("exp", "[exp]")
 
     REQUIRE(exp(DDouble(-1000)) == 0);
 }
+
+
+TEST_CASE("expm1", "[exp]")
+{
+    CMP_UNARY(expm1, 0.0, 1e-31);
+    CMP_UNARY(expm1, 1.0, 1e-31);
+    CMP_UNARY(expm1, -1000, 1e-31);
+
+    // Small values shall be very accurate
+    DDouble x = 0.25;
+    while ((x *= 0.9) > 1e-290) {
+        CMP_UNARY(expm1, x, 5e-32);
+        CMP_UNARY(expm1, -x, 5e-32);
+    }
+
+    // Larger, less so, but let's still strive for 1 ulps
+    x = 0.125;
+    while ((x *= 1.02) < 708.0) {
+        CMP_UNARY(expm1, x, 8e-32);
+        if (x < 670)
+            CMP_UNARY(expm1, -x, 8e-32);
+    }
+}
