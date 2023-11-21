@@ -126,6 +126,25 @@ TEST_CASE("cosh", "[hyp]")
     }
 }
 
+TEST_CASE("sinh", "[hyp]")
+{
+    CMP_UNARY(sinh, 0.01, 1e-31);
+
+    DDouble x = 0.15;
+    while ((x *= 0.9) > 1e-290) {
+        CMP_UNARY(sinh, x, 5e-32);
+        CMP_UNARY(sinh, -x, 5e-32);
+    }
+
+    // XXX improve precision here a little
+    x = 0.15;
+    while ((x *= 1.0041) < 708.0) {
+        CMP_UNARY(sinh, x, 1e-31);
+        CMP_UNARY(sinh, -x, 1e-31);
+    }
+}
+
+
 TEST_CASE("tanh", "[hyp]")
 {
     CMP_UNARY(tanh, INFINITY, 1e-31);
