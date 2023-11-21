@@ -19,6 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(ddouble SHARED
     src/ddouble.cxx
     src/exp.cxx
+    src/hyperbolic.cxx
     src/io.cxx
     )
 target_compile_options(ddouble PRIVATE -Wall -Wextra)
@@ -42,6 +43,7 @@ find_package(MPFR REQUIRED)
 add_executable(tests
     test/mpfloat.cxx
     test/arith.cxx
+    test/funcs.cxx
     test/convert.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)

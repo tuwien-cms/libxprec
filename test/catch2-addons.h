@@ -7,6 +7,30 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <iostream>
 
+#define CMP_UNARY(fn, x, eps)                                              \
+    do {                                                                   \
+        DDouble r_d = fn(DDouble(x));                                      \
+        MPFloat r_f = fn(MPFloat(x));                                      \
+        double eps_d = eps;                                                \
+        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                          \
+    } while(false)
+
+#define CMP_BINARY(fn, x, y, eps)                                          \
+    do {                                                                   \
+        DDouble r_d = fn(DDouble(x), DDouble(y));                          \
+        MPFloat r_f = fn(MPFloat(x), MPFloat(y));                          \
+        double eps_d = eps;                                                \
+        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                          \
+    } while(false)
+
+#define CMP_BINARY_1(fn, x, y, eps)                                        \
+    do {                                                                   \
+        DDouble r_d = fn(DDouble(x), y);                                   \
+        MPFloat r_f = fn(MPFloat(x), y);                                   \
+        double eps_d = eps;                                                \
+        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                          \
+    } while(false)
+
 using std::abs;
 
 template <typename T, typename R>
