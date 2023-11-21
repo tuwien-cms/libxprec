@@ -133,7 +133,6 @@ TEST_CASE("exp", "[exp]")
     REQUIRE(exp(DDouble(-1000)) == 0);
 }
 
-
 TEST_CASE("expm1", "[exp]")
 {
     CMP_UNARY(expm1, 0.0, 1e-31);
@@ -153,5 +152,21 @@ TEST_CASE("expm1", "[exp]")
         CMP_UNARY(expm1, x, 8e-32);
         if (x < 670)
             CMP_UNARY(expm1, -x, 8e-32);
+    }
+}
+
+TEST_CASE("log", "[exp]")
+{
+    CMP_UNARY(log, 1.0, 1e-31);
+    CMP_UNARY(log, 3.0, 1e-31);
+
+    DDouble x = 1.;
+    while ((x *= 1.13) < 1e300) {
+        CMP_UNARY(log, x, 1e-31);
+    }
+
+    x = 1.;
+    while ((x *= 0.95) > 1e-290) {
+        CMP_UNARY(log, x, 1e-31);
     }
 }

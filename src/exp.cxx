@@ -165,10 +165,10 @@ DDouble exp(DDouble x)
         return DDouble(0);
 
     // x = y/2 + z
-    double y = std::round(2 * x.hi());
+    double y = round(2 * x.hi());
     DDouble z = x - y/2;
 
-    // exp(z + y/4) = (1 + expm1(z)) exp(1/4)^y
+    // exp(z + y/2) = (1 + expm1(z)) exp(1/2)^y
     DDouble exp_z = 1.0 + expm1_kernel(z);
     DDouble exp_y = exp_halves(int(y));
     return exp_z * exp_y;
@@ -176,12 +176,30 @@ DDouble exp(DDouble x)
 
 DDouble expm1(DDouble x)
 {
-    // For small values, we call the expm kernel directly
-    if (std::abs(x.hi()) < 0.25)
+    // For small values, we call the expm1 kernel directly
+    if (fabs(x.hi()) < 0.25)
         return expm1_kernel(x);
 
+    // Otherwise, we do a naive computation
     DDouble res = exp(x);
     if (x.hi() < 75)
         res -= 1.0;
     return res;
+}
+
+DDouble log(DDouble x)
+{
+    // Start with logarithm of hi part
+    DDouble log_x = log(x.hi());
+    if (!std::isfinite(log_x.hi()))
+        return log_x;
+
+    // Abramowitz and Stegun give the following series expansion (4.1.30):
+    //
+    //   log(x) = log(x0) + 2 (x - x0)/(x + x0) + O(x - x0)^3
+    //
+    DDouble x0 = exp(log_x);
+    DDouble corr = PowerOfTwo(1) * (x - x0) / (x + x0);
+    log_x += corr;
+    return log_x;
 }
