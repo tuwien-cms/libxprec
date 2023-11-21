@@ -170,3 +170,23 @@ TEST_CASE("log", "[exp]")
         CMP_UNARY(log, x, 1e-31);
     }
 }
+
+TEST_CASE("log1p", "[exp]")
+{
+    CMP_UNARY(log, 1.0, 1e-31);
+    CMP_UNARY(log, 3.0, 1e-31);
+
+    DDouble x = 1.;
+    while ((x *= 1.13) < 1e300) {
+        CMP_UNARY(log1p, x, 1e-31);
+    }
+
+    x = 1.;
+    while ((x *= 0.92) > 1e-290) {
+        CMP_UNARY(log1p, x, 1e-31);
+    }
+    x = -.9999999;
+    while ((x *= 0.92) > 1e-290) {
+        CMP_UNARY(log1p, x, 1e-31);
+    }
+}

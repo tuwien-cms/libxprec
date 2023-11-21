@@ -249,6 +249,7 @@ DDouble modf(DDouble a, DDouble *b);
 DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
 DDouble log(DDouble a);
+DDouble log1p(DDouble a);
 DDouble pow(DDouble a, DDouble b);
 DDouble pow(DDouble a, int b);
 DDouble sin(DDouble a);

@@ -216,8 +216,11 @@ DDouble log1p(DDouble x)
         return log_x;
 
     // Again, we can use the same correction, but log1p <-> expm1
+    //
+    //   log(1 + x) = log(1 + x0) + 2 (x - x0)/(2 + x + x0) + O(x - x0)^3
+    //
     DDouble x0 = expm1(log_x);
-    DDouble corr = PowerOfTwo(1) * (x - x0) / (x + x0);
+    DDouble corr = PowerOfTwo(1) * (x - x0) / (2 + x + x0);
     log_x += corr;
     return log_x;
 }
