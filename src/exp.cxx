@@ -2,6 +2,10 @@
  *
  * Copyright (C) 2022 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
+ *
+ * Most strategies are adapted from DoubleFloats.jl which is
+ * Copyright (C) 2018-2023 Julia Math
+ * and also licensed MIT
  */
 #include "ddouble.h"
 #include <cmath>
@@ -199,6 +203,20 @@ DDouble log(DDouble x)
     //   log(x) = log(x0) + 2 (x - x0)/(x + x0) + O(x - x0)^3
     //
     DDouble x0 = exp(log_x);
+    DDouble corr = PowerOfTwo(1) * (x - x0) / (x + x0);
+    log_x += corr;
+    return log_x;
+}
+
+DDouble log1p(DDouble x)
+{
+    // Start with logarithm of hi part
+    DDouble log_x = log1p(x.hi());
+    if (!std::isfinite(log_x.hi()))
+        return log_x;
+
+    // Again, we can use the same correction, but log1p <-> expm1
+    DDouble x0 = expm1(log_x);
     DDouble corr = PowerOfTwo(1) * (x - x0) / (x + x0);
     log_x += corr;
     return log_x;
