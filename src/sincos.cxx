@@ -18,7 +18,7 @@ static DDouble sin_kernel(DDouble x)
     DDouble xpow = x;
     for (int i = 3; i <= 27; i += 2) {
         xpow *= xsq;
-        r += reciprocal_factorial(i) * xpow;
+        r = r.add_small(reciprocal_factorial(i) * xpow);
     }
     return r;
 }
@@ -32,10 +32,11 @@ static DDouble cos_kernel(DDouble x)
     // Taylor series of the cos around 0
     DDouble xsq = -x * x;
     DDouble r = 1.0;
-    DDouble xpow = 1.0;
-    for (int i = 2; i <= 26; i += 2) {
+    DDouble xpow = xsq;
+    r = r.add_small(PowerOfTwo(-1) * xpow);
+    for (int i = 4; i <= 26; i += 2) {
         xpow *= xsq;
-        r += reciprocal_factorial(i) * xpow;
+        r = r.add_small(reciprocal_factorial(i) * xpow);
     }
     return r;
 }
@@ -47,7 +48,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     static const DDouble PI2(1.5707963267948966, 6.123233995736766e-17);
     static const DDouble OVER_PI2(0.6366197723675814, -3.935735335036497e-17);
 
-    DDouble n = OVER_PI2 * x;
+    DDouble n = x / PI2;
     if (fabs(n.hi()) < 0.5) {
         sector = 0;
         return x;

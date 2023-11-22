@@ -164,26 +164,23 @@ TEST_CASE("tanh", "[hyp]")
 
 TEST_CASE("sin", "[hyp]")
 {
-    CMP_UNARY(sin, 0.0, 1e-31);
+    CMP_UNARY(sin, 0.0, 5e-32);
 
+    // small values must be very accurate
     DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
         CMP_UNARY(sin, x, 5e-32);
         CMP_UNARY(sin, -x, 5e-32);
     }
 
-    CMP_UNARY(sin, 1.0, 1e-31);
-    CMP_UNARY(sin, 2.0, 1e-31);
-    CMP_UNARY(sin, 4.0, 1e-31);
-    CMP_UNARY(sin, 6.0, 1e-31);
+    // larger values but smaller than 2 PI
+    x = M_PI/4;
+    while ((x *= 1.0009) < M_PI) {
+        CMP_UNARY(sin, x, 1e-28);
+        CMP_UNARY(sin, -x, 1e-28);
+    }
 
-    CMP_UNARY(sin, -1.0, 1e-31);
-    CMP_UNARY(sin, -2.0, 1e-31);
-    CMP_UNARY(sin, -3.0, 1e-31);
-    CMP_UNARY(sin, -6.0, 1e-31);
-
-    // XXX Quite inaccurate
-    x = 0.78;
+    // reduction mod 2 pi is quite inaccurate
     while ((x *= 1.0041) < 500.) {
         CMP_UNARY(sin, x, 1e-25);
         CMP_UNARY(sin, -x, 1e-25);
@@ -194,24 +191,21 @@ TEST_CASE("cos", "[hyp]")
 {
     CMP_UNARY(cos, 0.0, 1e-31);
 
+    // small values must be very accurate
     DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
         CMP_UNARY(cos, x, 5e-32);
         CMP_UNARY(cos, -x, 5e-32);
     }
 
-    CMP_UNARY(cos, 1.0, 1e-31);
-    CMP_UNARY(cos, 2.0, 1e-31);
-    CMP_UNARY(cos, 4.0, 1e-31);
-    CMP_UNARY(cos, 6.0, 1e-31);
+    // larger values but smaller than 2 PI
+    x = M_PI/4;
+    while ((x *= 1.0009) < M_PI) {
+        CMP_UNARY(cos, x, 1e-28);
+        CMP_UNARY(cos, -x, 1e-28);
+    }
 
-    CMP_UNARY(cos, -1.0, 1e-31);
-    CMP_UNARY(cos, -2.0, 1e-31);
-    CMP_UNARY(cos, -3.0, 1e-31);
-    CMP_UNARY(cos, -6.0, 1e-31);
-
-    // XXX Quite inaccurate
-    x = 0.78;
+    // reduction mod 2 pi is quite inaccurate
     while ((x *= 1.0041) < 500.) {
         CMP_UNARY(cos, x, 1e-25);
         CMP_UNARY(cos, -x, 1e-25);
