@@ -106,3 +106,41 @@ DDouble tanh(DDouble x)
     DDouble exp_mx = reciprocal(exp_x);
     return (exp_x - exp_mx) / (exp_x + exp_mx);
 }
+
+DDouble acosh(DDouble x)
+{
+    // Special values: domain starts at 1, rest is preserved
+    if (x.hi() < 1.0)
+        return NAN;
+    if (!std::isfinite(x.hi()))
+        return x;
+
+    // Compute the argument of the logarithm, making sure that nothing can
+    // overflow.  The case x = 1 is not a problem because there we anyway
+    // can do nothing against the precision limit in x + ...
+    DDouble arg = x;
+    if (arg.hi() <= 1e16)
+        arg = arg.add_small(sqrt(arg * arg - 1.0));
+    else
+        arg = PowerOfTwo(1) * arg;
+
+    return log(arg);
+}
+
+DDouble asinh(DDouble x)
+{
+    // Special values: +Inf, -Inf are all preserved
+    if (!std::isfinite(x.hi()))
+        return x;
+
+    // Compute the argument of the logarithm, making sure that the square
+    // cannot overflow.
+    DDouble arg = fabs(x);
+    if (arg.hi() <= 1e16)
+        arg = sqrt(arg * arg + 1.0).add_small(arg);
+    else
+        // XXX for very large values this may still overflow.
+        arg = PowerOfTwo(1) * arg;
+
+    return copysign(log(arg), x);
+}

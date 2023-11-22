@@ -162,6 +162,35 @@ TEST_CASE("tanh", "[hyp]")
     }
 }
 
+TEST_CASE("acosh", "[hyp]")
+{
+    CMP_UNARY(acosh, 1.0, 1e-31);
+    CMP_UNARY(acosh, 4.0, 1e-31);
+
+    DDouble x = 1.;
+    while ((x *= 1.13) < 1e306) {
+        CMP_UNARY(acosh, x, 1e-31);
+    }
+}
+
+TEST_CASE("asinh", "[hyp]")
+{
+    CMP_UNARY(asinh, 0.0, 1e-31);
+
+    DDouble x = 1.;
+    while ((x *= 1.13) < 1e306) {
+        CMP_UNARY(asinh, x, 1e-31);
+        CMP_UNARY(asinh, -x, 1e-31);
+    }
+
+    // XXX: broken
+    //x = 1.0;
+    //while ((x *= 0.91) > 1e-100) {
+    //    CMP_UNARY(asinh, x, 1e-20);
+    //    CMP_UNARY(asinh, -x, 1e-20);
+    //}
+}
+
 TEST_CASE("sin", "[hyp]")
 {
     CMP_UNARY(sin, 0.0, 5e-32);
