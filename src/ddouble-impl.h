@@ -302,15 +302,8 @@ inline DDouble fabs(DDouble x)
 
 inline DDouble trunc(DDouble x)
 {
-    // If hi was not an integer, we already found our answer
-    double hi = trunc(x.hi());
-    if (hi != x.hi())
-        return hi;
-
-    // hi is an integer, so truncate lo instead. Since trunc can only reduce
-    // the magnitude, we can directly feed this into DDouble.
-    double lo = trunc(x.lo());
-    return DDouble(x.hi(), lo);
+    // Truncation simply involves truncating both parts
+    return DDouble(trunc(x.hi()), trunc(x.lo()));
 }
 
 inline DDouble ceil(DDouble x)
@@ -341,9 +334,10 @@ inline DDouble floor(DDouble x)
 
 inline DDouble round(DDouble x)
 {
-    // trunc is usually encoded with a single instruction, so it makes sense
+    // trunc is usually encoded with two instructions, so it makes sense
     // to use this as a building block.
-    return trunc(x + copysign(0.5, x.hi()));
+    double nudge = copysign(0.5, x.hi());
+    return trunc(x + nudge);
 }
 
 // -------------------------------------------------------------------------
