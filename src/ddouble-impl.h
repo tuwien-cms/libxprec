@@ -292,24 +292,57 @@ inline DDouble copysign(double mag, DDouble sgn)
 
 inline DDouble abs(DDouble x)
 {
+    return fabs(x);
+}
+
+inline DDouble fabs(DDouble x)
+{
     return signbit(x) ? -x : x;
 }
 
 inline DDouble trunc(DDouble x)
 {
+    // If hi was not an integer, we already found our answer
     double hi = trunc(x.hi());
-    if (hi == x.hi()) {
-        // hi is already an integer, so truncate lo instead. Since trunc can
-        // only reduce the magnitude, we are already fine.
-        double lo = trunc(x.lo());
-        return DDouble(hi, lo);
-    } else {
-        return DDouble(hi);
-    }
+    if (hi != x.hi())
+        return hi;
+
+    // hi is an integer, so truncate lo instead. Since trunc can only reduce
+    // the magnitude, we can directly feed this into DDouble.
+    double lo = trunc(x.lo());
+    return DDouble(x.hi(), lo);
+}
+
+inline DDouble ceil(DDouble x)
+{
+    // If hi was not an integer, we already found our answer
+    double hi = ceil(x.hi());
+    if (hi != x.hi())
+        return hi;
+
+    // hi is an integer, so modify lo instead.  This may actually increase the
+    // magnitude above the limit, so let's renormalize to be safe.
+    double lo = ceil(x.lo());
+    return ExDouble(x.hi()).add_small(lo);
+}
+
+inline DDouble floor(DDouble x)
+{
+    // If hi was not an integer, we already found our answer
+    double hi = floor(x.hi());
+    if (hi != x.hi())
+        return hi;
+
+    // hi is an integer, so modify lo instead.  This may actually increase the
+    // magnitude above the limit, so let's renormalize to be safe.
+    double lo = floor(x.lo());
+    return ExDouble(x.hi()).add_small(lo);
 }
 
 inline DDouble round(DDouble x)
 {
+    // trunc is usually encoded with a single instruction, so it makes sense
+    // to use this as a building block.
     return trunc(x + copysign(0.5, x.hi()));
 }
 
