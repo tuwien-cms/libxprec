@@ -49,6 +49,14 @@ TEST_CASE("Divide pow2", "[arith]")
                  WithinRel(MPFloat(1) / 137, 1e-21));
 }
 
+TEST_CASE("trunc", "[round]")
+{
+    DDouble x(ldexp(1, 61), 0.5);
+    REQUIRE(round(x) == DDouble(ldexp(1, 61), 1));
+    REQUIRE(round(-x) == DDouble(-ldexp(1, 61), -1));
+}
+
+
 TEST_CASE("sqrt", "[fn]")
 {
     CMP_UNARY(sqrt, 2, 1e-31);
