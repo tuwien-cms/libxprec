@@ -295,6 +295,24 @@ inline DDouble abs(DDouble x)
     return signbit(x) ? -x : x;
 }
 
+inline DDouble trunc(DDouble x)
+{
+    double hi = trunc(x.hi());
+    if (hi == x.hi()) {
+        // hi is already an integer, so truncate lo instead. Since trunc can
+        // only reduce the magnitude, we are already fine.
+        double lo = trunc(x.lo());
+        return DDouble(hi, lo);
+    } else {
+        return DDouble(hi);
+    }
+}
+
+inline DDouble round(DDouble x)
+{
+    return trunc(x + copysign(0.5, x.hi()));
+}
+
 // -------------------------------------------------------------------------
 // Numeric limits
 

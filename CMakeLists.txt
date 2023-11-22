@@ -19,6 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(ddouble SHARED
     src/ddouble.cxx
     src/exp.cxx
+    src/sincos.cxx
     src/hyperbolic.cxx
     src/io.cxx
     )
