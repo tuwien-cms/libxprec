@@ -56,7 +56,6 @@ TEST_CASE("trunc", "[round]")
     REQUIRE(round(-x) == DDouble(-ldexp(1, 61), -1));
 }
 
-
 TEST_CASE("sqrt", "[fn]")
 {
     CMP_UNARY(sqrt, 2, 1e-31);

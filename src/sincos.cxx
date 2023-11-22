@@ -63,12 +63,11 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     return x - PI2 * n;
 }
 
-DDouble sin(DDouble x)
+DDouble sin_sector(DDouble x, int sector)
 {
-    int sector;
-    x = remainder_pi2(x, sector);
-
     assert(sector < 4);
+    assert(fabs(x.hi()) <= M_PI/4);
+
     switch (sector) {
     case 0:
         return sin_kernel(x);
@@ -83,21 +82,16 @@ DDouble sin(DDouble x)
     }
 }
 
+DDouble sin(DDouble x)
+{
+    int sector;
+    x = remainder_pi2(x, sector);
+    return sin_sector(x, sector);
+}
+
 DDouble cos(DDouble x)
 {
     int sector;
     x = remainder_pi2(x, sector);
-
-    switch (sector) {
-    case 0:
-        // use sin(x) = cos(x - pi/2)
-        return cos_kernel(x);
-    case 1:
-        // use sin(x) = -sin(x - pi)
-        return -sin_kernel(x);
-    case 2:
-        return -cos_kernel(x);
-    default:
-        return sin_kernel(x);
-    }
+    return sin_sector(x, (sector + 1) % 4);
 }
