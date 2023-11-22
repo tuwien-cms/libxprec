@@ -144,7 +144,6 @@ TEST_CASE("sinh", "[hyp]")
     }
 }
 
-
 TEST_CASE("tanh", "[hyp]")
 {
     CMP_UNARY(tanh, INFINITY, 1e-31);
@@ -167,7 +166,7 @@ TEST_CASE("sin", "[hyp]")
 {
     CMP_UNARY(sin, 0.0, 1e-31);
 
-    DDouble x = 0.78;
+    DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
         CMP_UNARY(sin, x, 5e-32);
         CMP_UNARY(sin, -x, 5e-32);
@@ -195,12 +194,26 @@ TEST_CASE("cos", "[hyp]")
 {
     CMP_UNARY(cos, 0.0, 1e-31);
 
-    DDouble x = 0.78;
+    DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
         CMP_UNARY(cos, x, 5e-32);
         CMP_UNARY(cos, -x, 5e-32);
     }
 
-    // CMP_UNARY(cos, 1.0, 1e-29);
-    // CMP_UNARY(cos, 2.0, 1e-29);
+    CMP_UNARY(cos, 1.0, 1e-31);
+    CMP_UNARY(cos, 2.0, 1e-31);
+    CMP_UNARY(cos, 4.0, 1e-31);
+    CMP_UNARY(cos, 6.0, 1e-31);
+
+    CMP_UNARY(cos, -1.0, 1e-31);
+    CMP_UNARY(cos, -2.0, 1e-31);
+    CMP_UNARY(cos, -3.0, 1e-31);
+    CMP_UNARY(cos, -6.0, 1e-31);
+
+    // XXX Quite inaccurate
+    x = 0.78;
+    while ((x *= 1.0041) < 500.) {
+        CMP_UNARY(cos, x, 1e-25);
+        CMP_UNARY(cos, -x, 1e-25);
+    }
 }
