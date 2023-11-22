@@ -173,7 +173,7 @@ TEST_CASE("sin", "[hyp]")
         CMP_UNARY(sin, -x, 5e-32);
     }
 
-    // larger values
+    // larger values can only be accurate to the magnitude of x
     x = M_PI/4;
     while ((x *= 1.0009) < 10.0) {
         CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
@@ -196,7 +196,7 @@ TEST_CASE("cos", "[hyp]")
         CMP_UNARY(cos, -x, 5e-32);
     }
 
-    // larger values
+    // larger values can only be accurate to the magnitude of x
     x = M_PI/4;
     while ((x *= 1.0009) < 10.0) {
         CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
