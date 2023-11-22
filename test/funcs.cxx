@@ -173,17 +173,15 @@ TEST_CASE("sin", "[hyp]")
         CMP_UNARY(sin, -x, 5e-32);
     }
 
-    // larger values but smaller than 2 PI
+    // larger values
     x = M_PI/4;
-    while ((x *= 1.0009) < M_PI) {
-        CMP_UNARY(sin, x, 1e-28);
-        CMP_UNARY(sin, -x, 1e-28);
+    while ((x *= 1.0009) < 10.0) {
+        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
     }
-
-    // reduction mod 2 pi is quite inaccurate
-    while ((x *= 1.0041) < 500.) {
-        CMP_UNARY(sin, x, 1e-25);
-        CMP_UNARY(sin, -x, 1e-25);
+    while ((x *= 1.07) < 1e6) {
+        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
     }
 }
 
@@ -198,16 +196,14 @@ TEST_CASE("cos", "[hyp]")
         CMP_UNARY(cos, -x, 5e-32);
     }
 
-    // larger values but smaller than 2 PI
+    // larger values
     x = M_PI/4;
-    while ((x *= 1.0009) < M_PI) {
-        CMP_UNARY(cos, x, 1e-28);
-        CMP_UNARY(cos, -x, 1e-28);
+    while ((x *= 1.0009) < 10.0) {
+        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
     }
-
-    // reduction mod 2 pi is quite inaccurate
-    while ((x *= 1.0041) < 500.) {
-        CMP_UNARY(cos, x, 1e-25);
-        CMP_UNARY(cos, -x, 1e-25);
+    while ((x *= 1.07) < 1e6) {
+        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
     }
 }

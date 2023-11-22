@@ -15,6 +15,14 @@
         REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                          \
     } while(false)
 
+#define CMP_UNARY_ABS(fn, x, eps)                                          \
+    do {                                                                   \
+        DDouble r_d = fn(DDouble(x));                                      \
+        MPFloat r_f = fn(MPFloat(x));                                      \
+        double eps_d = eps;                                                \
+        REQUIRE_THAT(r_d, WithinAbs(r_f, eps_d));                          \
+    } while(false)
+
 #define CMP_BINARY(fn, x, y, eps)                                          \
     do {                                                                   \
         DDouble r_d = fn(DDouble(x), DDouble(y));                          \
