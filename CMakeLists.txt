@@ -45,6 +45,7 @@ add_executable(tests
     test/mpfloat.cxx
     test/arith.cxx
     test/funcs.cxx
+    test/exp.cxx
     test/hyperbolic.cxx
     test/convert.cxx
     )
