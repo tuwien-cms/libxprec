@@ -171,6 +171,8 @@ TEST_CASE("acosh", "[hyp]")
     while ((x *= 1.13) < 1e306) {
         CMP_UNARY(acosh, x, 1e-31);
     }
+
+    CMP_UNARY(acosh, 1.00001, 1e-31);
 }
 
 TEST_CASE("asinh", "[hyp]")
@@ -183,12 +185,11 @@ TEST_CASE("asinh", "[hyp]")
         CMP_UNARY(asinh, -x, 1e-31);
     }
 
-    // XXX: broken
-    //x = 1.0;
-    //while ((x *= 0.91) > 1e-100) {
-    //    CMP_UNARY(asinh, x, 1e-20);
-    //    CMP_UNARY(asinh, -x, 1e-20);
-    //}
+    x = 1.0;
+    while ((x *= 0.91) > 1e-300) {
+        CMP_UNARY(asinh, x, 1e-31);
+        CMP_UNARY(asinh, -x, 1e-31);
+    }
 }
 
 TEST_CASE("sin", "[hyp]")

@@ -133,6 +133,17 @@ DDouble asinh(DDouble x)
     if (!std::isfinite(x.hi()))
         return x;
 
+    // For small values, use Taylor expansion around the double result,
+    // because the bottom expression is log(1 + 2x/3 + ...), subject to
+    // cancellation.
+    if (fabs(x.hi()) < 1.0) {
+        DDouble y0 = asinh(x.hi());
+        DDouble x0 = sinh(y0);
+
+        DDouble y = y0.add_small((x - x0) / hypot(1.0, x0));
+        return y;
+    }
+
     // Compute the argument of the logarithm, making sure that the square
     // cannot overflow.
     DDouble arg = fabs(x);
