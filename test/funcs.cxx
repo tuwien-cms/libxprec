@@ -8,48 +8,20 @@
 #include "mpfloat.h"
 #include "catch2-addons.h"
 
-TEST_CASE("sin", "[trig]")
+TEST_CASE("sqrt", "[fn]")
 {
-    CMP_UNARY(sin, 0.0, 5e-32);
-
-    // small values must be very accurate
-    DDouble x = M_PI/4;
-    while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(sin, x, 5e-32);
-        CMP_UNARY(sin, -x, 5e-32);
-    }
-
-    // larger values can only be accurate to the magnitude of x
-    x = M_PI/4;
-    while ((x *= 1.0009) < 10.0) {
-        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
-    }
-    while ((x *= 1.07) < 1e6) {
-        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
-    }
+    CMP_UNARY(sqrt, 2, 1e-31);
+    CMP_UNARY(sqrt, 3, 1e-31);
+    CMP_UNARY(sqrt, ldexp(67.0, -39), 1e-31);
+    CMP_UNARY(sqrt, ldexp(23.0, 105), 1e-31);
 }
 
-TEST_CASE("cos", "[trig]")
+TEST_CASE("hypot", "[fn]")
 {
-    CMP_UNARY(cos, 0.0, 1e-31);
-
-    // small values must be very accurate
-    DDouble x = M_PI/4;
-    while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(cos, x, 5e-32);
-        CMP_UNARY(cos, -x, 5e-32);
-    }
-
-    // larger values can only be accurate to the magnitude of x
-    x = M_PI/4;
-    while ((x *= 1.0009) < 10.0) {
-        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
-    }
-    while ((x *= 1.07) < 1e6) {
-        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
-    }
+    CMP_BINARY(hypot, 1.0, 1.0, 1e-31);
+    CMP_BINARY(hypot, 3.0, -10000.0, 1e-31);
+    CMP_BINARY(hypot, ldexp(3.0, 600), ldexp(1.0, 570), 1e-31);
+    CMP_BINARY(hypot, ldexp(-3.0, 600), ldexp(1.0, 640), 1e-31);
+    CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1e-31);
+    CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1e-31);
 }
