@@ -45,6 +45,7 @@ add_executable(tests
     test/mpfloat.cxx
     test/arith.cxx
     test/funcs.cxx
+    test/hyperbolic.cxx
     test/convert.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
