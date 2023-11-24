@@ -254,3 +254,8 @@ DDouble pow(DDouble x, int n)
     }
     return res;
 }
+
+DDouble pow(DDouble x, DDouble y)
+{
+    return exp(log(x) * y);
+}
