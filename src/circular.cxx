@@ -123,6 +123,12 @@ DDouble asin(DDouble x)
     if (!std::isfinite(y0.hi()))
         return y0;
 
+    // This is where Taylor fails
+    if (fabs(x) == 1.0) {
+        static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
+        return copysign(PI_2, x);
+    }
+
     // Perform Taylor expansion:
     //
     //    asin(x) = asin(x0) + (x - x0) / sqrt(1 - x0**2)
@@ -141,6 +147,14 @@ DDouble acos(DDouble x)
     DDouble y0 = acos(x.hi());
     if (!std::isfinite(y0.hi()))
         return y0;
+
+    // This is where Taylor fails
+    if (x == 1.0)
+        return 0.0;
+    if (x == -1.0) {
+        static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
+        return PI;
+    }
 
     // Perform Taylor expansion:
     //
