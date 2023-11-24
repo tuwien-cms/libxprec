@@ -53,3 +53,18 @@ TEST_CASE("cos", "[trig]")
         CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
     }
 }
+
+
+TEST_CASE("tan", "[trig]")
+{
+    CMP_UNARY(tan, 0.0, 1e-31);
+
+    // small values must be very accurate
+    DDouble x = M_PI/4;
+    while ((x *= 0.9) > 1e-290) {
+        CMP_UNARY(tan, x, 5e-32);
+        CMP_UNARY(tan, -x, 5e-32);
+    }
+
+    // XXX: larger values are relatively inaccurate
+}
