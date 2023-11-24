@@ -161,9 +161,17 @@ DDouble acos(DDouble x)
     //    acos(x) = acos(x0) - (x - x0) / sqrt(1 - x0**2)
     //            = y0 - (x - cos(y0)) / sin(y0)
     //
-    DDouble x0, w;
-    sincos(y0, w, x0);
+    DDouble x0, w, diff;
 
-    DDouble y = y0 + (x0 - x) / w;
-    return y;
+    sincos(y0, w, x0);
+    diff = (x0 - x) / w;
+    y0 += diff;
+
+    if (fabs(x.hi()) > 0.9) {
+        sincos(y0, w, x0);
+        diff = (x0 - x) / w;
+        y0 += diff;
+    }
+
+    return y0;
 }
