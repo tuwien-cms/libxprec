@@ -192,7 +192,27 @@ TEST_CASE("asinh", "[hyp]")
     }
 }
 
-TEST_CASE("sin", "[hyp]")
+TEST_CASE("atanh", "[hyp]")
+{
+    CMP_UNARY(atanh, 0.0, 1e-31);
+    CMP_UNARY(atanh, 0.5, 5e-32);
+    CMP_UNARY(atanh, -0.5, 5e-32);
+
+    DDouble x = 0.9;
+    while ((x *= 0.95) > 1e-300) {
+        CMP_UNARY(atanh, x, 1e-31);
+        CMP_UNARY(atanh, -x, 1e-31);
+    }
+
+    // Check values close to one.
+    x = 0.1;
+    while ((x *= 0.95) > 1e-20) {
+        CMP_UNARY(atanh, 1.0 - x, 1e-31);
+        CMP_UNARY(atanh, x - 1.0, 1e-31);
+    }
+}
+
+TEST_CASE("sin", "[trig]")
 {
     CMP_UNARY(sin, 0.0, 5e-32);
 
@@ -215,7 +235,7 @@ TEST_CASE("sin", "[hyp]")
     }
 }
 
-TEST_CASE("cos", "[hyp]")
+TEST_CASE("cos", "[trig]")
 {
     CMP_UNARY(cos, 0.0, 1e-31);
 

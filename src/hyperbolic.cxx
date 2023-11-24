@@ -155,3 +155,24 @@ DDouble asinh(DDouble x)
 
     return copysign(log(arg), x);
 }
+
+DDouble atanh(DDouble x)
+{
+    // Use symmetry
+    if (x.hi() < 0)
+        return -atanh(-x);
+
+    // Special values
+    if (std::isnan(x.hi()))
+        return x;
+    if (x == 1.0)
+        return INFINITY;
+    if (x > 1.0)
+        return NAN;
+
+    // Use the definition, but be wary of cancellation around 0.
+    //
+    //   atanh(x) = 1/2 log((1 + x)/(1 - x)) = 1/2 log(1 + 2x/(1 - x))
+    //
+    return PowerOfTwo(-1) * log1p(PowerOfTwo(1) * x / (1.0 - x));
+}
