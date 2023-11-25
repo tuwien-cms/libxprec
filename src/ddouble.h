@@ -297,8 +297,10 @@ public:
 
     static constexpr int radix = _double::radix;
 
-    static constexpr int min_exponent = _double::min_exponent + _double::digits;
-    static constexpr int min_exponent10 = _double::min_exponent10 + _double::digits10;
+    static constexpr int min_exponent =
+                            _double::min_exponent + _double::digits;
+    static constexpr int min_exponent10 =
+                            _double::min_exponent10 + _double::digits10;
     static constexpr int max_exponent = _double::max_exponent;
     static constexpr int max_exponent10 = _double::max_exponent10;
 

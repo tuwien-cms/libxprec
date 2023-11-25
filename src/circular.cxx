@@ -67,7 +67,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
 DDouble sin_sector(DDouble x, int sector)
 {
     assert(sector >= 0 && sector < 4);
-    assert(fabs(x.hi()) <= M_PI/4);
+    assert(fabs(x.hi()) <= nextafter(M_PI/4, 1));
 
     switch (sector) {
     case 0:
@@ -187,4 +187,23 @@ DDouble atan(DDouble x)
     y0 += (x - x0) * c * c;
 
     return y0;
+}
+
+DDouble atan2(DDouble y, DDouble x)
+{
+    const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
+    const static DDouble PI(3.141592653589793, 1.2246467991473532e-16);
+
+    // Special values
+    if (isnan(x) || isnan(y))
+        return NAN;
+    if (iszero(y))
+        return x.hi() >= 0 ? 0.0 : PI;
+    if (iszero(x))
+        return copysign(PI_2, y);
+
+    DDouble res = atan(y / x);
+    if (x.hi() < 0)
+        res = copysign(PI, y).add_small(res);
+    return res;
 }
