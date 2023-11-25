@@ -32,7 +32,7 @@ jobs:
       - name: CMake configure and build
         uses: threeal/cmake-action@v1.3.0
         with:
-          options: -DBUILD_TESTING=ON
+          options: BUILD_TESTING=ON
           run-build: true
 
       - name: Run tests
