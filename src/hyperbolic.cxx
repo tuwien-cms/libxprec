@@ -43,7 +43,7 @@ static DDouble sinh_kernel(DDouble x)
 DDouble sinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
-    if (!std::isfinite(x.hi()))
+    if (!isfinite(x))
         return x;
 
     // For small values, we use the Taylor series
@@ -68,7 +68,7 @@ static DDouble tanh_kernel(DDouble x)
     // precision, which is why we need to have this work till abs(x) < 0.15.
 
     // Convergence of the CF approx to 2e-32
-    assert(greater_in_magnitude(0.23, x.hi()));
+    assert(greater_in_magnitude(0.23, x));
 
     // Continued fraction expansion of the tanh
     // Abramowitz and Stegun 4.5.70
@@ -90,7 +90,7 @@ static DDouble tanh_kernel(DDouble x)
 DDouble tanh(DDouble x)
 {
     // Special values
-    if (std::isnan(x.hi()))
+    if (isnan(x))
         return x;
 
     // For small values, use the continued fraction representation
@@ -112,7 +112,7 @@ DDouble acosh(DDouble x)
     // Special values: domain starts at 1, rest is preserved
     if (x.hi() < 1.0)
         return NAN;
-    if (!std::isfinite(x.hi()))
+    if (!isfinite(x))
         return x;
 
     // Compute the argument of the logarithm, making sure that nothing can
@@ -130,7 +130,7 @@ DDouble acosh(DDouble x)
 DDouble asinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
-    if (!std::isfinite(x.hi()))
+    if (!isfinite(x))
         return x;
 
     // For small values, use Taylor expansion around the double result,
@@ -163,7 +163,7 @@ DDouble atanh(DDouble x)
         return -atanh(-x);
 
     // Special values
-    if (std::isnan(x.hi()))
+    if (isnan(x))
         return x;
     if (x == 1.0)
         return INFINITY;

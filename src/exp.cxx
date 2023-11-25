@@ -17,7 +17,7 @@ static DDouble expm1_kernel(DDouble x)
     // needs to go out to x = log(1.5) = 0.22
 
     // Convergence of the CF approx to 2e-32
-    assert(greater_in_magnitude(0.3, x.hi()));
+    assert(greater_in_magnitude(0.3, x));
 
     // Continued fraction expansion of the exponential function
     //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
@@ -161,7 +161,7 @@ static DDouble exp_halves(int x)
 
 DDouble exp(DDouble x)
 {
-    if (std::isnan(x.hi()))
+    if (isnan(x))
         return x;
     if (x.hi() >= 709.0)
         return DDouble(INFINITY, 0);
@@ -195,7 +195,7 @@ DDouble log(DDouble x)
 {
     // Start with logarithm of hi part
     DDouble log_x = log(x.hi());
-    if (!std::isfinite(log_x.hi()))
+    if (!isfinite(log_x))
         return log_x;
 
     // Abramowitz and Stegun give the following series expansion (4.1.30):
@@ -212,7 +212,7 @@ DDouble log1p(DDouble x)
 {
     // Start with logarithm of hi part
     DDouble log_x = log1p(x.hi());
-    if (!std::isfinite(log_x.hi()))
+    if (!isfinite(log_x))
         return log_x;
 
     // Again, we can use the same correction, but log1p <-> expm1

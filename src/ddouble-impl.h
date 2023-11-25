@@ -37,6 +37,17 @@ inline bool greater_in_magnitude(DDouble x, DDouble y)
     return greater_in_magnitude(x.hi(), y.hi());
 }
 
+inline bool greater_in_magnitude(DDouble x, double y)
+{
+    return greater_in_magnitude(x.hi(), y);
+}
+
+inline bool greater_in_magnitude(double x, DDouble y)
+{
+    return greater_in_magnitude(x, y.hi());
+}
+
+
 // -------------------------------------------------------------------------
 // PowerOfTwo
 
@@ -338,6 +349,31 @@ inline DDouble round(DDouble x)
     // to use this as a building block.
     double nudge = copysign(0.5, x.hi());
     return trunc(x + nudge);
+}
+
+// -------------------------------------------------------------------------
+// DDouble inquiry functions
+
+inline bool isfinite(DDouble x) { return std::isfinite(x.hi()); }
+
+inline bool isinf(DDouble x) { return std::isinf(x.hi()); }
+
+inline bool isnan(DDouble x) { return std::isnan(x.hi()); }
+
+inline bool isnormal(DDouble x)
+{
+    // Here, we have to check the lo part too, since that is where the
+    // denormalization shows up
+    return std::isnormal(x.hi()) && std::isnormal(x.lo());
+}
+
+inline bool iszero(DDouble x) { return x.hi() == 0; }
+
+inline int fpclassify(DDouble x)
+{
+    // This also works with zero, since that can be determined from the
+    // hi part alone
+    return std::fpclassify(x.hi());
 }
 
 // -------------------------------------------------------------------------

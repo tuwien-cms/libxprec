@@ -10,7 +10,7 @@ static DDouble sin_kernel(DDouble x)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
-    assert(greater_in_magnitude(0.94, x.hi()));
+    assert(greater_in_magnitude(0.94, x));
 
     // Taylor series of the sin around 0
     DDouble xsq = -x * x;
@@ -27,7 +27,7 @@ static DDouble cos_kernel(DDouble x)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
-    assert(greater_in_magnitude(0.83, x.hi()));
+    assert(greater_in_magnitude(0.83, x));
 
     // Taylor series of the cos around 0
     DDouble xsq = -x * x;
@@ -120,7 +120,7 @@ DDouble asin(DDouble x)
 {
     // Compute a approximation to double precision
     DDouble y0 = asin(x.hi());
-    if (!std::isfinite(y0.hi()))
+    if (!isfinite(y0))
         return y0;
 
     // This is where Taylor fails
@@ -145,7 +145,7 @@ DDouble acos(DDouble x)
 {
     // Compute a approximation to double precision
     DDouble y0 = acos(x.hi());
-    if (!std::isfinite(y0.hi()))
+    if (!isfinite(y0))
         return y0;
 
     // This is where Taylor fails
@@ -173,7 +173,7 @@ DDouble atan(DDouble x)
 {
     // Again use Taylor expansion
     DDouble y0 = atan(x.hi());
-    if (!std::isfinite(y0.hi()))
+    if (!isfinite(y0))
         return y0;
 
     DDouble s, c, x0;

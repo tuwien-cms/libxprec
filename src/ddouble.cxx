@@ -36,12 +36,12 @@ DDouble hypot(DDouble x, DDouble y)
     static const PowerOfTwo LARGE(std::numeric_limits<double>::max_exponent / 2);
     static const PowerOfTwo SMALL  = PowerOfTwo(0) / LARGE;
 
-    if (greater_in_magnitude(x.hi(), LARGE)) {
+    if (greater_in_magnitude(x, LARGE)) {
         // For large values, scale down to avoid overflow
         x *= SMALL;
         y *= SMALL;
         return sqrt((x * x).add_small(y * y)) * LARGE;
-    } else if (greater_in_magnitude(SMALL, x.hi())) {
+    } else if (greater_in_magnitude(SMALL, x)) {
         // For small values, scale up to avoid underflow
         x *= LARGE;
         y *= LARGE;

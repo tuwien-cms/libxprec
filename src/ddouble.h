@@ -262,6 +262,13 @@ DDouble sqrt(DDouble a);
 DDouble tan(DDouble a);
 DDouble tanh(DDouble a);
 
+int fpclassify(DDouble x);
+bool isfinite(DDouble x);
+bool isinf(DDouble x);
+bool isnan(DDouble x);
+bool isnormal(DDouble x);
+bool iszero(DDouble x);
+
 namespace std {
 
 /**
