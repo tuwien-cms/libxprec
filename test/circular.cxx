@@ -143,6 +143,7 @@ TEST_CASE("atan", "[trig]")
         CMP_UNARY(atan, -x, 1e-31);
     }
 }
+
 TEST_CASE("atan2", "[trig]")
 {
     CMP_BINARY(atan2, 0.0, 0.0, 1e-31);
