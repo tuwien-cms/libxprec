@@ -51,3 +51,15 @@ DDouble hypot(DDouble x, DDouble y)
         return sqrt((x * x).add_small(y * y));
     }
 }
+
+DDouble fmod(DDouble x, DDouble &i)
+{
+    i = trunc(x);
+    return x.add_small(-i);
+}
+
+
+DDouble fmod(DDouble x, DDouble *iptr)
+{
+    return fmod(x, *iptr);
+}

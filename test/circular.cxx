@@ -92,7 +92,7 @@ TEST_CASE("asin", "[trig]")
     // XXX: inaccurate for large values
     SKIP();
     x = 0.9;
-    while ((x /= 0.99) > 0.5) {
+    while ((x /= 0.99) < 1.0) {
         CMP_UNARY(asin, x, 1e-31);
         CMP_UNARY(asin, -x, 1e-31);
     }
