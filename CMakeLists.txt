@@ -23,7 +23,12 @@ add_library(ddouble SHARED
     src/hyperbolic.cxx
     src/io.cxx
     )
-target_compile_options(ddouble PRIVATE -Wall -Wextra)
+target_compile_options(ddouble PRIVATE -Wall -Wextra -pedantic)
+set_target_properties(ddouble PROPERTIES
+    PUBLIC_HEADER "src/ddouble.h;src/ddouble-impl.h"
+    )
+
+install(TARGETS ddouble)
 
 # TESTS
 if (BUILD_TESTING)

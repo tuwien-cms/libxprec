@@ -22,7 +22,7 @@
  */
 inline bool greater_in_magnitude(double x, double y)
 {
-    static_assert(std::numeric_limits<double>::is_iec559);
+    static_assert(std::numeric_limits<double>::is_iec559, "needs IEEE floats");
     union {
         double number;
         uint64_t pattern;
