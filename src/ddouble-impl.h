@@ -47,7 +47,6 @@ inline bool greater_in_magnitude(double x, DDouble y)
     return greater_in_magnitude(x, y.hi());
 }
 
-
 // -------------------------------------------------------------------------
 // PowerOfTwo
 

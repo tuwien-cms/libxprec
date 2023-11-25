@@ -66,6 +66,12 @@ TEST_CASE("tan", "[trig]")
     }
 
     // XXX: larger values are relatively inaccurate
+    SKIP();
+    x = M_PI/4;
+    while ((x /= 0.98) < M_PI/2) {
+        CMP_UNARY(tan, x, 5e-32);
+        CMP_UNARY(tan, -x, 5e-32);
+    }
 }
 
 TEST_CASE("asin", "[trig]")
@@ -78,12 +84,15 @@ TEST_CASE("asin", "[trig]")
 
     // small values must be very accurate
     DDouble x = 1.0;
-    // XXX: large values are not so accurate
-    //while ((x *= 0.99) > 0.5) {
-    //    CMP_UNARY(asin, x, 1e-31);
-    //    CMP_UNARY(asin, -x, 1e-31);
-    //}
     while ((x *= 0.84) > 1e-300) {
+        CMP_UNARY(asin, x, 1e-31);
+        CMP_UNARY(asin, -x, 1e-31);
+    }
+
+    // XXX: inaccurate for large values
+    SKIP();
+    x = 0.9;
+    while ((x /= 0.99) > 0.5) {
         CMP_UNARY(asin, x, 1e-31);
         CMP_UNARY(asin, -x, 1e-31);
     }
@@ -99,13 +108,17 @@ TEST_CASE("acos", "[trig]")
 
     // small values must be very accurate
     DDouble x = 1.0;
-    // while ((x *= 0.99) > 0.5) {
-    //     CMP_UNARY(acos, x, 2e-31);
-    //     CMP_UNARY(acos, -x, 2e-31);
-    // }
     while ((x *= 0.84) > 1e-300) {
         CMP_UNARY(acos, x, 1e-31);
         CMP_UNARY(acos, -x, 1e-31);
+    }
+
+    // XXX: inaccurate for large values
+    SKIP();
+    x = 0.9;
+    while ((x /= 0.99) < 1.0) {
+         CMP_UNARY(acos, x, 2e-31);
+         CMP_UNARY(acos, -x, 2e-31);
     }
 }
 
@@ -122,4 +135,11 @@ TEST_CASE("atan", "[trig]")
         CMP_UNARY(atan, -x, 1e-31);
     }
 
+    // XXX: inaccurate for large values
+    SKIP();
+    x = 1.0;
+    while ((x /= 0.84) < 1e290) {
+        CMP_UNARY(atan, x, 1e-31);
+        CMP_UNARY(atan, -x, 1e-31);
+    }
 }
