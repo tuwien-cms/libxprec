@@ -166,12 +166,25 @@ DDouble acos(DDouble x)
     sincos(y0, w, x0);
     diff = (x0 - x) / w;
     y0 += diff;
+    return y0;
+}
 
-    if (fabs(x.hi()) > 0.9) {
-        sincos(y0, w, x0);
-        diff = (x0 - x) / w;
-        y0 += diff;
-    }
+DDouble atan(DDouble x)
+{
+    // Again use Taylor expansion
+    DDouble y0 = atan(x.hi());
+    if (!std::isfinite(y0.hi()))
+        return y0;
+
+    DDouble s, c, x0;
+
+    sincos(y0, s, c);
+    x0 = s / c;
+    y0 += (x - x0) * c * c;
+
+    sincos(y0, s, c);
+    x0 = s / c;
+    y0 += (x - x0) * c * c;
 
     return y0;
 }

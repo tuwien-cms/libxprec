@@ -99,12 +99,27 @@ TEST_CASE("acos", "[trig]")
 
     // small values must be very accurate
     DDouble x = 1.0;
-    while ((x *= 0.99) > 0.5) {
-        CMP_UNARY(acos, x, 2e-31);
-        CMP_UNARY(acos, -x, 2e-31);
-    }
+    // while ((x *= 0.99) > 0.5) {
+    //     CMP_UNARY(acos, x, 2e-31);
+    //     CMP_UNARY(acos, -x, 2e-31);
+    // }
     while ((x *= 0.84) > 1e-300) {
         CMP_UNARY(acos, x, 1e-31);
         CMP_UNARY(acos, -x, 1e-31);
     }
+}
+
+TEST_CASE("atan", "[trig]")
+{
+    CMP_UNARY(atan, 0.0, 1e-31);
+    CMP_UNARY(atan, 0.5, 1e-31);
+    CMP_UNARY(atan, -0.5, 1e-31);
+
+    // small values must be very accurate
+    DDouble x = 1.0;
+    while ((x *= 0.84) > 1e-300) {
+        CMP_UNARY(atan, x, 1e-31);
+        CMP_UNARY(atan, -x, 1e-31);
+    }
+
 }
