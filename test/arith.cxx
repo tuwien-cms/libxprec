@@ -22,7 +22,7 @@ TEST_CASE("greater_in_magnitude", "")
 TEST_CASE("arith", "[arith]")
 {
     for (double x = 10.0; x > 5.0; x *= .9933) {
-        for (double y = 10.0; y > 1e-35; y *= .9383) {
+        for (double y = x; y > 1e-35; y *= .9383) {
             CMP_BINARY(operator+, x, y, 2.5e-32);
             CMP_BINARY(operator-, x, y, 2.5e-32);
             CMP_BINARY(operator+, y, x, 2.5e-32);
