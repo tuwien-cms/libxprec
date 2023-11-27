@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 #include "xprec/ddouble.h"
-#include <cstring>
 
 DDouble sqrt(DDouble a)
 {
