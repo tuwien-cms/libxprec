@@ -5,7 +5,7 @@
  * Most of the basic numerical algorithms are directly lifted from:
  * M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
 #pragma once

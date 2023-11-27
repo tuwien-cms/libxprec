@@ -20,7 +20,7 @@
 #
 #  - MPFR::MPFR        : imported target if library has been found
 #
-# Copyright (C) 2022 Markus Wallerberger and others
+# Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
 #
 include(FindPackageHandleStandardArgs)

@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Markus Wallerberger and others
+# Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
 #
 cmake_minimum_required(VERSION 3.9)

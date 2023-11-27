@@ -1,6 +1,6 @@
 /* Small double-double arithmetic library - version info
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
 #define XPREC_VERSION_MAJOR 0

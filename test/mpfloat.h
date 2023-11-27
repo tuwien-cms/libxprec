@@ -1,6 +1,6 @@
 /* Convenience wrapper for MPFloat to allow nice object-oriented stuff.
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
 #pragma once

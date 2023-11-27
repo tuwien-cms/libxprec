@@ -1,6 +1,6 @@
 # Utility for extracting version from C header
 #
-# Copyright (C) 2022 Markus Wallerberger and others
+# Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
 
 # Function to extract version string from header file

@@ -27,12 +27,19 @@ is 6u². We report the largest observed error here [^1].
 
 Installation
 ------------
+libxprec has no mandatory dependencies other than a C++11-compliant compiler.
+If you want to run the tests, you need to have GNU MPFR installed and add
+`-DBUILD_TESTING=ON` to the cmake flags.
 
     mkdir build
     cd build
-    cmake .. [EXTRA_CMAKE_FLAGS_GO_HERE]
+    cmake .. [-DBUILD_TESTING=ON] [EXTRA_CMAKE_FLAGS_GO_HERE]
     make
-    ./tests
+    ./test/tests
+
+xprec is faster when using the fused-multiply add (FMA) instruction, which should
+be available on most modern CPUs.  We recommend adding `CMAKE_CXX_FLAGS=-mfma`
+to the cmake command.
 
 License and Copying
 -------------------

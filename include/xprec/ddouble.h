@@ -1,6 +1,6 @@
 /* Small double-double arithmetic library.
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
 #pragma once

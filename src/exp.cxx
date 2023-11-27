@@ -1,6 +1,6 @@
 /* Mathematical functions to quad precision.
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  *
  * Most strategies are adapted from DoubleFloats.jl which is

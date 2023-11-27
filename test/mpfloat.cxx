@@ -1,6 +1,6 @@
 /* Tests for MPFloat
  *
- * Copyright (C) 2022 Markus Wallerberger and others
+ * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
 #include <catch2/catch_test_macros.hpp>
