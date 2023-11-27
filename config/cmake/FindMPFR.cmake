@@ -41,30 +41,12 @@ find_library(MPFR_LIBRARY
     )
 mark_as_advanced(MPFR_LIBRARY)
 
-# Function to extract version string from header file
-function(mpfr_find_version version filename)
-    file(READ "${filename}" header)
-
-    string(REGEX MATCH
-        "define[ \t]+MPFR_VERSION_MAJOR[ \t]+([0-9]+)"
-        match "${header}")
-    set(_version "${CMAKE_MATCH_1}")
-
-    string(REGEX MATCH
-        "define[ \t]+MPFR_VERSION_MINOR[ \t]+([0-9]+)"
-        match "${header}")
-    set(_version "${_version}.${CMAKE_MATCH_1}")
-
-    string(REGEX MATCH
-        "define[ \t]+MPFR_VERSION_PATCHLEVEL[ \t]+([0-9]+)"
-        match "${header}")
-    set(_version "${_version}.${CMAKE_MATCH_1}")
-
-    set("${version}" "${_version}" PARENT_SCOPE)
-endfunction()
-
 if(MPFR_INCLUDE_DIR)
-    mpfr_find_version(MPFR_VERSION "${MPFR_INCLUDE_DIR}/mpfr.h")
+    include(VersionFromHeader)
+    version_from_header(
+        MPFR_VERSION "${MPFR_INCLUDE_DIR}/mpfr.h"
+        MPFR_VERSION_MAJOR MPFR_VERSION_MINOR MPFR_VERSION_PATCHLEVEL
+        )
 endif()
 
 find_package_handle_standard_args(MPFR
