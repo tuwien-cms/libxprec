@@ -10,13 +10,7 @@
 #include <iostream>
 #include <type_traits>
 
-#define DDOUBLE_VERSION_MAJOR 0
-#define DDOUBLE_VERSION_MINOR 1
-#define DDOUBLE_VERSION_PATCH 0
-
-class PowerOfTwo;
-class ExDouble;
-class DDouble;
+#include "version.h"
 
 /**
  * Class for wrapping a power of two.
@@ -328,6 +322,5 @@ public:
 };
 
 } /* namespace std */
-
 
 #include "ddouble-impl.h"
