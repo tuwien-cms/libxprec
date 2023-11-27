@@ -323,4 +323,7 @@ public:
 
 } /* namespace std */
 
-#include "ddouble-impl.h"
+#include "internal/arith.h"
+#include "internal/checks.h"
+#include "internal/functions.h"
+#include "internal/limits.h"

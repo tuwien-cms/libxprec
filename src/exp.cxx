@@ -9,6 +9,7 @@
  */
 #include "xprec/ddouble.h"
 #include <cmath>
+#include <cassert>
 
 static DDouble expm1_kernel(DDouble x)
 {

@@ -1,4 +1,6 @@
 #pragma once
+#include <cassert>
+
 #include "xprec/ddouble.h"
 
 inline DDouble reciprocal_factorial(int n)
