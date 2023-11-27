@@ -12,8 +12,6 @@
 #include "ddouble.h"
 #include <cassert>
 
-#include <iostream>
-
 /**
  * Return true if x is greater or equal in magnitude as y.
  *
@@ -268,8 +266,13 @@ inline bool operator>(DDouble x, DDouble y)
 
 inline void swap(DDouble &x, DDouble &y)
 {
-    std::swap(x._hi, y._hi);
-    std::swap(x._lo, y._lo);
+    double tmp;
+    tmp = x._hi;
+    x._hi = y._hi;
+    y._hi = tmp;
+    tmp = x._lo;
+    x._lo = y._lo;
+    y._lo = tmp;
 }
 
 inline DDouble ldexp(DDouble a, int n)

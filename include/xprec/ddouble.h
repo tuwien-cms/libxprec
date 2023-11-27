@@ -7,7 +7,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <iostream>
+#include <iosfwd>
 #include <type_traits>
 
 #include "version.h"

@@ -5,6 +5,7 @@
  */
 #include "xprec/ddouble.h"
 #include <array>
+#include <iostream>
 #include <sstream>
 
 class FormatSentry
