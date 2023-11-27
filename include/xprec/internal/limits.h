@@ -5,6 +5,7 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
+#include "../ddouble.h"
 
 constexpr DDouble std::numeric_limits<DDouble>::min() noexcept
 {

@@ -8,7 +8,7 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-
+#include "../ddouble.h"
 
 /**
  * Return true if x is greater or equal in magnitude as y.

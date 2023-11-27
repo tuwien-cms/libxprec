@@ -5,6 +5,7 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
+#include "../ddouble.h"
 
 inline void swap(DDouble &x, DDouble &y)
 {
