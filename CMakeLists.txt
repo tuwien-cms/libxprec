@@ -24,9 +24,10 @@ add_library(xprec SHARED
     src/io.cxx
     )
 target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
-set_target_properties(xprec PROPERTIES
-    PUBLIC_HEADER "src/ddouble.h;src/ddouble-impl.h"
-    )
+target_include_directories(xprec PUBLIC include)
+#set_target_properties(xprec PROPERTIES
+#    PUBLIC_HEADER "include/xprec/ddouble.h;include/xprec/ddouble-impl.h"
+#    )
 
 install(TARGETS xprec)
 

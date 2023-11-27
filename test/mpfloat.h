@@ -13,7 +13,7 @@
 
 #include <mpfr.h>
 
-#include "ddouble.h"
+#include "xprec/ddouble.h"
 
 /**
  * Class wrapping a MPFR object at certain precision.

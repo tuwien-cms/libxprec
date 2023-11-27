@@ -3,7 +3,7 @@
  * Copyright (C) 2022 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "ddouble.h"
+#include "xprec/ddouble.h"
 #include "taylor.h"
 
 DDouble cosh(DDouble x)

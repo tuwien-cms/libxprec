@@ -7,7 +7,7 @@
  * Copyright (C) 2018-2023 Julia Math
  * and also licensed MIT
  */
-#include "ddouble.h"
+#include "xprec/ddouble.h"
 #include <cmath>
 
 static DDouble expm1_kernel(DDouble x)
