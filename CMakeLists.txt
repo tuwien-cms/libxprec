@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.9)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/config/cmake")
 
 project(
-    ddouble
+    libxprec
     LANGUAGES CXX
     VERSION 0.1.0
     DESCRIPTION "library for emulated extended-precision arithmetic"
@@ -16,19 +16,19 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Library
-add_library(ddouble SHARED
+add_library(xprec SHARED
     src/ddouble.cxx
     src/exp.cxx
     src/circular.cxx
     src/hyperbolic.cxx
     src/io.cxx
     )
-target_compile_options(ddouble PRIVATE -Wall -Wextra -pedantic)
-set_target_properties(ddouble PROPERTIES
+target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
+set_target_properties(xprec PROPERTIES
     PUBLIC_HEADER "src/ddouble.h;src/ddouble-impl.h"
     )
 
-install(TARGETS ddouble)
+install(TARGETS xprec)
 
 # TESTS
 if (BUILD_TESTING)
