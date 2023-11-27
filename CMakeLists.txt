@@ -39,11 +39,12 @@ add_library(xprec SHARED
     )
 target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 target_include_directories(xprec PUBLIC include)
-#set_target_properties(xprec PROPERTIES
-#    PUBLIC_HEADER "include/xprec/ddouble.h;include/xprec/ddouble-impl.h"
-#    )
 
 install(TARGETS xprec)
+install(
+    DIRECTORY include/
+    DESTINATION include
+    )
 
 # TESTS
 if (BUILD_TESTING)
