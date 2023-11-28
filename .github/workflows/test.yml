@@ -14,6 +14,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+          - os: macos-latest
 
     name: |
       test ${{ matrix.os }}
@@ -24,10 +25,15 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        if: matrix.os == 'ubuntu-latest'
+      - name: Install Linux dependencies
+        if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install libmpfr-dev catch2
+          sudo apt install libmpfr-dev
+
+      - name: Install MacOS dependencies
+        if: startsWith(matrix.os, 'macor')
+        run: |
+          brew install mpfr catch2
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v1.3.0
