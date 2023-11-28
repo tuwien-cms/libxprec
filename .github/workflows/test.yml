@@ -31,7 +31,7 @@ jobs:
           sudo apt install libmpfr-dev
 
       - name: Install MacOS dependencies
-        if: startsWith(matrix.os, 'macor')
+        if: startsWith(matrix.os, 'macos')
         run: |
           brew install mpfr catch2
 
