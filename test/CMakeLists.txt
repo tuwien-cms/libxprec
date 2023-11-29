@@ -17,6 +17,8 @@ FetchContent_MakeAvailable(Catch2)
 # MPFR is required for tests
 find_package(MPFR REQUIRED)
 
+enable_testing()
+
 add_executable(tests
     mpfloat.cxx
     convert.cxx
@@ -31,3 +33,4 @@ target_link_libraries(tests PRIVATE MPFR::MPFR)
 target_link_libraries(tests PRIVATE xprec)
 target_include_directories(tests PRIVATE ../include)
 target_compile_options(tests PRIVATE -Wall -Wextra)
+add_test(tests tests)
