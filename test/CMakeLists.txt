@@ -2,15 +2,17 @@
 # SPDX-License-Identifier: MIT
 #
 include(FetchContent)
+
+# Require Catch2 for tests
 FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG v3.4.0
+    FIND_PACKAGE_ARGS 3
     )
 
-# Require Catch2 for tests
-# Goes through FetchContent if necessary
-find_package(Catch2 3)
+# Goes through find_package first
+FetchContent_MakeAvailable(Catch2)
 
 # MPFR is required for tests
 find_package(MPFR REQUIRED)
