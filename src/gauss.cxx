@@ -52,7 +52,7 @@ void gauss_legendre(int n, DDouble *x, DDouble *w)
     // Perform Newton iteration to refine x
     // store derivatives in w for later use
     // XXX: terminate iteration early if converged
-    for (int iter = 0; iter < 10; ++iter) {
+    for (int iter = 0; iter < 15; ++iter) {
         for (int i = 0; i < n; ++i) {
             DDouble Pn, dPn;
             leg_deriv(n, x[i], Pn, dPn);
@@ -63,6 +63,6 @@ void gauss_legendre(int n, DDouble *x, DDouble *w)
 
     // Compute weights
     for (int i = 0; i < n; ++i) {
-        w[i] = 2.0 / ((1 - x[i] * x[i]) * w[i] * w[i]);
+        w[i] = 2.0 / ((1.0 - x[i] * x[i]) * w[i] * w[i]);
     }
 }
