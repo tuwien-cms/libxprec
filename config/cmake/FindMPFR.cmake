@@ -25,23 +25,27 @@
 #
 include(FindPackageHandleStandardArgs)
 
-find_path(MPFR_INCLUDE_DIR
-    NAMES mpfr.h
-    HINTS ENV MPFR_ROOT
-    PATH_SUFFIXES include
-    DOC "GNU MPFR - include directory"
-    )
-mark_as_advanced(MPFR_INCLUDE_DIR)
+if (NOT MPFR_INCLUDE_DIR)
+    find_path(MPFR_INCLUDE_DIR
+        NAMES mpfr.h
+        HINTS ENV MPFR_ROOT
+        PATH_SUFFIXES include
+        DOC "GNU MPFR - include directory"
+        )
+    mark_as_advanced(MPFR_INCLUDE_DIR)
+endif()
 
-find_library(MPFR_LIBRARY
-    NAMES mpfr
-    HINTS ENV MPFR_ROOT
-    PATH_SUFFIXES lib
-    DOC "GNU MPFR - library"
-    )
-mark_as_advanced(MPFR_LIBRARY)
+if (NOT MPFR_LIBRARY)
+    find_library(MPFR_LIBRARY
+        NAMES mpfr
+        HINTS ENV MPFR_ROOT
+        PATH_SUFFIXES lib
+        DOC "GNU MPFR - library"
+        )
+    mark_as_advanced(MPFR_LIBRARY)
+endif()
 
-if(MPFR_INCLUDE_DIR)
+if(MPFR_INCLUDE_DIR AND NOT MPFR_VERSION)
     include(VersionFromHeader)
     version_from_header(
         MPFR_VERSION "${MPFR_INCLUDE_DIR}/mpfr.h"
