@@ -8,8 +8,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/config/cmake")
 if (NOT XPREC_VERSION)
     include("VersionFromHeader")
     version_from_header(
-        XPREC_VERSION "include/xprec/version.h"
-        XPREC_VERSION_MAJOR XPREC_VERSION_MINOR XPREC_VERSION_PATCH)
+        VERSION XPREC_VERSION
+        HEADER "include/xprec/version.h"
+        MACROS XPREC_VERSION_MAJOR XPREC_VERSION_MINOR XPREC_VERSION_PATCH
+        )
     message(STATUS "Extracted package version: ${XPREC_VERSION}")
 
     set(XPREC_VERSION "${XPREC_VERSION}"
