@@ -12,9 +12,9 @@ void gauss_chebyshev(int n, DDouble *x, DDouble *w)
         return;
 
     static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
-    DDouble fact = PI / n;
+    DDouble fact = PI / (1.0 * n);
     for (int i = 0; i < n; ++i) {
-        x[i] = cos((i + 0.5) * fact);
+        x[i] = cos((n - i - 0.5) * fact);
         w[i] = fact;
     }
 }
@@ -52,7 +52,7 @@ void gauss_legendre(int n, DDouble *x, DDouble *w)
     // Perform Newton iteration to refine x
     // store derivatives in w for later use
     // XXX: terminate iteration early if converged
-    for (int iter = 0; iter < 20; ++iter) {
+    for (int iter = 0; iter < 10; ++iter) {
         for (int i = 0; i < n; ++i) {
             DDouble Pn, dPn;
             leg_deriv(n, x[i], Pn, dPn);
