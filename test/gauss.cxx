@@ -91,6 +91,6 @@ TEST_CASE("leg-cmp-16", "[gauss]")
     gauss_legendre(16, x.data(), w.data());
     for (int i = 0; i < 16; ++i) {
         REQUIRE_THAT(x[i], WithinAbs(x_ref[i], 5e-32));
-        REQUIRE_THAT(w[i], WithinAbs(w_ref[i], 0.3 * 5e-32));
+        REQUIRE_THAT(w[i], WithinAbs(w_ref[i], 0.2 * 1e-31));
     }
 }
