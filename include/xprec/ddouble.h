@@ -266,6 +266,9 @@ bool isnan(DDouble x);
 bool isnormal(DDouble x);
 bool iszero(DDouble x);
 
+void gauss_chebyshev(int n, DDouble *x, DDouble *w);
+void gauss_legendre(int n, DDouble *x, DDouble *w);
+
 namespace std {
 
 /**

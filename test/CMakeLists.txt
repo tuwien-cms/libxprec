@@ -20,13 +20,14 @@ find_package(MPFR REQUIRED)
 enable_testing()
 
 add_executable(tests
-    mpfloat.cxx
-    convert.cxx
     arith.cxx
-    funcs.cxx
-    exp.cxx
     circular.cxx
+    convert.cxx
+    exp.cxx
+    funcs.cxx
+    gauss.cxx
     hyperbolic.cxx
+    mpfloat.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)

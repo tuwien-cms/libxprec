@@ -33,9 +33,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Library
 add_library(xprec SHARED
+    src/circular.cxx
     src/ddouble.cxx
     src/exp.cxx
-    src/circular.cxx
+    src/gauss.cxx
     src/hyperbolic.cxx
     src/io.cxx
     )
