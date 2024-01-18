@@ -6,7 +6,7 @@
 #include "xprec/ddouble.h"
 #include <cassert>
 
-void gauss_chebyshev(int n, DDouble *x, DDouble *w)
+void gauss_chebyshev(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
         return;
@@ -15,7 +15,8 @@ void gauss_chebyshev(int n, DDouble *x, DDouble *w)
     DDouble fact = PI / (1.0 * n);
     for (int i = 0; i < n; ++i) {
         x[i] = cos((n - i - 0.5) * fact);
-        w[i] = fact;
+        if (w != nullptr)
+            w[i] = fact;
     }
 }
 
@@ -41,13 +42,13 @@ static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
     }
 }
 
-void gauss_legendre(int n, DDouble *x, DDouble *w)
+void gauss_legendre(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
         return;
 
     // Initial guess for x: Gauss-Chebyshev nodes
-    gauss_chebyshev(n, x, w);
+    gauss_chebyshev(n, x);
 
     // Perform Newton iteration to refine x
     // store derivatives in w for later use
@@ -58,7 +59,8 @@ void gauss_legendre(int n, DDouble *x, DDouble *w)
             leg_deriv(n, x[i], Pn, dPn);
             dx = -Pn / dPn;
             x[i] += dx;
-            w[i] = dPn;
+            if (w != nullptr)
+                w[i] = dPn;
 
             if (converged && !greater_in_magnitude(2.5e-32, dx))
                 converged = false;
@@ -67,8 +69,10 @@ void gauss_legendre(int n, DDouble *x, DDouble *w)
             break;
     }
 
-    // Compute weights
-    for (int i = 0; i < n; ++i) {
-        w[i] = 2.0 / ((1.0 - x[i] * x[i]) * w[i] * w[i]);
+    // Compute weights if so desired
+    if (w != nullptr) {
+        for (int i = 0; i < n; ++i) {
+            w[i] = 2.0 / ((1.0 - x[i] * x[i]) * w[i] * w[i]);
+        }
     }
 }

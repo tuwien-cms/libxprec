@@ -266,8 +266,24 @@ bool isnan(DDouble x);
 bool isnormal(DDouble x);
 bool iszero(DDouble x);
 
-void gauss_chebyshev(int n, DDouble *x, DDouble *w);
-void gauss_legendre(int n, DDouble *x, DDouble *w);
+/**
+ * Gauss-Chebyshev quadrature rule.
+ *
+ * Expects x and (optionally) w to be arrays of at least size n. Fill x with
+ * the Type-I Gauss-Chebyshev quadrature nodes of order n, i.e., the roots of
+ * the n-th Chebyshev polynomial. If w is given, store the quadrature weights
+ * there.
+ */
+void gauss_chebyshev(int n, DDouble x[], DDouble w[] = nullptr);
+
+/**
+ * Gauss-Legendre quadrature rule.
+ *
+ * Expects x and (optionally) w to be arrays of at least size n. Fill x with
+ * the Gauss-Legendre quadrature nodes of order n, i.e., the roots of the n-th
+ * Legendre polynomial. If w is given, store the quadrature weights there.
+ */
+void gauss_legendre(int n, DDouble x[], DDouble w[] = nullptr);
 
 namespace std {
 
