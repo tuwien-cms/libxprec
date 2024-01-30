@@ -19,7 +19,7 @@
  */
 class PowerOfTwo {
 public:
-    explicit constexpr PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
+    explicit PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
 
     friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
     friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
