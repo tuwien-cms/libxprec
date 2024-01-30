@@ -40,7 +40,9 @@ add_library(xprec SHARED
     src/hyperbolic.cxx
     src/io.cxx
     )
-target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
+if(NOT MSVC)
+    target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
+endif()
 target_include_directories(xprec PUBLIC include)
 
 install(TARGETS xprec)
