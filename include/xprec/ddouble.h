@@ -50,6 +50,7 @@ public:
 
     constexpr operator double () const { return _x; }
 
+    friend ExDouble operator+(ExDouble a) { return ExDouble(+a._x); }
     friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
 
     /**
@@ -167,6 +168,7 @@ public:
     friend DDouble operator-(double x, DDouble y) { return x + (-y); }
     friend DDouble operator-(DDouble x, DDouble y) { return x + (-y); }
 
+    friend DDouble operator+(DDouble x) { return x; }
     friend DDouble operator-(DDouble x) { return DDouble(-x._hi, -x._lo); }
 
     friend DDouble operator*(DDouble x, double y);

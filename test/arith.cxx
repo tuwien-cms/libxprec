@@ -37,7 +37,7 @@ TEST_CASE("Relational", "[rel]")
 {
     REQUIRE(DDouble(1.0) > 0);
     REQUIRE(DDouble(1.0) - ldexp(1.0, -80) < 1);
-    REQUIRE(DDouble(3.0) <= DDouble(3.0));
+    REQUIRE(DDouble(3.0) <= +DDouble(3.0));
 }
 
 TEST_CASE("Mul", "[arith]")
