@@ -46,7 +46,6 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     // This reduction has to be done quite carefully, because of the
     // remainder.
     static const DDouble PI2(1.5707963267948966, 6.123233995736766e-17);
-    static const DDouble OVER_PI2(0.6366197723675814, -3.935735335036497e-17);
 
     DDouble n = x / PI2;
     if (fabs(n.hi()) < 0.5) {
