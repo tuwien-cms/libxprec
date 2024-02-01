@@ -6,6 +6,7 @@
 #include "xprec/ddouble.h"
 #include <cassert>
 
+INLINE_IF_HEADER_ONLY
 void gauss_chebyshev(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
@@ -42,6 +43,7 @@ static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
     }
 }
 
+INLINE_IF_HEADER_ONLY
 void gauss_legendre(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
