@@ -20,6 +20,7 @@ public:
 
     ~FormatSentry() { stream_.copyfmt(saved_); }
 
+    _XPREC_INLINE_IF_HEADER_ONLY
     operator bool () const { return stream_.good(); }
 
 private:
@@ -31,6 +32,7 @@ private:
     std::ios saved_;
 };
 
+_XPREC_INLINE_IF_HEADER_ONLY
 std::ostream &dump(std::ostream &out, DDouble x)
 {
     FormatSentry s(out);
@@ -44,6 +46,7 @@ std::ostream &dump(std::ostream &out, DDouble x)
     return out;
 }
 
+_XPREC_INLINE_IF_HEADER_ONLY
 std::ostream &operator<<(std::ostream &out, DDouble x)
 {
     // XXX this needs some work
