@@ -13,7 +13,7 @@
 
 //The strategy for header only use of ddouble is pretty simple:
 //conditionally inline globally defined functions and include the cxx files directly.
-#define INLINE_IF_HEADER_ONLY inline
+#define _XPREC_INLINE_IF_HEADER_ONLY inline
 
 #include "ddouble.h"
 #include "xprec/../../src/circular.cxx"

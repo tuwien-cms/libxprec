@@ -159,7 +159,7 @@ static DDouble exp_halves(int x)
     return res;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble exp(DDouble x)
 {
     if (isnan(x))
@@ -179,7 +179,7 @@ DDouble exp(DDouble x)
     return exp_z * exp_y;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble expm1(DDouble x)
 {
     // For small values, we call the expm1 kernel directly
@@ -193,7 +193,7 @@ DDouble expm1(DDouble x)
     return res;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble log(DDouble x)
 {
     // Start with logarithm of hi part
@@ -211,7 +211,7 @@ DDouble log(DDouble x)
     return log_x;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble log1p(DDouble x)
 {
     // Start with logarithm of hi part
@@ -232,7 +232,7 @@ DDouble log1p(DDouble x)
     return log_x;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble pow(DDouble x, int n)
 {
     if (n < 0) {
@@ -260,7 +260,7 @@ DDouble pow(DDouble x, int n)
     return res;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble pow(DDouble x, DDouble y)
 {
     return exp(log(x) * y);

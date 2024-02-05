@@ -6,7 +6,7 @@
 #include "xprec/ddouble.h"
 #include "taylor.h"
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble cosh(DDouble x)
 {
     // simply use the definition:
@@ -41,7 +41,7 @@ static DDouble sinh_kernel(DDouble x)
     return r;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble sinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
@@ -89,7 +89,7 @@ static DDouble tanh_kernel(DDouble x)
     return r;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble tanh(DDouble x)
 {
     // Special values
@@ -110,7 +110,7 @@ DDouble tanh(DDouble x)
     return (exp_x - exp_mx) / (exp_x + exp_mx);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble acosh(DDouble x)
 {
     // Special values: domain starts at 1, rest is preserved
@@ -131,7 +131,7 @@ DDouble acosh(DDouble x)
     return log(arg);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble asinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
@@ -161,7 +161,7 @@ DDouble asinh(DDouble x)
     return copysign(log(arg), x);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble atanh(DDouble x)
 {
     // Use symmetry

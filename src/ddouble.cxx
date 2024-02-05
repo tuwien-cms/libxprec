@@ -5,7 +5,7 @@
  */
 #include "xprec/ddouble.h"
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble sqrt(DDouble a)
 {
     // From: Karp, High Precision Division and Square Root, 1993
@@ -20,7 +20,7 @@ DDouble sqrt(DDouble a)
     return ax + diff;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble hypot(DDouble x, DDouble y)
 {
     // Make sure that the values are ordered by magnitude
@@ -53,7 +53,7 @@ DDouble hypot(DDouble x, DDouble y)
     }
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble modf(DDouble x, DDouble &i)
 {
     i = trunc(x);
@@ -61,7 +61,7 @@ DDouble modf(DDouble x, DDouble &i)
 }
 
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble modf(DDouble x, DDouble *iptr)
 {
     return modf(x, *iptr);

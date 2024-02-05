@@ -64,7 +64,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     return x - PI2 * n;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble sin_sector(DDouble x, int sector)
 {
     assert(sector >= 0 && sector < 4);
@@ -84,7 +84,7 @@ DDouble sin_sector(DDouble x, int sector)
     }
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble sin(DDouble x)
 {
     int sector;
@@ -92,7 +92,7 @@ DDouble sin(DDouble x)
     return sin_sector(x, sector);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
@@ -105,7 +105,7 @@ DDouble cos(DDouble x)
     return sin_sector(x, (sector + 1) % 4);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 void sincos(DDouble x, DDouble &s, DDouble &c)
 {
     // XXX This should be improved
@@ -113,7 +113,7 @@ void sincos(DDouble x, DDouble &s, DDouble &c)
     c = cos(x);
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble tan(DDouble x)
 {
     DDouble s, c;
@@ -121,7 +121,7 @@ DDouble tan(DDouble x)
     return s / c;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble asin(DDouble x)
 {
     // Compute a approximation to double precision
@@ -147,7 +147,7 @@ DDouble asin(DDouble x)
     return y;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble acos(DDouble x)
 {
     // Compute a approximation to double precision
@@ -176,7 +176,7 @@ DDouble acos(DDouble x)
     return y0;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble atan(DDouble x)
 {
     // Again use Taylor expansion
@@ -197,7 +197,7 @@ DDouble atan(DDouble x)
     return y0;
 }
 
-INLINE_IF_HEADER_ONLY
+_XPREC_INLINE_IF_HEADER_ONLY
 DDouble atan2(DDouble y, DDouble x)
 {
     const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
