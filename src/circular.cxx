@@ -199,10 +199,6 @@ DDouble atan(DDouble x)
     x0 = s / c;
     y0 += (x - x0) * c * c;
 
-    sincos(y0, s, c);
-    x0 = s / c;
-    y0 += (x - x0) * c * c;
-
     return y0;
 }
 
