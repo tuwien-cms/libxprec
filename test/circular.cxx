@@ -128,6 +128,12 @@ TEST_CASE("atan", "[trig]")
     CMP_UNARY(atan, 0.5, 1e-31);
     CMP_UNARY(atan, -0.5, 1e-31);
 
+    // check infties
+    const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
+    REQUIRE_THAT(atan(DDouble(INFINITY)), WithinAbs(PI_2, 1e-31));
+    REQUIRE_THAT(atan(DDouble(-INFINITY)), WithinAbs(-PI_2, 1e-31));
+    REQUIRE(isnan(atan(DDouble(NAN))));
+
     // small values must be very accurate
     DDouble x = 1.0;
     while ((x *= 0.84) > 1e-300) {
