@@ -179,6 +179,12 @@ DDouble acos(DDouble x)
 _XPREC_INLINE_IF_HEADER_ONLY
 DDouble atan(DDouble x)
 {
+    // For large values, use the reflection formula
+    if (fabs(x) > 1.0) {
+        const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
+        return copysign(PI_2, x) - atan(reciprocal(x));
+    }
+
     // Again use Taylor expansion
     DDouble y0 = atan(x.hi());
     if (!isfinite(y0))

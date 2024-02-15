@@ -135,8 +135,6 @@ TEST_CASE("atan", "[trig]")
         CMP_UNARY(atan, -x, 1e-31);
     }
 
-    // XXX: inaccurate for large values
-    SKIP();
     x = 1.0;
     while ((x /= 0.84) < 1e290) {
         CMP_UNARY(atan, x, 1e-31);
