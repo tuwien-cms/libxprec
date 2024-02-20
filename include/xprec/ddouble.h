@@ -11,13 +11,6 @@
 
 #include "version.h"
 
-
-//Some functions are decorated withis, defined to inline. If it's not, define as nothing.
-#ifndef _XPREC_INLINE_IF_HEADER_ONLY
-	#define _XPREC_INLINE_IF_HEADER_ONLY
-#endif
-
-
 /**
  * Class for wrapping a power of two.
  *

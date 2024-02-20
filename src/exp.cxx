@@ -10,6 +10,10 @@
 #include "xprec/ddouble.h"
 #include <cassert>
 
+#ifndef XPREC_API_EXPORT
+#define XPREC_API_EXPORT
+#endif
+
 static DDouble expm1_kernel(DDouble x)
 {
     // We need to make sure that (1 + x) does not lose possible significant
@@ -159,7 +163,7 @@ static DDouble exp_halves(int x)
     return res;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble exp(DDouble x)
 {
     if (isnan(x))
@@ -179,7 +183,7 @@ DDouble exp(DDouble x)
     return exp_z * exp_y;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble expm1(DDouble x)
 {
     // For small values, we call the expm1 kernel directly
@@ -193,7 +197,7 @@ DDouble expm1(DDouble x)
     return res;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble log(DDouble x)
 {
     // Start with logarithm of hi part
@@ -211,7 +215,7 @@ DDouble log(DDouble x)
     return log_x;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble log1p(DDouble x)
 {
     // Start with logarithm of hi part
@@ -232,7 +236,7 @@ DDouble log1p(DDouble x)
     return log_x;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble pow(DDouble x, int n)
 {
     if (n < 0) {
@@ -260,7 +264,7 @@ DDouble pow(DDouble x, int n)
     return res;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble pow(DDouble x, DDouble y)
 {
     return exp(log(x) * y);

@@ -6,7 +6,11 @@
 #include "xprec/ddouble.h"
 #include <cassert>
 
-_XPREC_INLINE_IF_HEADER_ONLY
+#ifndef XPREC_API_EXPORT
+#define XPREC_API_EXPORT
+#endif
+
+XPREC_API_EXPORT
 void gauss_chebyshev(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
@@ -43,7 +47,7 @@ static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
     }
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 void gauss_legendre(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)

@@ -5,7 +5,11 @@
  */
 #include "xprec/ddouble.h"
 
-_XPREC_INLINE_IF_HEADER_ONLY
+#ifndef XPREC_API_EXPORT
+#define XPREC_API_EXPORT
+#endif
+
+XPREC_API_EXPORT
 DDouble sqrt(DDouble a)
 {
     // From: Karp, High Precision Division and Square Root, 1993
@@ -20,7 +24,7 @@ DDouble sqrt(DDouble a)
     return ax + diff;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble hypot(DDouble x, DDouble y)
 {
     // Make sure that the values are ordered by magnitude
@@ -53,7 +57,7 @@ DDouble hypot(DDouble x, DDouble y)
     }
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble modf(DDouble x, DDouble &i)
 {
     i = trunc(x);
@@ -61,7 +65,7 @@ DDouble modf(DDouble x, DDouble &i)
 }
 
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble modf(DDouble x, DDouble *iptr)
 {
     return modf(x, *iptr);

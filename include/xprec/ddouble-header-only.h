@@ -5,14 +5,15 @@
  */
 #pragma once
 
-//The strategy for header only use of ddouble is pretty simple:
-//conditionally inline globally defined functions and include the cxx files directly.
-#define _XPREC_INLINE_IF_HEADER_ONLY inline
+// The strategy for header only use of ddouble is pretty simple:
+// conditionally inline globally defined functions and include the cxx files
+// directly.
+#define XPREC_API_EXPORT inline
 
 #include "ddouble.h"
-#include "xprec/../../src/circular.cxx"
-#include "xprec/../../src/ddouble.cxx"
-#include "xprec/../../src/exp.cxx"
-#include "xprec/../../src/gauss.cxx"
-#include "xprec/../../src/hyperbolic.cxx"
-#include "xprec/../../src/io.cxx"
+#include "../../src/circular.cxx"
+#include "../../src/ddouble.cxx"
+#include "../../src/exp.cxx"
+#include "../../src/gauss.cxx"
+#include "../../src/hyperbolic.cxx"
+#include "../../src/io.cxx"

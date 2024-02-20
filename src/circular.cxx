@@ -6,6 +6,10 @@
 #include "xprec/ddouble.h"
 #include "taylor.h"
 
+#ifndef XPREC_API_EXPORT
+#define XPREC_API_EXPORT
+#endif
+
 static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
 static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
 static const DDouble PI_4(0.7853981633974483, 3.061616997868383e-17);
@@ -65,8 +69,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     return x - PI_2 * n;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
-DDouble sin_sector(DDouble x, int sector)
+static DDouble sin_sector(DDouble x, int sector)
 {
     assert(sector >= 0 && sector < 4);
     assert(fabs(x.hi()) <= nextafter(PI_4.hi(), 1));
@@ -85,7 +88,7 @@ DDouble sin_sector(DDouble x, int sector)
     }
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble sin(DDouble x)
 {
     int sector;
@@ -93,7 +96,7 @@ DDouble sin(DDouble x)
     return sin_sector(x, sector);
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
@@ -106,7 +109,7 @@ DDouble cos(DDouble x)
     return sin_sector(x, (sector + 1) % 4);
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 void sincos(DDouble x, DDouble &s, DDouble &c)
 {
     // XXX This should be improved
@@ -114,7 +117,7 @@ void sincos(DDouble x, DDouble &s, DDouble &c)
     c = cos(x);
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble tan(DDouble x)
 {
     DDouble s, c;
@@ -122,7 +125,7 @@ DDouble tan(DDouble x)
     return s / c;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble asin(DDouble x)
 {
     // Compute a approximation to double precision
@@ -148,7 +151,7 @@ DDouble asin(DDouble x)
     return y;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble acos(DDouble x)
 {
     // Compute a approximation to double precision
@@ -176,7 +179,7 @@ DDouble acos(DDouble x)
     return y0;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble atan(DDouble x)
 {
     // For large values, use reflection formula
@@ -201,7 +204,7 @@ DDouble atan(DDouble x)
     return y0;
 }
 
-_XPREC_INLINE_IF_HEADER_ONLY
+XPREC_API_EXPORT
 DDouble atan2(DDouble y, DDouble x)
 {
     // Special values
