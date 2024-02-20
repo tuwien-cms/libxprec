@@ -40,9 +40,7 @@ add_library(xprec SHARED
     src/hyperbolic.cxx
     src/io.cxx
     )
-if(MSVC)
-    target_compile_definitions(xprec PRIVATE _USE_MATH_DEFINES)
-else()
+if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
 target_include_directories(xprec PUBLIC include)
