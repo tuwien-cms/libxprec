@@ -221,7 +221,22 @@ inline DDouble operator*(DDouble x, PowerOfTwo y)
     return DDouble(x._hi * (double)y, x._lo * (double)y);
 }
 
+inline DDouble operator*(PowerOfTwo x, DDouble y)
+{
+    return y * x;
+}
+
 inline DDouble operator/(DDouble x, PowerOfTwo y)
 {
     return DDouble(x._hi / (double)y, x._lo / (double)y);
+}
+
+inline DDouble &DDouble::operator*=(PowerOfTwo y)
+{
+    return *this = *this * y;
+}
+
+inline DDouble &DDouble::operator/=(PowerOfTwo y)
+{
+    return *this = *this / y;
 }

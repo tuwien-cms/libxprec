@@ -12,77 +12,6 @@
 #include "version.h"
 
 /**
- * Class for wrapping a power of two.
- *
- * Double-double can be multiplied by powers of two much quicker and at no
- * loss of precision, since we simply scale all hunks.
- */
-class PowerOfTwo {
-public:
-    explicit PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
-
-    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
-    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
-
-    constexpr operator double () const { return _x; }
-
-private:
-    explicit constexpr PowerOfTwo(double x) : _x(x) { }
-
-    double _x;
-};
-
-/**
- * Class wrapping a double, but marking it for extended precision computation
- *
- * Doing arithmetic with these objects, even though they hold only a double,
- * will return a DDouble object and be accurate within double-double
- * arithmetic. However, it is usually much faster than first converting an
- * operand to a full double-double.
- *
- * Note that this means that arithmetic with these object DOES NOT return
- * an object of this ExDouble, and therefore also in-place operators are not
- * defined.
- */
-class ExDouble {
-public:
-    constexpr ExDouble(double x) : _x(x) { }
-
-    constexpr operator double () const { return _x; }
-
-    friend ExDouble operator+(ExDouble a) { return ExDouble(+a._x); }
-    friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
-
-    /**
-     * Add small number to this.
-     *
-     * WARNING: You must ensure that b is small than this in magnitude!
-     */
-    DDouble add_small(double b) const;
-
-    friend DDouble operator+(ExDouble a, ExDouble b);
-    friend DDouble operator+(double a, ExDouble b);
-    friend DDouble operator+(ExDouble a, double b);
-
-    friend DDouble operator-(ExDouble a, ExDouble b);
-    friend DDouble operator-(ExDouble a, double b);
-    friend DDouble operator-(double a, ExDouble b);
-
-    friend DDouble operator*(ExDouble a, ExDouble b);
-    friend DDouble operator*(double a, ExDouble b);
-    friend DDouble operator*(ExDouble a, double b);
-
-    friend DDouble operator/(ExDouble a, ExDouble b);
-    friend DDouble operator/(double a, ExDouble b);
-    friend DDouble operator/(ExDouble a, double b);
-
-    friend DDouble reciprocal(ExDouble y);
-
-private:
-    double _x;
-};
-
-/**
  * Class for double-double arithmetic.
  *
  * Emulates quadruple precision with a pair of doubles.  This roughly doubles
@@ -180,7 +109,7 @@ public:
     friend DDouble operator/(DDouble x, DDouble y);
 
     friend DDouble operator*(DDouble x, PowerOfTwo y);
-    friend DDouble operator*(PowerOfTwo x, DDouble y) { return y * x; }
+    friend DDouble operator*(PowerOfTwo x, DDouble y);
     friend DDouble operator/(DDouble x, PowerOfTwo y);
 
     friend DDouble reciprocal(DDouble y);
@@ -195,8 +124,8 @@ public:
     DDouble &operator*=(DDouble y) { return *this = *this * y; }
     DDouble &operator/=(DDouble y) { return *this = *this / y; }
 
-    DDouble &operator*=(PowerOfTwo y) { return *this = *this * y; }
-    DDouble &operator/=(PowerOfTwo y) { return *this = *this / y; }
+    DDouble &operator*=(PowerOfTwo y);
+    DDouble &operator/=(PowerOfTwo y);
 
     friend bool operator==(DDouble x, DDouble y);
     friend bool operator!=(DDouble x, DDouble y);
@@ -224,6 +153,77 @@ public:
 private:
     double _hi;
     double _lo;
+};
+
+/**
+ * Class wrapping a double, but marking it for extended precision computation
+ *
+ * Doing arithmetic with these objects, even though they hold only a double,
+ * will return a DDouble object and be accurate within double-double
+ * arithmetic. However, it is usually much faster than first converting an
+ * operand to a full double-double.
+ *
+ * Note that this means that arithmetic with these object DOES NOT return
+ * an object of this ExDouble, and therefore also in-place operators are not
+ * defined.
+ */
+class ExDouble {
+public:
+    constexpr ExDouble(double x) : _x(x) { }
+
+    constexpr operator double () const { return _x; }
+
+    friend ExDouble operator+(ExDouble a) { return ExDouble(+a._x); }
+    friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
+
+    /**
+     * Add small number to this.
+     *
+     * WARNING: You must ensure that b is small than this in magnitude!
+     */
+    DDouble add_small(double b) const;
+
+    friend DDouble operator+(ExDouble a, ExDouble b);
+    friend DDouble operator+(double a, ExDouble b);
+    friend DDouble operator+(ExDouble a, double b);
+
+    friend DDouble operator-(ExDouble a, ExDouble b);
+    friend DDouble operator-(ExDouble a, double b);
+    friend DDouble operator-(double a, ExDouble b);
+
+    friend DDouble operator*(ExDouble a, ExDouble b);
+    friend DDouble operator*(double a, ExDouble b);
+    friend DDouble operator*(ExDouble a, double b);
+
+    friend DDouble operator/(ExDouble a, ExDouble b);
+    friend DDouble operator/(double a, ExDouble b);
+    friend DDouble operator/(ExDouble a, double b);
+
+    friend DDouble reciprocal(ExDouble y);
+
+private:
+    double _x;
+};
+
+/**
+ * Class for wrapping a power of two.
+ *
+ * Double-double can be multiplied by powers of two much quicker and at no
+ * loss of precision, since we simply scale all hunks.
+ */
+class PowerOfTwo {
+public:
+    explicit PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
+
+    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
+    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
+
+    constexpr operator double () const { return _x; }
+
+private:
+    explicit constexpr PowerOfTwo(double x) : _x(x) { }
+
+    double _x;
 };
 
 // C++ forbids overloading functions in the std namespace, which is why we
