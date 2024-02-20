@@ -6,6 +6,9 @@
 #include "xprec/ddouble.h"
 #include "taylor.h"
 
+static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
+static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
+static const DDouble PI_4(0.7853981633974483, 3.061616997868383e-17);
 
 static DDouble sin_kernel(DDouble x)
 {
@@ -46,9 +49,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
 {
     // This reduction has to be done quite carefully, because of the
     // remainder.
-    static const DDouble PI2(1.5707963267948966, 6.123233995736766e-17);
-
-    DDouble n = x / PI2;
+    DDouble n = x / PI_2;
     if (fabs(n.hi()) < 0.5) {
         sector = 0;
         return x;
@@ -61,14 +62,14 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     sector = n_int % 4;
     if (sector < 0)
         sector += 4;
-    return x - PI2 * n;
+    return x - PI_2 * n;
 }
 
 _XPREC_INLINE_IF_HEADER_ONLY
 DDouble sin_sector(DDouble x, int sector)
 {
     assert(sector >= 0 && sector < 4);
-    assert(fabs(x.hi()) <= nextafter(M_PI/4, 1));
+    assert(fabs(x.hi()) <= nextafter(PI_4.hi(), 1));
 
     switch (sector) {
     case 0:
@@ -96,7 +97,7 @@ _XPREC_INLINE_IF_HEADER_ONLY
 DDouble cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
-    if (fabs(x.hi()) < M_PI/4)
+    if (fabs(x.hi()) < PI_4.hi())
         return cos_kernel(x);
 
     // Otherwise, use common code.
@@ -159,7 +160,6 @@ DDouble acos(DDouble x)
     if (x == 1.0)
         return 0.0;
     if (x == -1.0) {
-        static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
         return PI;
     }
 
@@ -181,7 +181,6 @@ DDouble atan(DDouble x)
 {
     // For large values, use reflection formula
     if (fabs(x.hi()) > 1.0) {
-        const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
         DDouble y = copysign(PI_2, x);
         if (isfinite(x))
             y -= atan(reciprocal(x));
@@ -205,9 +204,6 @@ DDouble atan(DDouble x)
 _XPREC_INLINE_IF_HEADER_ONLY
 DDouble atan2(DDouble y, DDouble x)
 {
-    const static DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
-    const static DDouble PI(3.141592653589793, 1.2246467991473532e-16);
-
     // Special values
     if (isnan(x) || isnan(y))
         return NAN;
