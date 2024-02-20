@@ -19,6 +19,14 @@ TEST_CASE("greater_in_magnitude", "")
     REQUIRE(!greater_in_magnitude(1e200, NAN));
 }
 
+TEST_CASE("is_small", "")
+{
+    REQUIRE(ExDouble(-1.2).is_small(0.5));
+    REQUIRE(ExDouble(1.2).is_small(1.3));
+    REQUIRE(ExDouble(9.0).is_small(0.0));
+    REQUIRE(ExDouble(-1e200).is_small(1e-200));
+}
+
 TEST_CASE("arith", "[arith]")
 {
     for (double x = 10.0; x > 5.0; x *= .9933) {

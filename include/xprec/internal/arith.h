@@ -56,19 +56,31 @@ inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
     return PowerOfTwo(a._x / b._x);
 }
 
+// -------------------------------------------------------------------------
+// ExDouble
+
+inline bool ExDouble::is_small(double b) const
+{
+    static_assert(std::numeric_limits<double>::is_iec559, "needs IEEE floats");
+    static const uint64_t exp_mask = 0x7ff0000000000000UL;
+
+    union {
+        double number;
+        uint64_t pattern;
+    } x_u = {_x}, b_u = {b};
+    return (x_u.pattern & exp_mask) >= (b_u.pattern & exp_mask);
+}
+
 inline DDouble ExDouble::add_small(double b) const
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
-    //assert(_x == 0 || greater_in_magnitude(_x, b));
+    //assert(is_small(b));
     double s = _x + b;
     double z = s - _x;
     double t = b - z;
     return DDouble(s, t);
 }
-
-// -------------------------------------------------------------------------
-// ExDouble
 
 inline DDouble operator+(ExDouble a, ExDouble b)
 {
