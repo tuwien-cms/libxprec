@@ -75,7 +75,8 @@ inline DDouble ExDouble::add_small(double b) const
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
-    //assert(is_small(b));
+    //if(!is_small(b))
+    //    throw "invalid value";
     double s = _x + b;
     double z = s - _x;
     double t = b - z;

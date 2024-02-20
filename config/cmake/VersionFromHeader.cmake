@@ -2,8 +2,23 @@
 #
 # Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
+cmake_minimum_required(VERSION 3.9)
 
 # Function to extract version string from header file
+#
+#     version_from_header(
+#           VERSION version_variable
+#           HEADER header_file
+#           MACROS macro_name_major [macro_name_minor ...]
+#           )
+#
+# Writes into `version_variable` the version detected from a header file
+# named `header_file`. The code looks for preprecessor definitions of the form
+#
+#     #define MACRO_NAME DIGITS
+#
+# where MACRO_NAME is each of the arguments of MACROS in sequence. The code
+# then strings together the values, separated by "."
 function(version_from_header)
     # parse arguments
     set(options)
