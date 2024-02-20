@@ -27,10 +27,6 @@ project(
     DESCRIPTION "library for emulated extended-precision arithmetic"
     )
 
-# Require C++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Library
 add_library(xprec SHARED
     src/circular.cxx
@@ -44,6 +40,10 @@ if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
 target_include_directories(xprec PUBLIC include)
+set_property(TARGET xprec PROPERTY
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+    )
 
 install(TARGETS xprec)
 install(

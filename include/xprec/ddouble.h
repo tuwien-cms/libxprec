@@ -9,6 +9,10 @@
 #include <limits>
 #include <iosfwd>
 
+#if __cpp_lib_math_constants >= 201907L
+#include <numbers>
+#endif
+
 #include "version.h"
 
 /**
@@ -342,6 +346,28 @@ public:
 };
 
 } /* namespace std */
+
+#if __cpp_lib_math_constants >= 201907L
+
+namespace std { namespace number {
+
+inline constexpr DDouble e_v{2.718281828459045, 1.4456468917292502e-16};
+inline constexpr DDouble log2e_v{1.4426950408889634, 2.0355273740931033e-17};
+inline constexpr DDouble log10e_v{0.4342944819032518, 1.098319650216765e-17};
+inline constexpr DDouble pi_v{3.141592653589793, 1.2246467991473532e-16};
+inline constexpr DDouble inv_pi_v{0.3183098861837907, -1.9678676675182486e-17};
+inline constexpr DDouble inv_sqrtpi_v{0.5641895835477563, 7.66772980658294e-18};
+inline constexpr DDouble ln2_v{0.6931471805599453, 2.3190468138462996e-17};
+inline constexpr DDouble ln10_v{2.302585092994046, -2.1707562233822494e-16};
+inline constexpr DDouble sqrt2_v{1.4142135623730951, -9.667293313452913e-17};
+inline constexpr DDouble sqrt3_v{1.7320508075688772, 1.0035084221806903e-16};
+inline constexpr DDouble inv_sqrt3_v{0.5773502691896257, 3.3450280739356345e-17};
+inline constexpr DDouble egamma_v{0.5772156649015329, -4.942915152430645e-18};
+inline constexpr DDouble phi_v{1.618033988749895, -5.432115203682506e-17};
+
+}} /* namespace std::number */
+
+#endif
 
 #include "internal/arith.h"
 #include "internal/checks.h"
