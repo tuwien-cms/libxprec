@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 #define XPREC_VERSION_MAJOR 0
-#define XPREC_VERSION_MINOR 2
+#define XPREC_VERSION_MINOR 3
 #define XPREC_VERSION_PATCH 0
 
 // Forward defitions
