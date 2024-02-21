@@ -27,6 +27,7 @@ add_executable(tests
     funcs.cxx
     gauss.cxx
     hyperbolic.cxx
+    inline.cxx
     mpfloat.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
