@@ -24,7 +24,6 @@ public:
 
     ~FormatSentry() { stream_.copyfmt(saved_); }
 
-    XPREC_API_EXPORT
     operator bool () const { return stream_.good(); }
 
 private:
