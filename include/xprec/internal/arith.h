@@ -10,6 +10,8 @@
  */
 #include "../ddouble.h"
 
+namespace xprec {
+
 /**
  * Return true if x is greater or equal in magnitude as y.
  *
@@ -253,3 +255,5 @@ inline DDouble &DDouble::operator/=(PowerOfTwo y)
 {
     return *this = *this / y;
 }
+
+} /* namespace xprec */

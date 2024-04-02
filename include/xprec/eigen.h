@@ -10,12 +10,12 @@
 namespace Eigen {
 
 template <>
-struct NumTraits<DDouble>
-    : GenericNumTraits<DDouble>
+struct NumTraits<xprec::DDouble>
+    : GenericNumTraits<xprec::DDouble>
 {
-    typedef DDouble Real;
-    typedef DDouble NonInteger;
-    typedef DDouble Nested;
+    typedef xprec::DDouble Real;
+    typedef xprec::DDouble NonInteger;
+    typedef xprec::DDouble Nested;
 
     enum {
         IsComplex = 0,

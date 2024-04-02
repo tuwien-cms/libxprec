@@ -17,7 +17,7 @@ TEST_CASE("eigenvalues", "[eigen]" )
     Eigen::Matrix<DDouble, Dynamic, Dynamic> A(21, 21);
     for (int j = 0; j != A.cols(); ++j)
         for (int i = 0; i != A.rows(); ++i)
-            A(i, j) = reciprocal(ExDouble(i + j + 1));
+            A(i, j) = xprec::reciprocal(xprec::ExDouble(i + j + 1));
 
     Eigen::SelfAdjointEigenSolver<decltype(A)> A_eig(A);
     // TODO

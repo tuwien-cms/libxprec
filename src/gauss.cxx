@@ -10,6 +10,8 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 XPREC_API_EXPORT
 void gauss_chebyshev(int n, DDouble x[], DDouble w[])
 {
@@ -82,3 +84,5 @@ void gauss_legendre(int n, DDouble x[], DDouble w[])
         }
     }
 }
+
+} /* namespace xprec */

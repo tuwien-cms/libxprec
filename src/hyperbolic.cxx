@@ -10,6 +10,8 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 XPREC_API_EXPORT
 DDouble cosh(DDouble x)
 {
@@ -106,7 +108,7 @@ DDouble tanh(DDouble x)
 
     // Asymptotically, we have +- 1
     if (fabs(x.hi()) > 36.5)
-        return copysign(1.0, x.hi());
+        return std::copysign(1.0, x.hi());
 
     // Otherwise, simply use defitions
     DDouble exp_x = exp(x);
@@ -146,7 +148,7 @@ DDouble asinh(DDouble x)
     // because the bottom expression is log(1 + 2x/3 + ...), subject to
     // cancellation.
     if (fabs(x.hi()) < 1.0) {
-        DDouble y0 = asinh(x.hi());
+        DDouble y0 = std::asinh(x.hi());
         DDouble x0 = sinh(y0);
 
         DDouble y = y0.add_small((x - x0) / hypot(1.0, x0));
@@ -186,3 +188,5 @@ DDouble atanh(DDouble x)
     //
     return PowerOfTwo(-1) * log1p(PowerOfTwo(1) * x / (1.0 - x));
 }
+
+} /* namespace xprec */

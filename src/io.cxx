@@ -12,6 +12,8 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 class FormatSentry
 {
 public:
@@ -58,3 +60,5 @@ std::ostream &operator<<(std::ostream &out, DDouble x)
     // Return stream
     return out;
 }
+
+} /* namespace xprec */

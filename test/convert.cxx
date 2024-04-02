@@ -6,6 +6,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include "xprec/ddouble.h"
 
+using xprec::DDouble;
+
 TEST_CASE("int", "[convert]" )
 {
     // XXX BROKEN

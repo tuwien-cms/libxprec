@@ -7,6 +7,8 @@
  */
 #include "../ddouble.h"
 
+namespace xprec {
+
 inline void swap(DDouble &x, DDouble &y)
 {
     double tmp;
@@ -95,3 +97,5 @@ inline DDouble round(DDouble x)
     double nudge = std::copysign(0.5, x.hi());
     return trunc(x + nudge);
 }
+
+} /* namespace xprec */

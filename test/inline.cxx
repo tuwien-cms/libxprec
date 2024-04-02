@@ -6,6 +6,8 @@
 #include "xprec/ddouble-header-only.h"
 #include <catch2/catch_test_macros.hpp>
 
+using xprec::DDouble;
+
 TEST_CASE("check")
 {
     DDouble x = 1.0;

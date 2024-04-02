@@ -7,7 +7,11 @@
 #define XPREC_VERSION_MINOR 3
 #define XPREC_VERSION_PATCH 0
 
+namespace xprec {
+
 // Forward defitions
 class PowerOfTwo;
 class ExDouble;
 class DDouble;
+
+}

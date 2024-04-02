@@ -7,6 +7,8 @@
  */
 #include "../ddouble.h"
 
+namespace xprec {
+
 inline bool operator==(DDouble x, DDouble y)
 {
     return x.hi() == y.hi() && x.lo() == y.lo();
@@ -58,3 +60,5 @@ inline int fpclassify(DDouble x)
     // hi part alone
     return std::fpclassify(x.hi());
 }
+
+} /* namespace xprec */

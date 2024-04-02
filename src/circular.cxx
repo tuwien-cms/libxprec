@@ -10,6 +10,8 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
 static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
 static const DDouble PI_4(0.7853981633974483, 3.061616997868383e-17);
@@ -129,7 +131,7 @@ XPREC_API_EXPORT
 DDouble asin(DDouble x)
 {
     // Compute a approximation to double precision
-    DDouble y0 = asin(x.hi());
+    DDouble y0 = std::asin(x.hi());
     if (!isfinite(y0))
         return y0;
 
@@ -155,7 +157,7 @@ XPREC_API_EXPORT
 DDouble acos(DDouble x)
 {
     // Compute a approximation to double precision
-    DDouble y0 = acos(x.hi());
+    DDouble y0 = std::acos(x.hi());
     if (!isfinite(y0))
         return y0;
 
@@ -191,7 +193,7 @@ DDouble atan(DDouble x)
     }
 
     // Again use Taylor expansion
-    DDouble y0 = atan(x.hi());
+    DDouble y0 = std::atan(x.hi());
     if (!isfinite(y0))
         return y0;
 
@@ -219,4 +221,6 @@ DDouble atan2(DDouble y, DDouble x)
     if (x.hi() < 0)
         res = copysign(PI, y).add_small(res);
     return res;
+}
+
 }

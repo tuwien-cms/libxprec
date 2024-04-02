@@ -15,6 +15,8 @@
 
 #include "xprec/ddouble.h"
 
+using xprec::DDouble;
+
 /**
  * Class wrapping a MPFR object at certain precision.
  */

@@ -8,6 +8,9 @@
 #include "mpfloat.h"
 #include "catch2-addons.h"
 
+using xprec::greater_in_magnitude;
+using xprec::ExDouble;
+
 TEST_CASE("greater_in_magnitude", "")
 {
     REQUIRE(greater_in_magnitude(2.0, 1.0));

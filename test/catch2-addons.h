@@ -6,6 +6,7 @@
 #pragma once
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <iostream>
+#include "mpfloat.h"
 
 #define CMP_UNARY(fn, x, eps)                                              \
     do {                                                                   \

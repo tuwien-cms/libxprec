@@ -9,11 +9,13 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 XPREC_API_EXPORT
 DDouble sqrt(DDouble a)
 {
     // From: Karp, High Precision Division and Square Root, 1993
-    double sqrt_hi = sqrt(a.hi());
+    double sqrt_hi = std::sqrt(a.hi());
     if (a.hi() <= 0)
         return sqrt_hi;
 
@@ -69,4 +71,6 @@ XPREC_API_EXPORT
 DDouble modf(DDouble x, DDouble *iptr)
 {
     return modf(x, *iptr);
+}
+
 }

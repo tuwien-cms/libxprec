@@ -3,6 +3,8 @@
 
 #include "xprec/ddouble.h"
 
+namespace xprec {
+
 inline DDouble reciprocal_factorial(int n)
 {
     static const DDouble RECIPROCAL_FACTORIAL[28] = {
@@ -42,3 +44,5 @@ inline DDouble reciprocal_factorial(int n)
     else
         return RECIPROCAL_FACTORIAL[n - 2];
 }
+
+} /* namespace xprec */

@@ -14,6 +14,8 @@
 #define XPREC_API_EXPORT
 #endif
 
+namespace xprec {
+
 static DDouble expm1_kernel(DDouble x)
 {
     // We need to make sure that (1 + x) does not lose possible significant
@@ -174,7 +176,7 @@ DDouble exp(DDouble x)
         return DDouble(0);
 
     // x = y/2 + z
-    double y = round(2 * x.hi());
+    double y = std::round(2 * x.hi());
     DDouble z = x - y/2;
 
     // exp(z + y/2) = (1 + expm1(z)) exp(1/2)^y
@@ -201,7 +203,7 @@ XPREC_API_EXPORT
 DDouble log(DDouble x)
 {
     // Start with logarithm of hi part
-    DDouble log_x = log(x.hi());
+    DDouble log_x = std::log(x.hi());
     if (!isfinite(log_x))
         return log_x;
 
@@ -219,7 +221,7 @@ XPREC_API_EXPORT
 DDouble log1p(DDouble x)
 {
     // Start with logarithm of hi part
-    DDouble log_x = log1p(x.hi());
+    DDouble log_x = std::log1p(x.hi());
     if (!isfinite(log_x))
         return log_x;
 
@@ -268,4 +270,6 @@ XPREC_API_EXPORT
 DDouble pow(DDouble x, DDouble y)
 {
     return exp(log(x) * y);
+}
+
 }
