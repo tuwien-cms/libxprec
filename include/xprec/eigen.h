@@ -11,6 +11,7 @@ namespace Eigen {
 
 template <>
 struct NumTraits<DDouble>
+    : GenericNumTraits<DDouble>
 {
     typedef DDouble Real;
     typedef DDouble NonInteger;

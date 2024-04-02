@@ -29,12 +29,12 @@ jobs:
       - name: Install Linux dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install libmpfr-dev
+          sudo apt install libmpfr-dev libeigen3-dev
 
       - name: Install MacOS dependencies
         if: startsWith(matrix.os, 'macos')
         run: |
-          brew install mpfr catch2
+          brew install mpfr catch2 eigen
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v1.3.0

@@ -16,6 +16,7 @@ FetchContent_MakeAvailable(Catch2)
 
 # MPFR is required for tests
 find_package(MPFR REQUIRED)
+find_package(Eigen3 3.3)
 
 enable_testing()
 
@@ -35,6 +36,11 @@ target_link_libraries(tests PRIVATE MPFR::MPFR)
 target_link_libraries(tests PRIVATE xprec)
 target_include_directories(tests PRIVATE ../include)
 target_compile_options(tests PRIVATE -Wall -Wextra)
+
+if (TARGET Eigen3::Eigen)
+    target_sources(tests PRIVATE eigen.cxx)
+    target_link_libraries(tests PRIVATE Eigen3::Eigen)
+endif()
 
 if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.12")
     set_property(TARGET tests PROPERTY CXX_STANDARD 20)
