@@ -33,11 +33,11 @@ Simple example:
 
     int main()
     {
-         DDouble x = 1.0;                   // emulated quad precision object
-         x = (4 - x) / (x + 6);             // arithmetic operators overloaded
-         std::cout << x << std::endl;       // output x to full precision
-         std::cout << x.hi() << std::endl;  // output x truncated to a double
-         std::cout << exp(x) << std::endl;  // higher-precision functions
+      xprec::DDouble x = 1.0;                    // emulated quad precision
+      x = (4 - x) / (x + 6);                     // arithmetic operators work
+      std::cout << x << std::endl;               // output to full precision
+      std::cout << x.hi() << std::endl;          // output truncated to double
+      std::cout << xprec::exp(x) << std::endl;   // higher-precision exp
     }
 
 Installation
