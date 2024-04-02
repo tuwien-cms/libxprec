@@ -40,9 +40,15 @@ TEST_CASE("sinh", "[hyp]")
 
     // XXX improve precision here a little
     x = 0.15;
+    while ((x *= 1.0041) < 1.0) {
+        CMP_UNARY(sinh, x, 2e-31);
+        CMP_UNARY(sinh, -x, 2e-31);
+    }
+
+    // This is fine.
     while ((x *= 1.0041) < 708.0) {
-        CMP_UNARY(sinh, x, 1e-31);
-        CMP_UNARY(sinh, -x, 1e-31);
+        CMP_UNARY(sinh, x, 5e-32);
+        CMP_UNARY(sinh, -x, 5e-32);
     }
 }
 
