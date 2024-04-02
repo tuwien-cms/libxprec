@@ -41,7 +41,7 @@ function(version_from_header version_arg)
     # build up version string from macros
     set(version "")
     foreach(macro_name IN LISTS _ARG_MACROS)
-        if (header MATCHES "define[ \t]+${macro_name}[ \t]+([0-9]+)")
+        if (header MATCHES "#[ \t]*define[ \t]+${macro_name}[ \t]+([0-9]+)")
             set(chunk "${CMAKE_MATCH_1}")
             if (version STREQUAL "")
                 set(version "${chunk}")
