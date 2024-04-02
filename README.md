@@ -64,13 +64,30 @@ Useful CMake flags:
  - `-DCMAKE_INSTALL_PREFIX=/path/to/usr`: sets the base directory below which
    to install include files and the shared object.
 
-libxprec can also be used in **header-only mode**, which does not require
+#### Header-only mode ####
+libxprec can also be used in header-only mode, which does not require
 installation. For this, simply drop the full libxprec directory into your project
 and use the following header:
 
     #include "libxprec/include/xprec/ddouble-header-only.h"
 
+Please note that this will likely lead to considerably longer compile times.
+
 [GNU MPFR]: https://www.mpfr.org/
+
+#### Import in other CMake project ####
+In order to use the library in CMake projects, we recommend using [FetchContent]:
+
+    include(FetchContent)
+    FetchContent_Declare(xprec
+        GIT_REPOSITORY https://github.com/tuwien-cms/libxprec
+        GIT_TAG v0.4.0
+        )
+    FetchContent_MakeAvailable(xprec)
+
+You then should be able to simply link against the `xprec` target.
+
+[FetchContent]: https://cmake.org/cmake/help/latest/module/FetchContent.html
 
 License and Copying
 -------------------
