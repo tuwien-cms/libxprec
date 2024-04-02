@@ -7,8 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/config/cmake")
 # extract version information from header file
 if (NOT XPREC_VERSION)
     include("VersionFromHeader")
-    version_from_header(
-        VERSION XPREC_VERSION
+    version_from_header(XPREC_VERSION
         HEADER "include/xprec/version.h"
         MACROS XPREC_VERSION_MAJOR XPREC_VERSION_MINOR XPREC_VERSION_PATCH
         )

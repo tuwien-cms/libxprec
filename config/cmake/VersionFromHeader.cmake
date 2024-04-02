@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.9)
 # Function to extract version string from header file
 #
 #     version_from_header(
-#           VERSION version_variable
+#           version_variable
 #           HEADER header_file
 #           MACROS macro_name_major [macro_name_minor ...]
 #           )
@@ -19,18 +19,15 @@ cmake_minimum_required(VERSION 3.9)
 #
 # where MACRO_NAME is each of the arguments of MACROS in sequence. The code
 # then strings together the values, separated by "."
-function(version_from_header)
+function(version_from_header version_arg)
     # parse arguments
     set(options)
-    set(one_value_args VERSION HEADER)
+    set(one_value_args HEADER)
     set(multi_value_args MACROS)
     cmake_parse_arguments(_ARG "${options}" "${one_value_args}"
                           "${multi_value_args}" ${ARGN})
 
     # These are required
-    if (NOT _ARG_VERSION)
-        message(FATAL_ERROR "VERSION is required")
-    endif()
     if (NOT _ARG_HEADER)
         message(FATAL_ERROR "HEADER is required")
     endif()
@@ -58,5 +55,5 @@ function(version_from_header)
     endforeach()
 
     # export back to parent scope ("pass by reference")
-    set("${_ARG_VERSION}" "${version}" PARENT_SCOPE)
+    set("${version_arg}" "${version}" PARENT_SCOPE)
 endfunction()

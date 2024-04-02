@@ -47,8 +47,7 @@ endif()
 
 if(MPFR_INCLUDE_DIR AND NOT MPFR_VERSION)
     include(VersionFromHeader)
-    version_from_header(
-        VERSION MPFR_VERSION
+    version_from_header(MPFR_VERSION
         HEADER "${MPFR_INCLUDE_DIR}/mpfr.h"
         MACROS MPFR_VERSION_MAJOR MPFR_VERSION_MINOR MPFR_VERSION_PATCHLEVEL
         )
