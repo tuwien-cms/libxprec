@@ -23,6 +23,7 @@ enable_testing()
 add_executable(tests
     arith.cxx
     circular.cxx
+    complex.cxx
     convert.cxx
     exp.cxx
     funcs.cxx
