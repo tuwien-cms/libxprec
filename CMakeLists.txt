@@ -48,6 +48,7 @@ install(TARGETS xprec)
 install(
     DIRECTORY include/
     DESTINATION include
+    PATTERN "ddouble-header-only.h" EXCLUDE
     )
 
 # Tests
