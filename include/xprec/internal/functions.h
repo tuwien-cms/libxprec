@@ -25,6 +25,11 @@ inline DDouble ldexp(DDouble a, int n)
     return DDouble(std::ldexp(a.hi(), n), std::ldexp(a.lo(), n));
 }
 
+inline DDouble scalbn(DDouble a, int n)
+{
+    return DDouble(std::scalbn(a.hi(), n), std::scalbn(a.lo(), n));
+}
+
 inline bool signbit(DDouble a)
 {
     return std::signbit(a.hi());
