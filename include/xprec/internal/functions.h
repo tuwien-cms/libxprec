@@ -35,10 +35,8 @@ inline int ilogb(DDouble x)
     return std::ilogb(x.hi());
 }
 
-inline double logb(DDouble x)
+inline DDouble logb(DDouble x)
 {
-    // XXX It's a bit strange to return double here, maybe revisit this
-    // later.
     return std::logb(x.hi());
 }
 

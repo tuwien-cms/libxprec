@@ -75,6 +75,9 @@ public:
     template <typename T>
     constexpr T as() const { return static_cast<T>(_hi) + static_cast<T>(_lo); }
 
+    // XXX this is a bit of a hack to make complex work on MacOS
+    constexpr explicit operator int () const { return this->as<int>(); }
+
     /** Get high part of a ddouble */
     constexpr double hi() const { return _hi; }
 
@@ -261,7 +264,7 @@ DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
 DDouble log(DDouble a);
 DDouble log1p(DDouble a);
-double logb(DDouble a);
+DDouble logb(DDouble a);
 DDouble modf(DDouble a, DDouble *b);
 DDouble pow(DDouble a, DDouble b);
 DDouble pow(DDouble a, int b);
