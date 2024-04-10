@@ -79,8 +79,15 @@ public:
         constexpr result_type a() const { return _a; }
         constexpr result_type b() const { return _b; }
 
-        friend bool operator==(const param_type &lhs, const param_type &rhs);
-        friend bool operator!=(const param_type &lhs, const param_type &rhs);
+        friend bool operator==(const param_type &lhs, const param_type &rhs)
+        {
+            return lhs._a == rhs._a && lhs._b == rhs._b;
+        }
+
+        friend bool operator!=(const param_type &lhs, const param_type &rhs)
+        {
+            return !(lhs == rhs);
+        }
 
     private:
         result_type _a, _b;
@@ -102,9 +109,16 @@ public:
     constexpr result_type max() const { return b(); }
 
     friend bool operator==(const uniform_real_distribution &lhs,
-                           const uniform_real_distribution &rhs);
+                           const uniform_real_distribution &rhs)
+    {
+        return lhs.param() == rhs.param();
+    }
+
     friend bool operator!=(const uniform_real_distribution &lhs,
-                           const uniform_real_distribution &rhs);
+                           const uniform_real_distribution &rhs)
+    {
+        return lhs.param() != rhs.param();
+    }
 
     template <typename Generator>
     result_type operator()(Generator &rng) { return operator()(rng, _param); }
@@ -116,36 +130,7 @@ private:
     param_type _param;
 };
 
-
 // Implmenetations:
-
-inline bool operator==(
-        const uniform_real_distribution<xprec::DDouble>::param_type &lhs,
-        const uniform_real_distribution<xprec::DDouble>::param_type &rhs)
-{
-    return lhs._a == rhs._a && lhs._b == rhs._b;
-}
-
-inline bool operator!=(
-        const uniform_real_distribution<xprec::DDouble>::param_type &lhs,
-        const uniform_real_distribution<xprec::DDouble>::param_type &rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator==(
-        const uniform_real_distribution<xprec::DDouble> &lhs,
-        const uniform_real_distribution<xprec::DDouble> &rhs)
-{
-    return lhs.param() == rhs.param();
-}
-
-inline bool operator!=(
-        const uniform_real_distribution<xprec::DDouble> &lhs,
-        const uniform_real_distribution<xprec::DDouble> &rhs)
-{
-    return lhs.param() != rhs.param();
-}
 
 template <typename Generator>
 xprec::DDouble uniform_real_distribution<xprec::DDouble>::operator()(
