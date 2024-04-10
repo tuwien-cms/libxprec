@@ -1,4 +1,10 @@
-/* Small double-double arithmetic library.
+/* Small double-double arithmetic library - header-only version.
+ *
+ * To use this, simply drop the full libxprec directory into your project
+ * and include this header.  Please note that this will likely lead to
+ * considerably longer compile times.
+ *
+ * Please also note that this header WILL NOT be installed by `make install`.
  *
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
