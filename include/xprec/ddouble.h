@@ -254,6 +254,8 @@ DDouble cosh(DDouble a);
 DDouble exp(DDouble a);
 DDouble expm1(DDouble a);
 DDouble fabs(DDouble a);
+DDouble fmax(DDouble a, DDouble b);
+DDouble fmin(DDouble a, DDouble b);
 DDouble floor(DDouble a);
 DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);

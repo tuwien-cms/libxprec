@@ -51,6 +51,19 @@ TEST_CASE("Relational", "[rel]")
     REQUIRE(DDouble(3.0) <= +DDouble(3.0));
 }
 
+TEST_CASE("MinMax", "[rel]")
+{
+    REQUIRE(fmin(DDouble(1.0), DDouble(2.5)) == 1.0);
+    REQUIRE(fmin(DDouble(2.0), DDouble(-4.0)) == -4.0);
+    REQUIRE(fmin(DDouble(NAN), DDouble(100.0)) == 100);
+    REQUIRE(fmin(DDouble(50.0), DDouble(NAN)) == 50);
+
+    REQUIRE(fmax(DDouble(1.0), DDouble(2.5)) == 2.5);
+    REQUIRE(fmax(DDouble(2.0), DDouble(-4.0)) == 2.0);
+    REQUIRE(fmax(DDouble(NAN), DDouble(100.0)) == 100);
+    REQUIRE(fmax(DDouble(50.0), DDouble(NAN)) == 50);
+}
+
 TEST_CASE("Mul", "[arith]")
 {
     DDouble x = DDouble(1.25, -ldexp(1.125, -85));

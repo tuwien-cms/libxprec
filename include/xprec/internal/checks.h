@@ -61,4 +61,17 @@ inline int fpclassify(DDouble x)
     return std::fpclassify(x.hi());
 }
 
+inline DDouble fmin(DDouble a, DDouble b)
+{
+    // fmin considers NaN to be the largest number. (a <= b) is false with
+    // either element being NaN, if a is NaN, then it is okay to return b;
+    // but if b is NaN, we have to return a
+    return a <= b || isnan(b) ? a : b;
+}
+
+inline DDouble fmax(DDouble a, DDouble b)
+{
+    return a <= b || isnan(a) ? b : a;
+}
+
 } /* namespace xprec */
