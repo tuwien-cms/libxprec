@@ -25,7 +25,7 @@ DDouble cosh(DDouble x)
     // Only add something if indeed something can change.
     if (x.hi() < 36.5)
         res += reciprocal(res);
-    return PowerOfTwo(-1) * res;
+    return PowerOfTwo(0.5) * res;
 }
 
 static DDouble sinh_kernel(DDouble x)
@@ -67,7 +67,7 @@ DDouble sinh(DDouble x)
     // Only add something if indeed something can change.
     if (x.hi() < 36.5)
         res -= reciprocal(res);
-    return PowerOfTwo(-1) * res;
+    return PowerOfTwo(0.5) * res;
 }
 
 static DDouble tanh_kernel(DDouble x)
@@ -132,7 +132,7 @@ DDouble acosh(DDouble x)
     if (arg.hi() <= 1e16)
         arg = arg.add_small(sqrt(arg * arg - 1.0));
     else
-        arg = PowerOfTwo(1) * arg;
+        arg = PowerOfTwo(2.0) * arg;
 
     return log(arg);
 }
@@ -162,7 +162,7 @@ DDouble asinh(DDouble x)
         arg = sqrt(arg * arg + 1.0).add_small(arg);
     else
         // XXX for very large values this may still overflow.
-        arg = PowerOfTwo(1) * arg;
+        arg = PowerOfTwo(2.0) * arg;
 
     return copysign(log(arg), x);
 }
@@ -186,7 +186,7 @@ DDouble atanh(DDouble x)
     //
     //   atanh(x) = 1/2 log((1 + x)/(1 - x)) = 1/2 log(1 + 2x/(1 - x))
     //
-    return PowerOfTwo(-1) * log1p(PowerOfTwo(1) * x / (1.0 - x));
+    return PowerOfTwo(0.5) * log1p(PowerOfTwo(2.0) * x / (1.0 - x));
 }
 
 } /* namespace xprec */

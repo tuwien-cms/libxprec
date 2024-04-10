@@ -220,16 +220,23 @@ private:
  */
 class PowerOfTwo {
 public:
-    explicit PowerOfTwo(int n) : _x(std::ldexp(1.0, n)) { }
+    /**
+     * Initialize power of two.
+     *
+     * WARNING: You MUST ensure that x is a power of two or zero.
+     */
+    constexpr PowerOfTwo(double x) : _x(x) { }
 
     friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
     friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
 
+    friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return std::ldexp(x._x, m); }
+
+    friend PowerOfTwo reciprocal(PowerOfTwo x) { return 1.0/x._x; }
+
     constexpr operator double () const { return _x; }
 
 private:
-    explicit constexpr PowerOfTwo(double x) : _x(x) { }
-
     double _x;
 };
 

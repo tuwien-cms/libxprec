@@ -40,7 +40,7 @@ static DDouble cos_kernel(DDouble x)
     DDouble xsq = -x * x;
     DDouble r = 1.0;
     DDouble xpow = xsq;
-    r = r.add_small(PowerOfTwo(-1) * xpow);
+    r = r.add_small(PowerOfTwo(0.5) * xpow);
     for (int i = 4; i <= 26; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);

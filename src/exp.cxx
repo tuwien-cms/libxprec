@@ -38,7 +38,7 @@ static DDouble expm1_kernel(DDouble x)
     r = xsq / r + 6.0;
     r = (-x).add_small(xsq / r) + 2.0;
     r = x / r;
-    r *= PowerOfTwo(1);
+    r *= PowerOfTwo(2.0);
     return r;
 }
 
@@ -212,7 +212,7 @@ DDouble log(DDouble x)
     //   log(x) = log(x0) + 2 (x - x0)/(x + x0) + O(x - x0)^3
     //
     DDouble x0 = exp(log_x);
-    DDouble corr = PowerOfTwo(1) * (x - x0) / (x + x0);
+    DDouble corr = PowerOfTwo(2.0) * (x - x0) / (x + x0);
     log_x += corr;
     return log_x;
 }
@@ -233,7 +233,7 @@ DDouble log1p(DDouble x)
     // x close to -1, since that is where we have an intrinsic loss of
     // precision anyway
     DDouble x0 = expm1(log_x);
-    DDouble corr = PowerOfTwo(1) * (x - x0) / (2 + x + x0);
+    DDouble corr = PowerOfTwo(2.0) * (x - x0) / (2 + x + x0);
     log_x += corr;
     return log_x;
 }

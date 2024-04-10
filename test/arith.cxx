@@ -10,6 +10,7 @@
 
 using xprec::greater_in_magnitude;
 using xprec::ExDouble;
+using xprec::PowerOfTwo;
 
 TEST_CASE("greater_in_magnitude", "")
 {
@@ -42,6 +43,13 @@ TEST_CASE("arith", "[arith]")
             CMP_BINARY(operator/, x, y, 5.0e-32);
         }
     }
+}
+
+TEST_CASE("pow2", "[arith]")
+{
+    REQUIRE(PowerOfTwo(4.0) * PowerOfTwo(-8.0) == PowerOfTwo(-32.0));
+    REQUIRE(PowerOfTwo(16.0) / PowerOfTwo(64.0) == PowerOfTwo(0.25));
+    REQUIRE(reciprocal(PowerOfTwo(8.0)) == PowerOfTwo(0.125));
 }
 
 TEST_CASE("Relational", "[rel]")
