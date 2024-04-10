@@ -30,6 +30,18 @@ inline DDouble scalbn(DDouble a, int n)
     return DDouble(std::scalbn(a.hi(), n), std::scalbn(a.lo(), n));
 }
 
+inline int ilogb(DDouble x)
+{
+    return std::ilogb(x.hi());
+}
+
+inline double logb(DDouble x)
+{
+    // XXX It's a bit strange to return double here, maybe revisit this
+    // later.
+    return std::logb(x.hi());
+}
+
 inline bool signbit(DDouble a)
 {
     return std::signbit(a.hi());

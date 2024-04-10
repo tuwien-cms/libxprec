@@ -261,6 +261,7 @@ DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
 DDouble log(DDouble a);
 DDouble log1p(DDouble a);
+double logb(DDouble a);
 DDouble modf(DDouble a, DDouble *b);
 DDouble pow(DDouble a, DDouble b);
 DDouble pow(DDouble a, int b);
@@ -273,6 +274,7 @@ DDouble tan(DDouble a);
 DDouble tanh(DDouble a);
 
 int fpclassify(DDouble x);
+int ilogb(DDouble x);
 bool isfinite(DDouble x);
 bool isinf(DDouble x);
 bool isnan(DDouble x);
