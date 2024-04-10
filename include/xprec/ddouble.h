@@ -323,10 +323,10 @@ constexpr DDouble log10e{0.4342944819032518, 1.098319650216765e-17};
 constexpr DDouble pi{3.141592653589793, 1.2246467991473532e-16};
 
 /** Circle constant pi, divided by two */
-constexpr DDouble pi_half(1.5707963267948966, 6.123233995736766e-17);
+constexpr DDouble pi_half{1.5707963267948966, 6.123233995736766e-17};
 
 /** Circle constant pi, divided by four */
-constexpr DDouble pi_4(0.7853981633974483, 3.061616997868383e-17);
+constexpr DDouble pi_4{0.7853981633974483, 3.061616997868383e-17};
 
 /** Reciprocal of pi */
 constexpr DDouble inv_pi{0.3183098861837907, -1.9678676675182486e-17};
@@ -421,31 +421,31 @@ public:
 namespace std { namespace numbers {
 
 template <>
-constexpr xprec::DDouble e_v<xprec::DDouble> = xprec::numbers::e;
+inline constexpr xprec::DDouble e_v<xprec::DDouble> = xprec::numbers::e;
 template <>
-constexpr xprec::DDouble log2e_v<xprec::DDouble> = xprec::numbers::log2e;
+inline constexpr xprec::DDouble log2e_v<xprec::DDouble> = xprec::numbers::log2e;
 template <>
-constexpr xprec::DDouble log10e_v<xprec::DDouble> = xprec::numbers::log10e;
+inline constexpr xprec::DDouble log10e_v<xprec::DDouble> = xprec::numbers::log10e;
 template <>
-constexpr xprec::DDouble pi_v<xprec::DDouble> = xprec::numbers::pi;
+inline constexpr xprec::DDouble pi_v<xprec::DDouble> = xprec::numbers::pi;
 template <>
-constexpr xprec::DDouble inv_pi_v<xprec::DDouble> = xprec::numbers::inv_pi;
+inline constexpr xprec::DDouble inv_pi_v<xprec::DDouble> = xprec::numbers::inv_pi;
 template <>
-constexpr xprec::DDouble inv_sqrtpi_v<xprec::DDouble> = xprec::numbers::inv_sqrtpi;
+inline constexpr xprec::DDouble inv_sqrtpi_v<xprec::DDouble> = xprec::numbers::inv_sqrtpi;
 template <>
-constexpr xprec::DDouble ln2_v<xprec::DDouble> = xprec::numbers::ln2;
+inline constexpr xprec::DDouble ln2_v<xprec::DDouble> = xprec::numbers::ln2;
 template <>
-constexpr xprec::DDouble ln10_v<xprec::DDouble> = xprec::numbers::ln10;
+inline constexpr xprec::DDouble ln10_v<xprec::DDouble> = xprec::numbers::ln10;
 template <>
-constexpr xprec::DDouble sqrt2_v<xprec::DDouble> = xprec::numbers::sqrt2;
+inline constexpr xprec::DDouble sqrt2_v<xprec::DDouble> = xprec::numbers::sqrt2;
 template <>
-constexpr xprec::DDouble sqrt3_v<xprec::DDouble> = xprec::numbers::sqrt3;
+inline constexpr xprec::DDouble sqrt3_v<xprec::DDouble> = xprec::numbers::sqrt3;
 template <>
-constexpr xprec::DDouble inv_sqrt3_v<xprec::DDouble> = xprec::numbers::inv_sqrt3;
+inline constexpr xprec::DDouble inv_sqrt3_v<xprec::DDouble> = xprec::numbers::inv_sqrt3;
 template <>
-constexpr xprec::DDouble egamma_v<xprec::DDouble> = xprec::numbers::egamma;
+inline constexpr xprec::DDouble egamma_v<xprec::DDouble> = xprec::numbers::egamma;
 template <>
-constexpr xprec::DDouble phi_v<xprec::DDouble> = xprec::numbers::phi;
+inline constexpr xprec::DDouble phi_v<xprec::DDouble> = xprec::numbers::phi;
 
 }} /* namespace std::numbers */
 
