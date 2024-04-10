@@ -9,6 +9,7 @@
 #include "catch2-addons.h"
 
 using xprec::greater_in_magnitude;
+using xprec::is_power_of_two;
 using xprec::ExDouble;
 using xprec::PowerOfTwo;
 
@@ -21,6 +22,15 @@ TEST_CASE("greater_in_magnitude", "")
     REQUIRE(!greater_in_magnitude(1e200, -INFINITY));
     REQUIRE(greater_in_magnitude(NAN, INFINITY));
     REQUIRE(!greater_in_magnitude(1e200, NAN));
+}
+
+TEST_CASE("is_power_of_two", "")
+{
+    REQUIRE(is_power_of_two(4.0));
+    REQUIRE(is_power_of_two(0.0));
+    REQUIRE(is_power_of_two(-0.25));
+    REQUIRE(!is_power_of_two(0.1));
+    REQUIRE(!is_power_of_two(17.34));
 }
 
 TEST_CASE("is_small", "")
