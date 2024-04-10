@@ -66,12 +66,12 @@ inline bool is_power_of_two(DDouble x)
 
 inline PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b)
 {
-    return PowerOfTwo(a._x * b._x);
+    return a._x * b._x;
 }
 
 inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
 {
-    return PowerOfTwo(a._x / b._x);
+    return a._x / b._x;
 }
 
 // -------------------------------------------------------------------------

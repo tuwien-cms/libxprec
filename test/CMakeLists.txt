@@ -31,6 +31,7 @@ add_executable(tests
     hyperbolic.cxx
     inline.cxx
     mpfloat.cxx
+    random.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)

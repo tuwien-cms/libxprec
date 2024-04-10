@@ -230,6 +230,12 @@ public:
     friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
     friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
 
+    friend double operator*(PowerOfTwo a, double b) { return (double)a * b; }
+    friend double operator*(double a, PowerOfTwo b) { return a * (double)b; }
+
+    friend double operator/(PowerOfTwo a, double b) { return (double)a / b; }
+    friend double operator/(double a, PowerOfTwo b) { return a / (double)b; }
+
     friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return std::ldexp(x._x, m); }
 
     friend PowerOfTwo reciprocal(PowerOfTwo x) { return 1.0/x._x; }
