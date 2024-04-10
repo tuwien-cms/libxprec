@@ -12,10 +12,6 @@
 
 namespace xprec {
 
-static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
-static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
-static const DDouble PI_4(0.7853981633974483, 3.061616997868383e-17);
-
 static DDouble sin_kernel(DDouble x)
 {
     // We need this to go out to pi/4 ~= 0.785
@@ -55,7 +51,8 @@ static DDouble remainder_pi2(DDouble x, int &sector)
 {
     // This reduction has to be done quite carefully, because of the
     // remainder.
-    DDouble n = x / PI_2;
+    using xprec::numbers::pi_half;
+    DDouble n = x / pi_half;
     if (fabs(n.hi()) < 0.5) {
         sector = 0;
         return x;
@@ -68,13 +65,14 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     sector = n_int % 4;
     if (sector < 0)
         sector += 4;
-    return x - PI_2 * n;
+    return x - pi_half * n;
 }
 
 static DDouble sin_sector(DDouble x, int sector)
 {
+    using xprec::numbers::pi_4;
     assert(sector >= 0 && sector < 4);
-    assert(fabs(x.hi()) <= nextafter(PI_4.hi(), 1));
+    assert(fabs(x.hi()) <= nextafter(pi_4.hi(), 1));
 
     switch (sector) {
     case 0:
@@ -102,7 +100,8 @@ XPREC_API_EXPORT
 DDouble cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
-    if (fabs(x.hi()) < PI_4.hi())
+    using xprec::numbers::pi_4;
+    if (fabs(x.hi()) < pi_4.hi())
         return cos_kernel(x);
 
     // Otherwise, use common code.
@@ -137,8 +136,7 @@ DDouble asin(DDouble x)
 
     // This is where Taylor fails
     if (fabs(x) == 1.0) {
-        static const DDouble PI_2(1.5707963267948966, 6.123233995736766e-17);
-        return copysign(PI_2, x);
+        return copysign(xprec::numbers::pi_half, x);
     }
 
     // Perform Taylor expansion:
@@ -164,9 +162,8 @@ DDouble acos(DDouble x)
     // This is where Taylor fails
     if (x == 1.0)
         return 0.0;
-    if (x == -1.0) {
-        return PI;
-    }
+    if (x == -1.0)
+        return xprec::numbers::pi;
 
     // Perform Taylor expansion:
     //
@@ -186,7 +183,7 @@ DDouble atan(DDouble x)
 {
     // For large values, use reflection formula
     if (fabs(x.hi()) > 1.0) {
-        DDouble y = copysign(PI_2, x);
+        DDouble y = copysign(xprec::numbers::pi_half, x);
         if (isfinite(x))
             y -= atan(reciprocal(x));
         return y;
@@ -209,17 +206,20 @@ DDouble atan(DDouble x)
 XPREC_API_EXPORT
 DDouble atan2(DDouble y, DDouble x)
 {
+    using xprec::numbers::pi_half;
+    using xprec::numbers::pi;
+
     // Special values
     if (isnan(x) || isnan(y))
         return NAN;
     if (iszero(y))
-        return x.hi() >= 0 ? 0.0 : PI;
+        return x.hi() >= 0 ? 0.0 : pi;
     if (iszero(x))
-        return copysign(PI_2, y);
+        return copysign(pi_half, y);
 
     DDouble res = atan(y / x);
     if (x.hi() < 0)
-        res = copysign(PI, y).add_small(res);
+        res = copysign(pi, y).add_small(res);
     return res;
 }
 

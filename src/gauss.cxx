@@ -18,8 +18,7 @@ void gauss_chebyshev(int n, DDouble x[], DDouble w[])
     if (n < 1)
         return;
 
-    static const DDouble PI(3.141592653589793, 1.2246467991473532e-16);
-    DDouble fact = PI / (1.0 * n);
+    DDouble fact = xprec::numbers::pi / (1.0 * n);
     for (int i = 0; i < n; ++i) {
         x[i] = cos((n - i - 0.5) * fact);
         if (w != nullptr)
