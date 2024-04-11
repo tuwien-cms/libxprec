@@ -31,25 +31,32 @@ inline DDouble _generate_canonical(Generator &rng, Range range, size_t m)
     if (m == 0)
         return 0;
 
+    constexpr double max_exact = 1 / std::numeric_limits<double>::epsilon();
     DDouble sum = rng();
     sum /= range;
 
     for (size_t k = 1; k != m; ++k) {
-        sum = DDouble(rng()).add_small(sum);
+        if (range <= max_exact)
+            sum += double(rng());
+        else
+            sum += DDouble(rng());
         sum /= range;
     }
     return sum;
 }
 
-template <size_t Bits, typename Generator>
-DDouble generate_canonical(Generator &rng)
+template <typename Generator>
+inline DDouble generate_canonical(
+            Generator &rng, size_t bits=std::numeric_limits<DDouble>::digits)
 {
-    size_t b = std::min<size_t>(std::numeric_limits<DDouble>::digits, Bits);
+    size_t b = std::min<size_t>(std::numeric_limits<DDouble>::digits, bits);
     DDouble r = _rng_range(rng);
     size_t m = std::ceil(b / std::log2(r.hi()));
 
     if (is_power_of_two(r))
         return _generate_canonical(rng, PowerOfTwo(r.hi()), m);
+    else if (r.lo() == 0)
+        return _generate_canonical(rng, r.hi(), m);
     else
         return _generate_canonical(rng, r, m);
 }
@@ -124,22 +131,15 @@ public:
     result_type operator()(Generator &rng) { return operator()(rng, _param); }
 
     template <typename Generator>
-    result_type operator()(Generator &rng, const param_type &param);
+    result_type operator()(Generator &rng, const param_type &param)
+    {
+        xprec::DDouble u01 = xprec::generate_canonical(rng);
+        return (param.b() - param.a()) * u01 + param.a();
+    }
 
 private:
     param_type _param;
 };
 
-// Implmenetations:
-
-template <typename Generator>
-xprec::DDouble uniform_real_distribution<xprec::DDouble>::operator()(
-        Generator &rng, const param_type &param)
-{
-    using xprec::DDouble;
-    constexpr size_t bits = std::numeric_limits<DDouble>::digits;
-    DDouble u01 = xprec::generate_canonical<bits, Generator>(rng);
-    return (param.b() - param.a()) * u01 + param.a();
-}
 
 } /* namespace std */
