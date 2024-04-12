@@ -8,6 +8,7 @@
  * and also licensed MIT
  */
 #include "xprec/ddouble.h"
+#include "taylor.h"
 #include <cassert>
 
 #ifndef XPREC_API_EXPORT
@@ -16,19 +17,15 @@
 
 namespace xprec {
 
-inline DDouble expm1_kernel(DDouble x, int n)
+inline DDouble expm1_kernel_taylor(DDouble x, int n)
 {
-    // Continued fraction expansion of the exponential function
-    //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
-    DDouble xhalf = PowerOfTwo(0.5) * x;
-    DDouble xsq4 = xhalf * xhalf;
-
-    DDouble r = xsq4 / (2 * n + 3.0) + (2 * n + 1.0);
-    for (int k = n - 1; k >= 1; --k) {
-        r = xsq4 / r + (2 * k + 1.0);
+    assert(fabs(x.hi()) < 1.0);
+    DDouble xpow = x * x;
+    DDouble r = x.add_small(PowerOfTwo(0.5) * xpow);
+    for (int k = 3; k <= n; ++k) {
+        xpow *= x;
+        r = r.add_small(reciprocal_factorial(k) * xpow);
     }
-    r = (-xhalf).add_small(xsq4 / r) + 1.0;
-    r = x / r;
     return r;
 }
 
@@ -125,7 +122,7 @@ static DDouble expm1_quarter(DDouble x)
 
     DDouble expm1_x0 = expm1_128th(n);
     DDouble exp_x0 = expm1_x0 + 1.0;
-    DDouble exp_y = expm1_kernel(y, 3);
+    DDouble exp_y = expm1_kernel_taylor(y, 10);
     return expm1_x0.add_small(exp_x0 * exp_y);
 }
 
