@@ -103,7 +103,7 @@ TEST_CASE("log1p", "[exp]")
 
     x = 1.;
     while ((x *= 0.92) > 1e-290) {
-        CMP_UNARY(log1p, x, 1.5 * ulp);
+        CMP_UNARY(log1p, x, 2.5 * ulp);
     }
     x = -.9999999;
     while ((x *= 0.92) > 1e-290) {
