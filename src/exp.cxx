@@ -16,7 +16,7 @@
 
 namespace xprec {
 
-static DDouble expm1_kernel(DDouble x)
+inline DDouble expm1_kernel(DDouble x, int n=7)
 {
     // We need to make sure that (1 + x) does not lose possible significant
     // digits, so no matter what strategy we choose here, the convergence
@@ -28,14 +28,11 @@ static DDouble expm1_kernel(DDouble x)
     // Continued fraction expansion of the exponential function
     //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
     DDouble xsq = x * x;
-    DDouble r;
-    r = xsq / 34.0 + 30.0;
-    r = xsq / r + 26.0;
-    r = xsq / r + 22.0;
-    r = xsq / r + 18.0;
-    r = xsq / r + 14.0;
-    r = xsq / r + 10.0;
-    r = xsq / r + 6.0;
+
+    DDouble r = xsq / (4 * n + 6.0) + (4 * n + 2.0);
+    for (int k = n - 1; k >= 1; --k) {
+        r = xsq / r + (4 * k + 2.0);
+    }
     r = (-x).add_small(xsq / r) + 2.0;
     r = x / r;
     r *= PowerOfTwo(2.0);
