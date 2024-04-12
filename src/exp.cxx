@@ -22,20 +22,17 @@ inline DDouble expm1_kernel(DDouble x, int n=7)
     // digits, so no matter what strategy we choose here, the convergence
     // needs to go out to x = log(1.5) = 0.22
 
-    // Convergence of the CF approx to 2e-32
-    assert(greater_in_magnitude(0.3, x));
-
     // Continued fraction expansion of the exponential function
     //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
-    DDouble xsq = x * x;
+    DDouble xhalf = PowerOfTwo(0.5) * x;
+    DDouble xsq4 = xhalf * xhalf;
 
-    DDouble r = xsq / (4 * n + 6.0) + (4 * n + 2.0);
+    DDouble r = xsq4 / (2 * n + 3.0) + (2 * n + 1.0);
     for (int k = n - 1; k >= 1; --k) {
-        r = xsq / r + (4 * k + 2.0);
+        r = xsq4 / r + (2 * k + 1.0);
     }
-    r = (-x).add_small(xsq / r) + 2.0;
+    r = (-xhalf).add_small(xsq4 / r) + 1.0;
     r = x / r;
-    r *= PowerOfTwo(2.0);
     return r;
 }
 
