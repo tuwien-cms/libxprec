@@ -16,12 +16,8 @@
 
 namespace xprec {
 
-static DDouble expm1_kernel(DDouble x, int n=7)
+inline DDouble expm1_kernel(DDouble x, int n)
 {
-    // We need to make sure that (1 + x) does not lose possible significant
-    // digits, so no matter what strategy we choose here, the convergence
-    // needs to go out to x = log(1.5) = 0.22
-
     // Continued fraction expansion of the exponential function
     //  6*div + div_d + 6*add_d + add_sm + mul_p = 253 flops
     DDouble xhalf = PowerOfTwo(0.5) * x;
@@ -112,12 +108,17 @@ static DDouble expm1_128th(int n)
 
 static DDouble expm1_quarter(DDouble x)
 {
+    // We need to make sure that (1 + x) does not lose possible significant
+    // digits, so no matter what strategy we choose here, the convergence
+    // needs to go out to x = log(1.5) = 0.22. We have it work for until a
+    // quarter, because that's a nice round power of two.
+    assert (fabs(x.hi()) <= 0.25);
+
     // The idea is to use the identity
     //
     //   expm1(x) = expm1(x0) + exp(x0) * expm1(x - x0)
     //
-    assert (fabs(x.hi()) <= 0.25);
-
+    // to reduce the expansion order.
     double n = std::round(128 * x.hi());
     double x0 = n / 128;
     DDouble y = x - x0;
