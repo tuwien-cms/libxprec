@@ -39,7 +39,9 @@ if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
 target_include_directories(xprec PUBLIC include)
-set_property(TARGET xprec PROPERTY
+set_target_properties(xprec PROPERTIES
+    VERSION ${CMAKE_PROJECT_VERSION}
+    SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR}
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED ON
     )
