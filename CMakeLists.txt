@@ -40,8 +40,8 @@ if(NOT MSVC)
 endif()
 target_include_directories(xprec PUBLIC include)
 set_target_properties(xprec PROPERTIES
-    VERSION ${CMAKE_PROJECT_VERSION}
-    SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR}
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED ON
     )
