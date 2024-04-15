@@ -8,6 +8,24 @@
 #include "mpfloat.h"
 #include "catch2-addons.h"
 
+MPFloat trig_complement(MPFloat x)
+{
+    return sqrt(1 - x * x);
+}
+
+TEST_CASE("compl", "[trig]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    CMP_UNARY(trig_complement, 0.0, 1.0 * ulp);
+    CMP_UNARY(trig_complement, 1.0, 1.0 * ulp);
+
+    DDouble x = 0.5;
+    while ((x *= 0.98) > 1e-290) {
+        CMP_UNARY(trig_complement, x, 3.0 * ulp);
+        CMP_UNARY(trig_complement, -x, 3.0 * ulp);
+    }
+}
+
 TEST_CASE("sin", "[trig]")
 {
     CMP_UNARY(sin, 0.0, 5e-32);

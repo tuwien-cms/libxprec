@@ -13,6 +13,29 @@
 
 namespace xprec {
 
+XPREC_API_EXPORT
+DDouble trig_complement(DDouble x)
+{
+    if (fabs(x) > 1.0)
+        return NAN;
+    if (fabs(x.hi()) > 0.5)
+        return sqrt(1 - x * x);
+
+    // sqrt(1 - x*x) loses half its digits of precision for small x.  But this
+    // means that half of the digits are accurate, so we compute the function
+    // for the hi part first.
+    ExDouble x0 = x.hi(), dx = x.lo();
+    DDouble y0 = sqrt(1.0 - x0 * x0);
+
+    // Now we have the Taylor expansion:
+    //
+    //     f(x) = sqrt(1 - x*x) = f(x0) - x0/f(x0) * (x - x0) + ...
+    //
+    // where it is sufficient to take just one term.
+    DDouble dy = -x0 * dx / y0;
+    return y0.add_small(dy);
+}
+
 static DDouble sin_kernel(DDouble x)
 {
     // We need this to go out to pi/4 ~= 0.785
