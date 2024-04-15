@@ -36,35 +36,35 @@ DDouble trig_complement(DDouble x)
     return y0.add_small(dy);
 }
 
-static DDouble sin_kernel(DDouble x)
+static DDouble sin_kernel(DDouble x, int n=13)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
-    assert(greater_in_magnitude(0.94, x));
+    assert(n >= 0 && n <= 13);
 
     // Taylor series of the sin around 0
     DDouble xsq = -x * x;
     DDouble r = x;
     DDouble xpow = x;
-    for (int i = 3; i <= 27; i += 2) {
+    for (int i = 3; i <= 2 * n + 1; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);
     }
     return r;
 }
 
-static DDouble cos_kernel(DDouble x)
+static DDouble cos_kernel(DDouble x, int n=13)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
-    assert(greater_in_magnitude(0.83, x));
+    assert(n >= 0 && n <= 13);
 
     // Taylor series of the cos around 0
     DDouble xsq = -x * x;
     DDouble r = 1.0;
     DDouble xpow = xsq;
     r = r.add_small(PowerOfTwo(0.5) * xpow);
-    for (int i = 4; i <= 26; i += 2) {
+    for (int i = 4; i <= 2 * n; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);
     }
