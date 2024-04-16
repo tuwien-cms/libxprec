@@ -21,8 +21,8 @@ TEST_CASE("compl", "[trig]")
 
     DDouble x = 0.5;
     while ((x *= 0.98) > 1e-290) {
-        CMP_UNARY(trig_complement, x, 3.0 * ulp);
-        CMP_UNARY(trig_complement, -x, 3.0 * ulp);
+        CMP_UNARY(trig_complement, x, 1.0 * ulp);
+        CMP_UNARY(trig_complement, -x, 1.0 * ulp);
     }
 }
 
