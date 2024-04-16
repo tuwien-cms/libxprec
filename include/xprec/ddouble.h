@@ -312,6 +312,9 @@ void gauss_chebyshev(int n, DDouble x[], DDouble w[] = nullptr);
  */
 void gauss_legendre(int n, DDouble x[], DDouble w[] = nullptr);
 
+/** Trigonometric complement sqrt(1 - x*x) to full precision. */
+DDouble trig_complement(DDouble x);
+
 } /* namespace xprec*/
 
 namespace std {
