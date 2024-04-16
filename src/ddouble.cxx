@@ -14,16 +14,22 @@ namespace xprec {
 XPREC_API_EXPORT
 DDouble sqrt(DDouble a)
 {
-    // From: Karp, High Precision Division and Square Root, 1993
     double sqrt_hi = std::sqrt(a.hi());
     if (a.hi() <= 0)
         return sqrt_hi;
 
-    double x = 1.0 / sqrt_hi;
-    ExDouble ax = a.hi() * x;
-    DDouble ax_squared = ax * ax;
-    double diff = (a - ax_squared).hi() * x * 0.5;
-    return ax + diff;
+    // From: Karp, High Precision Division and Square Root, 1993, Table II
+    // This is based on Newton-Ralphson for 1/sqrt(x):
+    //
+    //   x0 = approx(1/sqrt(A))
+    //   x  = x + 0.5 * x * (1.0 - A * x * x)
+    //
+    double x0 = 1.0 / sqrt_hi;
+    ExDouble y0 = a.hi() * x0;
+    DDouble tt0 = y0 * y0;
+    double t0 = 0.5 * x0 * (a - tt0).hi();
+    DDouble y1 = y0 + t0;
+    return y1;
 }
 
 XPREC_API_EXPORT

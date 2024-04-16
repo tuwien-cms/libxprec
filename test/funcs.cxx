@@ -8,13 +8,7 @@
 #include "mpfloat.h"
 #include "catch2-addons.h"
 
-TEST_CASE("sqrt", "[fn]")
-{
-    CMP_UNARY(sqrt, 2, 1e-31);
-    CMP_UNARY(sqrt, 3, 1e-31);
-    CMP_UNARY(sqrt, ldexp(67.0, -39), 1e-31);
-    CMP_UNARY(sqrt, ldexp(23.0, 105), 1e-31);
-}
+using xprec::DDouble;
 
 TEST_CASE("hypot", "[fn]")
 {
@@ -24,4 +18,26 @@ TEST_CASE("hypot", "[fn]")
     CMP_BINARY(hypot, ldexp(-3.0, 600), ldexp(1.0, 640), 1e-31);
     CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1e-31);
     CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1e-31);
+}
+
+TEST_CASE("sqrt", "[fn]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    REQUIRE(isnan(sqrt(DDouble(-1.0))));
+
+    CMP_UNARY(sqrt, 0.0, 1.0);
+    CMP_UNARY(sqrt, 1.0, 1.0 * ulp);
+    CMP_UNARY(sqrt, 0.25, 1.0 * ulp);
+    CMP_UNARY(sqrt, 4.0, 1.0 * ulp);
+
+    // XXX our square root is quite inaccurate in practice :(
+    DDouble x = 1.0;
+    while ((x *= 0.99) > 1e-290) {
+        CMP_UNARY(sqrt, x, 4.0 * ulp);
+    }
+
+    x = 1.0;
+    while ((x /= 0.99) <= 1e290) {
+        CMP_UNARY(sqrt, x, 4.0 * ulp);
+    }
 }
