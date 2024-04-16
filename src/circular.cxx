@@ -16,18 +16,16 @@ namespace xprec {
 XPREC_API_EXPORT
 DDouble trig_complement(DDouble x)
 {
-    if (fabs(x) > 1.0)
-        return NAN;
-    if (fabs(x.hi()) > 0.5)
-        return sqrt(1 - x * x);
+    if (fabs(x.hi()) > 0.9)
+        return sqrt(1.0 - x * x);
 
     // Search for a zero of f(y) = y^2 + x^2 - 1
     ExDouble y0 = std::sqrt(std::fma(x.hi(), -x.hi(), 1));
 
     // Newton-Ralphson iteration
     //      y = y - f(y) / f'(y) = y - (y^2 + x^2 - 1) / 2 y
-    DDouble dy = PowerOfTwo(-0.5) * (y0 * y0 + x * x - 1.0) / y0;
-    DDouble y = y0 + dy;
+    double dy = -0.5 * (y0 * y0 + x * x - 1.0).hi() / (double)y0;
+    DDouble y = y0.add_small(dy);
     return y;
 }
 
