@@ -3,14 +3,14 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include <catch2/catch_test_macros.hpp>
-#include "xprec/ddouble.h"
-#include "mpfloat.h"
 #include "catch2-addons.h"
+#include "mpfloat.h"
+#include "xprec/ddouble.h"
+#include <catch2/catch_test_macros.hpp>
 
+using xprec::ExDouble;
 using xprec::greater_in_magnitude;
 using xprec::is_power_of_two;
-using xprec::ExDouble;
 using xprec::PowerOfTwo;
 
 TEST_CASE("greater_in_magnitude", "")
@@ -101,8 +101,7 @@ TEST_CASE("Divide", "[arith]")
 TEST_CASE("Divide pow2", "[arith]")
 {
     CMP_BINARY(operator/, 1, 137, 1e-31);
-    REQUIRE_THAT(reciprocal(ExDouble(137)),
-                 WithinRel(MPFloat(1) / 137, 1e-21));
+    REQUIRE_THAT(reciprocal(ExDouble(137)), WithinRel(MPFloat(1) / 137, 1e-21));
 }
 
 TEST_CASE("trunc", "[round]")

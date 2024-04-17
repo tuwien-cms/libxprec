@@ -1,0 +1,30 @@
+# Use stuff
+IndentWidth: 4
+UseTab: Never
+ColumnLimit: 80
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterFunction: true
+  AfterStruct: true
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+
+AlwaysBreakTemplateDeclarations: true
+
+AccessModifierOffset: -4
+IndentCaseLabels: false
+
+AllowShortIfStatementsOnASingleLine: false
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+
+SpaceInEmptyBlock: true
+SpaceAfterCStyleCast: true

@@ -30,20 +30,11 @@ inline DDouble scalbn(DDouble a, int n)
     return DDouble(std::scalbn(a.hi(), n), std::scalbn(a.lo(), n));
 }
 
-inline int ilogb(DDouble x)
-{
-    return std::ilogb(x.hi());
-}
+inline int ilogb(DDouble x) { return std::ilogb(x.hi()); }
 
-inline DDouble logb(DDouble x)
-{
-    return std::logb(x.hi());
-}
+inline DDouble logb(DDouble x) { return std::logb(x.hi()); }
 
-inline bool signbit(DDouble a)
-{
-    return std::signbit(a.hi());
-}
+inline bool signbit(DDouble a) { return std::signbit(a.hi()); }
 
 inline DDouble copysign(DDouble mag, double sgn)
 {
@@ -63,15 +54,9 @@ inline DDouble copysign(double mag, DDouble sgn)
     return DDouble(std::copysign(mag, sgn.hi()));
 }
 
-inline DDouble abs(DDouble x)
-{
-    return fabs(x);
-}
+inline DDouble abs(DDouble x) { return fabs(x); }
 
-inline DDouble fabs(DDouble x)
-{
-    return signbit(x) ? -x : x;
-}
+inline DDouble fabs(DDouble x) { return signbit(x) ? -x : x; }
 
 inline DDouble trunc(DDouble x)
 {

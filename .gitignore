@@ -6,6 +6,7 @@
 *~
 
 ### Allow git files
+!.clang-format
 !.editorconfig
 !.gitignore
 !/.gitlab-ci.yml

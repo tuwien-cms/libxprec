@@ -3,8 +3,8 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "xprec/ddouble.h"
 #include "taylor.h"
+#include "xprec/ddouble.h"
 
 #ifndef XPREC_API_EXPORT
 #define XPREC_API_EXPORT

@@ -3,10 +3,10 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include <catch2/catch_test_macros.hpp>
-#include "xprec/ddouble.h"
-#include "mpfloat.h"
 #include "catch2-addons.h"
+#include "mpfloat.h"
+#include "xprec/ddouble.h"
+#include <catch2/catch_test_macros.hpp>
 
 using xprec::DDouble;
 

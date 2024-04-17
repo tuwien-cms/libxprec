@@ -20,25 +20,31 @@ using xprec::DDouble;
 /**
  * Class wrapping a MPFR object at certain precision.
  */
-class MPFloat
-{
+class MPFloat {
 public:
     MPFloat()
     {
-        _x = (mpfr_ptr) malloc(sizeof(mpfr_t));
+        _x = (mpfr_ptr)malloc(sizeof(mpfr_t));
         if (_x == nullptr)
             throw std::bad_alloc();
         mpfr_init2(_x, precision);
     }
 
     template <typename T>
-    MPFloat(const T &x) : MPFloat() { *this = x; }
+    MPFloat(const T &x) : MPFloat()
+    {
+        *this = x;
+    }
 
     MPFloat(const MPFloat &other) : MPFloat() { mpfr_set(_x, other._x, round); }
 
     MPFloat(MPFloat &&other) : _x(nullptr) { swap(*this, other); }
 
-    MPFloat &operator=(MPFloat other) { swap(*this, other); return *this; }
+    MPFloat &operator=(MPFloat other)
+    {
+        swap(*this, other);
+        return *this;
+    }
 
     ~MPFloat()
     {
@@ -50,12 +56,12 @@ public:
 
     void swap(MPFloat &left, MPFloat &right) { std::swap(left._x, right._x); }
 
-
-    #define _DECLARE_ASSIGN(type, func)                                      \
-        MPFloat &operator=(type x) {                                         \
-            func(_x, x, round);                                              \
-            return *this;                                                    \
-        }
+#define _DECLARE_ASSIGN(type, func)                                            \
+    MPFloat &operator=(type x)                                                 \
+    {                                                                          \
+        func(_x, x, round);                                                    \
+        return *this;                                                          \
+    }
 
     _DECLARE_ASSIGN(float, mpfr_set_flt)
     _DECLARE_ASSIGN(double, mpfr_set_d)
@@ -87,161 +93,171 @@ public:
         return DDouble(hi, lo);
     }
 
-    #define _DECLARE_BINARY_OP_RIGHT(op, func)                               \
-        friend MPFloat op(const MPFloat &left, const MPFloat &right) {       \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func, (mpfr_srcptr)left._x, (mpfr_srcptr)right._x); \
-        }                                                                    \
-        friend MPFloat op(const MPFloat &left, double right) {               \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _d, (mpfr_srcptr)left._x, right);           \
-        }                                                                    \
-        friend MPFloat op(const MPFloat &left, unsigned long right) {        \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _ui, (mpfr_srcptr)left._x, right);          \
-        }                                                                    \
-        friend MPFloat op(const MPFloat &left, long right) {                 \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _si, (mpfr_srcptr)left._x, right);          \
-        }                                                                    \
-        template <typename T>                                                \
-        friend MPFloat op(const MPFloat &left, T right) {                    \
-            return op(left, MPFloat(right));                                 \
-        }
+#define _DECLARE_BINARY_OP_RIGHT(op, func)                                     \
+    friend MPFloat op(const MPFloat &left, const MPFloat &right)               \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func, (mpfr_srcptr)left._x,           \
+                                  (mpfr_srcptr)right._x);                      \
+    }                                                                          \
+    friend MPFloat op(const MPFloat &left, double right)                       \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_d, (mpfr_srcptr)left._x,       \
+                                  right);                                      \
+    }                                                                          \
+    friend MPFloat op(const MPFloat &left, unsigned long right)                \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_ui, (mpfr_srcptr)left._x,      \
+                                  right);                                      \
+    }                                                                          \
+    friend MPFloat op(const MPFloat &left, long right)                         \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_si, (mpfr_srcptr)left._x,      \
+                                  right);                                      \
+    }                                                                          \
+    template <typename T>                                                      \
+    friend MPFloat op(const MPFloat &left, T right)                            \
+    {                                                                          \
+        return op(left, MPFloat(right));                                       \
+    }
 
     _DECLARE_BINARY_OP_RIGHT(operator+, add)
     _DECLARE_BINARY_OP_RIGHT(operator-, sub)
     _DECLARE_BINARY_OP_RIGHT(operator*, mul)
     _DECLARE_BINARY_OP_RIGHT(operator/, div)
 
+#define _DECLARE_BINARY_OP_COMM(op, func)                                      \
+    friend MPFloat op(double right, const MPFloat &left)                       \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_d, (mpfr_srcptr)left._x,       \
+                                  right);                                      \
+    }                                                                          \
+    friend MPFloat op(unsigned long right, const MPFloat &left)                \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_ui, (mpfr_srcptr)left._x,      \
+                                  right);                                      \
+    }                                                                          \
+    friend MPFloat op(long right, const MPFloat &left)                         \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_##func##_si, (mpfr_srcptr)left._x,      \
+                                  right);                                      \
+    }                                                                          \
+    template <typename T>                                                      \
+    friend MPFloat op(T left, const MPFloat &right)                            \
+    {                                                                          \
+        return op(MPFloat(left), right);                                       \
+    }
 
-    #define _DECLARE_BINARY_OP_COMM(op, func)                                \
-        friend MPFloat op(double right, const MPFloat &left) {               \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _d, (mpfr_srcptr)left._x, right);           \
-        }                                                                    \
-        friend MPFloat op(unsigned long right, const MPFloat &left) {        \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _ui, (mpfr_srcptr)left._x, right);          \
-        }                                                                    \
-        friend MPFloat op(long right, const MPFloat &left) {                 \
-            return MPFloat::binary_op(                                       \
-                mpfr_ ## func ## _si, (mpfr_srcptr)left._x, right);          \
-        }                                                                    \
-        template <typename T>                                                \
-        friend MPFloat op(T left, const MPFloat &right) {                    \
-            return op(MPFloat(left), right);                                 \
-        }
-
-    #define _DECLARE_BINARY_OP_LEFT(op, func)                                \
-        friend MPFloat op(double right, const MPFloat &left) {               \
-            return MPFloat::binary_op(                                       \
-                mpfr_d_ ## func, right, (mpfr_srcptr)left._x);               \
-        }                                                                    \
-        friend MPFloat op(unsigned long right, const MPFloat &left) {        \
-            return MPFloat::binary_op(                                       \
-                mpfr_ui_ ## func, right, (mpfr_srcptr)left._x);              \
-        }                                                                    \
-        friend MPFloat op(long right, const MPFloat &left) {                 \
-            return MPFloat::binary_op(                                       \
-                mpfr_si_ ## func, right, (mpfr_srcptr)left._x);              \
-        }                                                                    \
-        template <typename T>                                                \
-        friend MPFloat op(T left, const MPFloat &right) {                    \
-            return op(MPFloat(left), right);                                 \
-        }
+#define _DECLARE_BINARY_OP_LEFT(op, func)                                      \
+    friend MPFloat op(double right, const MPFloat &left)                       \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_d_##func, right, (mpfr_srcptr)left._x); \
+    }                                                                          \
+    friend MPFloat op(unsigned long right, const MPFloat &left)                \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_ui_##func, right,                       \
+                                  (mpfr_srcptr)left._x);                       \
+    }                                                                          \
+    friend MPFloat op(long right, const MPFloat &left)                         \
+    {                                                                          \
+        return MPFloat::binary_op(mpfr_si_##func, right,                       \
+                                  (mpfr_srcptr)left._x);                       \
+    }                                                                          \
+    template <typename T>                                                      \
+    friend MPFloat op(T left, const MPFloat &right)                            \
+    {                                                                          \
+        return op(MPFloat(left), right);                                       \
+    }
 
     _DECLARE_BINARY_OP_COMM(operator+, add)
     _DECLARE_BINARY_OP_LEFT(operator-, sub)
     _DECLARE_BINARY_OP_COMM(operator*, mul)
     _DECLARE_BINARY_OP_LEFT(operator/, div)
 
-
-    #define _DECLARE_INPLACE_OP(op, func)                                    \
-        MPFloat &op(const MPFloat &right) {                                  \
-            return inplace_op(mpfr_ ## func, (mpfr_srcptr)right._x);         \
-        }                                                                    \
-        MPFloat &op(double right) {                                          \
-            return inplace_op(mpfr_ ## func ## _d, right);                   \
-        }                                                                    \
-        template <typename T>                                                \
-        MPFloat &op(const T &right) {                                        \
-            return op(MPFloat(right));                                       \
-        }
+#define _DECLARE_INPLACE_OP(op, func)                                          \
+    MPFloat &op(const MPFloat &right)                                          \
+    {                                                                          \
+        return inplace_op(mpfr_##func, (mpfr_srcptr)right._x);                 \
+    }                                                                          \
+    MPFloat &op(double right) { return inplace_op(mpfr_##func##_d, right); }   \
+    template <typename T>                                                      \
+    MPFloat &op(const T &right)                                                \
+    {                                                                          \
+        return op(MPFloat(right));                                             \
+    }
 
     _DECLARE_INPLACE_OP(operator+=, add)
     _DECLARE_INPLACE_OP(operator-=, sub)
     _DECLARE_INPLACE_OP(operator*=, mul)
     _DECLARE_INPLACE_OP(operator/=, div)
 
+#define _DECLARE_RELATIONAL_OP(op, func)                                       \
+    friend bool op(const MPFloat &left, const MPFloat &right)                  \
+    {                                                                          \
+        return func(left._x, right._x);                                        \
+    }                                                                          \
+    template <typename T>                                                      \
+    friend bool op(const MPFloat &left, T right)                               \
+    {                                                                          \
+        return func(left._x, MPFloat(right)._x);                               \
+    }                                                                          \
+    template <typename T>                                                      \
+    friend bool op(T left, const MPFloat &right)                               \
+    {                                                                          \
+        return func(MPFloat(left)._x, right._x);                               \
+    }
 
-    #define _DECLARE_RELATIONAL_OP(op, func)                                 \
-        friend bool op(const MPFloat &left, const MPFloat &right) {          \
-            return func(left._x, right._x);                                  \
-        }                                                                    \
-        template <typename T>                                                \
-        friend bool op(const MPFloat &left, T right) {                       \
-            return func(left._x, MPFloat(right)._x);                         \
-        }                                                                    \
-        template <typename T>                                                \
-        friend bool op(T left, const MPFloat &right) {                       \
-            return func(MPFloat(left)._x, right._x);                         \
-        }
-
-    _DECLARE_RELATIONAL_OP(operator<,  mpfr_less_p)
-    _DECLARE_RELATIONAL_OP(operator>,  mpfr_greater_p)
+    _DECLARE_RELATIONAL_OP(operator<, mpfr_less_p)
+    _DECLARE_RELATIONAL_OP(operator>, mpfr_greater_p)
     _DECLARE_RELATIONAL_OP(operator<=, mpfr_lessequal_p)
     _DECLARE_RELATIONAL_OP(operator>=, mpfr_greaterequal_p)
     _DECLARE_RELATIONAL_OP(operator==, mpfr_equal_p)
     _DECLARE_RELATIONAL_OP(operator!=, mpfr_notequal_p)
 
-
-    #define _DECLARE_UNARY_OP(op, func)                                      \
-        friend MPFloat op(const MPFloat &x)                                  \
-        {                                                                    \
-            MPFloat res;                                                     \
-            func(res._x, x._x, round);                                       \
-            return res;                                                      \
-        }
+#define _DECLARE_UNARY_OP(op, func)                                            \
+    friend MPFloat op(const MPFloat &x)                                        \
+    {                                                                          \
+        MPFloat res;                                                           \
+        func(res._x, x._x, round);                                             \
+        return res;                                                            \
+    }
 
     _DECLARE_UNARY_OP(operator-, mpfr_neg)
-    _DECLARE_UNARY_OP(abs,   mpfr_abs)
-    _DECLARE_UNARY_OP(sqrt,  mpfr_sqrt)
+    _DECLARE_UNARY_OP(abs, mpfr_abs)
+    _DECLARE_UNARY_OP(sqrt, mpfr_sqrt)
 
-    _DECLARE_UNARY_OP(log,   mpfr_log)
-    _DECLARE_UNARY_OP(log2,  mpfr_log2)
+    _DECLARE_UNARY_OP(log, mpfr_log)
+    _DECLARE_UNARY_OP(log2, mpfr_log2)
     _DECLARE_UNARY_OP(log10, mpfr_log10)
     _DECLARE_UNARY_OP(log1p, mpfr_log1p)
-    _DECLARE_UNARY_OP(exp,   mpfr_exp)
-    _DECLARE_UNARY_OP(exp2,  mpfr_exp2)
+    _DECLARE_UNARY_OP(exp, mpfr_exp)
+    _DECLARE_UNARY_OP(exp2, mpfr_exp2)
     _DECLARE_UNARY_OP(exp10, mpfr_exp10)
     _DECLARE_UNARY_OP(expm1, mpfr_expm1)
 
-    _DECLARE_UNARY_OP(cos,   mpfr_cos)
-    _DECLARE_UNARY_OP(sin,   mpfr_sin)
-    _DECLARE_UNARY_OP(tan,   mpfr_tan)
-    _DECLARE_UNARY_OP(acos,  mpfr_acos)
-    _DECLARE_UNARY_OP(asin,  mpfr_asin)
-    _DECLARE_UNARY_OP(atan,  mpfr_atan)
+    _DECLARE_UNARY_OP(cos, mpfr_cos)
+    _DECLARE_UNARY_OP(sin, mpfr_sin)
+    _DECLARE_UNARY_OP(tan, mpfr_tan)
+    _DECLARE_UNARY_OP(acos, mpfr_acos)
+    _DECLARE_UNARY_OP(asin, mpfr_asin)
+    _DECLARE_UNARY_OP(atan, mpfr_atan)
 
-    _DECLARE_UNARY_OP(cosh,  mpfr_cosh)
-    _DECLARE_UNARY_OP(sinh,  mpfr_sinh)
-    _DECLARE_UNARY_OP(tanh,  mpfr_tanh)
+    _DECLARE_UNARY_OP(cosh, mpfr_cosh)
+    _DECLARE_UNARY_OP(sinh, mpfr_sinh)
+    _DECLARE_UNARY_OP(tanh, mpfr_tanh)
     _DECLARE_UNARY_OP(acosh, mpfr_acosh)
     _DECLARE_UNARY_OP(asinh, mpfr_asinh)
     _DECLARE_UNARY_OP(atanh, mpfr_atanh)
 
-
-    #define _DECLARE_BINARY_FUNC(op, func)                                   \
-        friend MPFloat op(const MPFloat &left, const MPFloat &right) {       \
-            return MPFloat::binary_op(                                       \
-                func, (mpfr_srcptr)left._x, (mpfr_srcptr)right._x);          \
-        }
+#define _DECLARE_BINARY_FUNC(op, func)                                         \
+    friend MPFloat op(const MPFloat &left, const MPFloat &right)               \
+    {                                                                          \
+        return MPFloat::binary_op(func, (mpfr_srcptr)left._x,                  \
+                                  (mpfr_srcptr)right._x);                      \
+    }
 
     _DECLARE_BINARY_FUNC(atan2, mpfr_atan2)
     _DECLARE_BINARY_FUNC(hypot, mpfr_hypot)
     _DECLARE_BINARY_FUNC(pow, mpfr_pow)
-
 
     friend std::ostream &operator<<(std::ostream &out, const MPFloat &x)
     {
@@ -264,8 +280,8 @@ private:
     mpfr_ptr _x;
 
     template <typename L, typename R>
-    static MPFloat binary_op(int (*op)(mpfr_ptr, L, R, mpfr_rnd_t),
-                             L left, R right)
+    static MPFloat binary_op(int (*op)(mpfr_ptr, L, R, mpfr_rnd_t), L left,
+                             R right)
     {
         MPFloat res;
         op(res._x, left, right, round);
@@ -296,7 +312,7 @@ private:
         if (out.width() > 0)
             res << out.width();
         // this is a bit hacky
-        //res << '.' << out.precision();
+        // res << '.' << out.precision();
         res << ".35";
         res << "R*";
         if ((ioflags & std::ios::floatfield) == std::ios::fixed)
@@ -304,7 +320,8 @@ private:
         else if ((ioflags & std::ios::floatfield) == std::ios::scientific)
             res << (out.flags() & std::ios_base::uppercase ? 'E' : 'e');
         else
-            res << (out.flags() & std::ios_base::uppercase ? 'G' : 'g');;
+            res << (out.flags() & std::ios_base::uppercase ? 'G' : 'g');
+        ;
         return res.str();
     }
 };

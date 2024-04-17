@@ -48,7 +48,7 @@ DDouble hypot(DDouble x, DDouble y)
     // Splits the range in half
     static const PowerOfTwo LARGE =
         ldexp(PowerOfTwo(1), std::numeric_limits<double>::max_exponent / 2);
-    static const PowerOfTwo SMALL  = reciprocal(LARGE);
+    static const PowerOfTwo SMALL = reciprocal(LARGE);
 
     if (greater_in_magnitude(x, LARGE)) {
         // For large values, scale down to avoid overflow
@@ -73,11 +73,7 @@ DDouble modf(DDouble x, DDouble &i)
     return x.add_small(-i);
 }
 
-
 XPREC_API_EXPORT
-DDouble modf(DDouble x, DDouble *iptr)
-{
-    return modf(x, *iptr);
-}
+DDouble modf(DDouble x, DDouble *iptr) { return modf(x, *iptr); }
 
-}
+} // namespace xprec

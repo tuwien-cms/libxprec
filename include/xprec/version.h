@@ -14,4 +14,4 @@ class PowerOfTwo;
 class ExDouble;
 class DDouble;
 
-}
+} // namespace xprec

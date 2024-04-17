@@ -65,24 +65,29 @@ constexpr DDouble egamma{0.5772156649015329, -4.942915152430645e-18};
 /** Golden ratio */
 constexpr DDouble phi{1.618033988749895, -5.432115203682506e-17};
 
-}} /* namespace xprec::numbers */
+} // namespace numbers
+} // namespace xprec
 
 #if __cpp_lib_math_constants >= 201907L
 
-namespace std { namespace numbers {
+namespace std {
+namespace numbers {
 
 template <>
 inline constexpr xprec::DDouble e_v<xprec::DDouble> = xprec::numbers::e;
 template <>
 inline constexpr xprec::DDouble log2e_v<xprec::DDouble> = xprec::numbers::log2e;
 template <>
-inline constexpr xprec::DDouble log10e_v<xprec::DDouble> = xprec::numbers::log10e;
+inline constexpr xprec::DDouble log10e_v<xprec::DDouble> =
+    xprec::numbers::log10e;
 template <>
 inline constexpr xprec::DDouble pi_v<xprec::DDouble> = xprec::numbers::pi;
 template <>
-inline constexpr xprec::DDouble inv_pi_v<xprec::DDouble> = xprec::numbers::inv_pi;
+inline constexpr xprec::DDouble inv_pi_v<xprec::DDouble> =
+    xprec::numbers::inv_pi;
 template <>
-inline constexpr xprec::DDouble inv_sqrtpi_v<xprec::DDouble> = xprec::numbers::inv_sqrtpi;
+inline constexpr xprec::DDouble inv_sqrtpi_v<xprec::DDouble> =
+    xprec::numbers::inv_sqrtpi;
 template <>
 inline constexpr xprec::DDouble ln2_v<xprec::DDouble> = xprec::numbers::ln2;
 template <>
@@ -92,12 +97,15 @@ inline constexpr xprec::DDouble sqrt2_v<xprec::DDouble> = xprec::numbers::sqrt2;
 template <>
 inline constexpr xprec::DDouble sqrt3_v<xprec::DDouble> = xprec::numbers::sqrt3;
 template <>
-inline constexpr xprec::DDouble inv_sqrt3_v<xprec::DDouble> = xprec::numbers::inv_sqrt3;
+inline constexpr xprec::DDouble inv_sqrt3_v<xprec::DDouble> =
+    xprec::numbers::inv_sqrt3;
 template <>
-inline constexpr xprec::DDouble egamma_v<xprec::DDouble> = xprec::numbers::egamma;
+inline constexpr xprec::DDouble egamma_v<xprec::DDouble> =
+    xprec::numbers::egamma;
 template <>
 inline constexpr xprec::DDouble phi_v<xprec::DDouble> = xprec::numbers::phi;
 
-}} /* namespace std::numbers */
+} // namespace numbers
+} // namespace std
 
 #endif

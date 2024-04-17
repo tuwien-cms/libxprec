@@ -6,8 +6,8 @@
 #pragma once
 #include <cmath>
 #include <cstdint>
-#include <limits>
 #include <iosfwd>
+#include <limits>
 
 #include "version.h"
 
@@ -45,8 +45,9 @@ public:
     constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
 
     // TODO: requires extended precision to work.
-    constexpr DDouble(int64_t x) : _hi((double)x), _lo((long double)x - _hi) {}
-    constexpr DDouble(uint64_t x) : _hi((double)x), _lo((long double)x - _hi) {}
+    constexpr DDouble(int64_t x) : _hi((double)x), _lo((long double)x - _hi) { }
+    constexpr DDouble(uint64_t x)
+        : _hi((double)x), _lo((long double)x - _hi) { }
     constexpr DDouble(int32_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(uint32_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(int16_t x) : _hi(x), _lo(0.0) { }
@@ -54,8 +55,8 @@ public:
 
     // Ensure that trivially_*_constructible work.
     DDouble() = default;
-    DDouble(const DDouble&) = default;
-    DDouble(DDouble&&) = default;
+    DDouble(const DDouble &) = default;
+    DDouble(DDouble &&) = default;
     DDouble &operator=(const DDouble &other) = default;
     DDouble &operator=(DDouble &&other) = default;
     ~DDouble() = default;
@@ -69,10 +70,13 @@ public:
 
     /** Convert DDouble to different type */
     template <typename T>
-    constexpr T as() const { return static_cast<T>(_hi) + static_cast<T>(_lo); }
+    constexpr T as() const
+    {
+        return static_cast<T>(_hi) + static_cast<T>(_lo);
+    }
 
     // XXX this is a bit of a hack to make complex work on MacOS
-    constexpr explicit operator int () const { return this->as<int>(); }
+    constexpr explicit operator int() const { return this->as<int>(); }
 
     /** Get high part of a ddouble */
     constexpr double hi() const { return _hi; }
@@ -135,21 +139,21 @@ public:
     friend bool operator==(DDouble x, DDouble y);
     friend bool operator!=(DDouble x, DDouble y);
     friend bool operator<=(DDouble x, DDouble y);
-    friend bool operator< (DDouble x, DDouble y);
+    friend bool operator<(DDouble x, DDouble y);
     friend bool operator>=(DDouble x, DDouble y);
-    friend bool operator> (DDouble x, DDouble y);
+    friend bool operator>(DDouble x, DDouble y);
 
     friend bool operator==(DDouble x, double y) { return x == DDouble(y); }
     friend bool operator!=(DDouble x, double y) { return x != DDouble(y); }
     friend bool operator<=(DDouble x, double y) { return x <= DDouble(y); }
     friend bool operator>=(DDouble x, double y) { return x >= DDouble(y); }
-    friend bool operator> (DDouble x, double y) { return x > DDouble(y); }
+    friend bool operator>(DDouble x, double y) { return x > DDouble(y); }
 
     friend bool operator==(double x, DDouble y) { return DDouble(x) == y; }
     friend bool operator!=(double x, DDouble y) { return DDouble(x) != y; }
     friend bool operator<=(double x, DDouble y) { return DDouble(x) <= y; }
     friend bool operator>=(double x, DDouble y) { return DDouble(x) >= y; }
-    friend bool operator> (double x, DDouble y) { return DDouble(x) > y; }
+    friend bool operator>(double x, DDouble y) { return DDouble(x) > y; }
 
     friend void swap(DDouble &x, DDouble &y);
 
@@ -176,7 +180,7 @@ class ExDouble {
 public:
     constexpr ExDouble(double x) : _x(x) { }
 
-    constexpr operator double () const { return _x; }
+    constexpr operator double() const { return _x; }
 
     friend ExDouble operator+(ExDouble a) { return ExDouble(+a._x); }
     friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
@@ -238,9 +242,9 @@ public:
 
     friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return std::ldexp(x._x, m); }
 
-    friend PowerOfTwo reciprocal(PowerOfTwo x) { return 1.0/x._x; }
+    friend PowerOfTwo reciprocal(PowerOfTwo x) { return 1.0 / x._x; }
 
-    constexpr operator double () const { return _x; }
+    constexpr operator double() const { return _x; }
 
 private:
     double _x;
@@ -346,10 +350,9 @@ public:
 
     static constexpr int radix = _double::radix;
 
-    static constexpr int min_exponent =
-                            _double::min_exponent + _double::digits;
+    static constexpr int min_exponent = _double::min_exponent + _double::digits;
     static constexpr int min_exponent10 =
-                            _double::min_exponent10 + _double::digits10;
+        _double::min_exponent10 + _double::digits10;
     static constexpr int max_exponent = _double::max_exponent;
     static constexpr int max_exponent10 = _double::max_exponent10;
 

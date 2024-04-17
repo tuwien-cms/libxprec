@@ -3,14 +3,14 @@
  * Copyright (C) 2024Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include <catch2/catch_test_macros.hpp>
-#include "xprec/ddouble.h"
 #include "xprec/eigen.h"
 #include "catch2-addons.h"
+#include "xprec/ddouble.h"
+#include <catch2/catch_test_macros.hpp>
 
 #include <Eigen/Dense>
 
-TEST_CASE("eigenvalues", "[eigen]" )
+TEST_CASE("eigenvalues", "[eigen]")
 {
     using Eigen::Dynamic;
 

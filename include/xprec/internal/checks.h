@@ -69,9 +69,6 @@ inline DDouble fmin(DDouble a, DDouble b)
     return a <= b || isnan(b) ? a : b;
 }
 
-inline DDouble fmax(DDouble a, DDouble b)
-{
-    return a <= b || isnan(a) ? b : a;
-}
+inline DDouble fmax(DDouble a, DDouble b) { return a <= b || isnan(a) ? b : a; }
 
 } /* namespace xprec */

@@ -4,14 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 #pragma once
-#include <Eigen/Core>
 #include "ddouble.h"
+#include <Eigen/Core>
 
 namespace Eigen {
 
 template <>
-struct NumTraits<xprec::DDouble>
-    : GenericNumTraits<xprec::DDouble>
+struct NumTraits<xprec::DDouble> : GenericNumTraits<xprec::DDouble>
 {
     typedef xprec::DDouble Real;
     typedef xprec::DDouble NonInteger;

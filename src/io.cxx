@@ -14,19 +14,16 @@
 
 namespace xprec {
 
-class FormatSentry
-{
+class FormatSentry {
 public:
-    explicit FormatSentry(std::ostream &str)
-        : stream_(str)
-        , saved_(nullptr)
+    explicit FormatSentry(std::ostream &str) : stream_(str), saved_(nullptr)
     {
         saved_.copyfmt(stream_);
     }
 
     ~FormatSentry() { stream_.copyfmt(saved_); }
 
-    operator bool () const { return stream_.good(); }
+    operator bool() const { return stream_.good(); }
 
 private:
     // make it non-copyable and -movable

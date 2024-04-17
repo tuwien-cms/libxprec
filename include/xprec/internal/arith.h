@@ -64,15 +64,9 @@ inline bool is_power_of_two(DDouble x)
     return x.lo() == 0 && is_power_of_two(x.hi());
 }
 
-inline PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b)
-{
-    return a._x * b._x;
-}
+inline PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b) { return a._x * b._x; }
 
-inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b)
-{
-    return a._x / b._x;
-}
+inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b) { return a._x / b._x; }
 
 // -------------------------------------------------------------------------
 // ExDouble
@@ -93,7 +87,7 @@ inline DDouble ExDouble::add_small(double b) const
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
-    //if(!is_small(b))
+    // if(!is_small(b))
     //    throw "invalid value";
     double s = _x + b;
     double z = s - _x;
@@ -104,11 +98,11 @@ inline DDouble ExDouble::add_small(double b) const
 inline DDouble operator+(ExDouble a, ExDouble b)
 {
     // Algorithm 2: cost 6 flops
-    double s = (double) a + (double) b;
-    double aprime = s - (double) b;
+    double s = (double)a + (double)b;
+    double aprime = s - (double)b;
     double bprime = s - aprime;
-    double delta_a = (double) a - aprime;
-    double delta_b = (double) b - bprime;
+    double delta_a = (double)a - aprime;
+    double delta_b = (double)b - bprime;
     double t = delta_a + delta_b;
     return DDouble(s, t);
 }
@@ -126,8 +120,8 @@ inline DDouble operator-(double a, ExDouble b) { return a + (-b); }
 inline DDouble operator*(ExDouble a, ExDouble b)
 {
     // Algorithm 3: cost 2 flops
-    double pi = (double) a * (double) b;
-    double rho = std::fma((double) a, (double) b, -pi);
+    double pi = (double)a * (double)b;
+    double rho = std::fma((double)a, (double)b, -pi);
     return DDouble(pi, rho);
 }
 
@@ -137,8 +131,8 @@ inline DDouble operator*(ExDouble a, double b) { return a * ExDouble(b); }
 inline DDouble reciprocal(ExDouble y)
 {
     // Part of Algorithm 18 for y_lo = 0
-    double th = 1.0 / (double) y;
-    double rh = std::fma(-(double) y, th, 1.0);
+    double th = 1.0 / (double)y;
+    double rh = std::fma(-(double)y, th, 1.0);
     DDouble delta = ExDouble(rh) * th;
     return delta + th;
 }
@@ -252,24 +246,15 @@ inline DDouble operator*(DDouble x, PowerOfTwo y)
     return DDouble(x._hi * (double)y, x._lo * (double)y);
 }
 
-inline DDouble operator*(PowerOfTwo x, DDouble y)
-{
-    return y * x;
-}
+inline DDouble operator*(PowerOfTwo x, DDouble y) { return y * x; }
 
 inline DDouble operator/(DDouble x, PowerOfTwo y)
 {
     return DDouble(x._hi / (double)y, x._lo / (double)y);
 }
 
-inline DDouble &DDouble::operator*=(PowerOfTwo y)
-{
-    return *this = *this * y;
-}
+inline DDouble &DDouble::operator*=(PowerOfTwo y) { return *this = *this * y; }
 
-inline DDouble &DDouble::operator/=(PowerOfTwo y)
-{
-    return *this = *this / y;
-}
+inline DDouble &DDouble::operator/=(PowerOfTwo y) { return *this = *this / y; }
 
 } /* namespace xprec */

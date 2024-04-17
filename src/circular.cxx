@@ -3,9 +3,9 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
+#include "taylor.h"
 #include "xprec/ddouble.h"
 #include "xprec/numbers.h"
-#include "taylor.h"
 
 #ifndef XPREC_API_EXPORT
 #define XPREC_API_EXPORT
@@ -29,7 +29,7 @@ DDouble trig_complement(DDouble x)
     return y;
 }
 
-static DDouble sin_kernel(DDouble x, int n=13)
+static DDouble sin_kernel(DDouble x, int n = 13)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
@@ -46,7 +46,7 @@ static DDouble sin_kernel(DDouble x, int n=13)
     return r;
 }
 
-static DDouble cos_kernel(DDouble x, int n=13)
+static DDouble cos_kernel(DDouble x, int n = 13)
 {
     // We need this to go out to pi/4 ~= 0.785
     // Convergence of the Taylor approx to 2e-32
@@ -223,8 +223,8 @@ DDouble atan(DDouble x)
 XPREC_API_EXPORT
 DDouble atan2(DDouble y, DDouble x)
 {
-    using xprec::numbers::pi_half;
     using xprec::numbers::pi;
+    using xprec::numbers::pi_half;
 
     // Special values
     if (isnan(x) || isnan(y))
@@ -240,4 +240,4 @@ DDouble atan2(DDouble y, DDouble x)
     return res;
 }
 
-}
+} // namespace xprec

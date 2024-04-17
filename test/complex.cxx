@@ -3,10 +3,10 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
+#include "xprec/ddouble.h"
 #include <catch2/catch_test_macros.hpp>
 #include <complex>
 #include <iostream>
-#include "xprec/ddouble.h"
 
 using xprec::DDouble;
 

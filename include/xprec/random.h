@@ -46,8 +46,9 @@ inline DDouble _generate_canonical(Generator &rng, Range range, size_t m)
 }
 
 template <typename Generator>
-inline DDouble generate_canonical(
-            Generator &rng, size_t bits=std::numeric_limits<DDouble>::digits)
+inline DDouble
+generate_canonical(Generator &rng,
+                   size_t bits = std::numeric_limits<DDouble>::digits)
 {
     size_t b = std::min<size_t>(std::numeric_limits<DDouble>::digits, bits);
     DDouble r = _rng_range(rng);
@@ -63,13 +64,11 @@ inline DDouble generate_canonical(
 
 } /* namespace xprec */
 
-
 namespace std {
 
 // TODO: figure out whether this is actually allowed by the standard
 template <>
-class uniform_real_distribution<xprec::DDouble>
-{
+class uniform_real_distribution<xprec::DDouble> {
 public:
     /** Type of the result it gives */
     using result_type = xprec::DDouble;
@@ -80,8 +79,10 @@ public:
         using distribution_type = uniform_real_distribution<result_type>;
 
         constexpr param_type() : param_type(0.0) { }
-        explicit constexpr param_type(result_type a, result_type b=1.0)
-            : _a(a), _b(b) { }
+        explicit constexpr param_type(result_type a, result_type b = 1.0)
+            : _a(a), _b(b)
+        {
+        }
 
         constexpr result_type a() const { return _a; }
         constexpr result_type b() const { return _b; }
@@ -101,10 +102,15 @@ public:
     };
 
     constexpr uniform_real_distribution() : uniform_real_distribution(0.0) { }
-    constexpr explicit uniform_real_distribution(result_type a, result_type b=1.0)
-        : _param(a, b) { }
+    constexpr explicit uniform_real_distribution(result_type a,
+                                                 result_type b = 1.0)
+        : _param(a, b)
+    {
+    }
     constexpr explicit uniform_real_distribution(const param_type &p)
-        : _param(p) { }
+        : _param(p)
+    {
+    }
 
     constexpr result_type a() const { return _param.a(); }
     constexpr result_type b() const { return _param.b(); }
@@ -128,7 +134,10 @@ public:
     }
 
     template <typename Generator>
-    result_type operator()(Generator &rng) { return operator()(rng, _param); }
+    result_type operator()(Generator &rng)
+    {
+        return operator()(rng, _param);
+    }
 
     template <typename Generator>
     result_type operator()(Generator &rng, const param_type &param)
@@ -140,6 +149,5 @@ public:
 private:
     param_type _param;
 };
-
 
 } /* namespace std */

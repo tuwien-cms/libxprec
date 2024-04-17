@@ -38,8 +38,9 @@ static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
     dPn = 1.0;
     for (int n = 1; n < N; ++n) {
         // compute next term by Bonnet's recursion formula
-        DDouble Pnext = ((2*n + 1.0) * x * Pn - n * Pn_1) / (n + 1.0);
-        DDouble dPnext = ((2*n + 1.0) * (x * dPn + Pn) - n * dPn_1) / (n + 1.0);
+        DDouble Pnext = ((2 * n + 1.0) * x * Pn - n * Pn_1) / (n + 1.0);
+        DDouble dPnext =
+            ((2 * n + 1.0) * (x * dPn + Pn) - n * dPn_1) / (n + 1.0);
 
         // shift terms by one
         Pn_1 = Pn;

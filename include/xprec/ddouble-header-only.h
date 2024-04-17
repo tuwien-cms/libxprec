@@ -16,10 +16,10 @@
 // directly.
 #define XPREC_API_EXPORT inline
 
-#include "ddouble.h"
 #include "../../src/circular.cxx"
 #include "../../src/ddouble.cxx"
 #include "../../src/exp.cxx"
 #include "../../src/gauss.cxx"
 #include "../../src/hyperbolic.cxx"
 #include "../../src/io.cxx"
+#include "ddouble.h"
