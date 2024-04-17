@@ -16,71 +16,74 @@ MPFloat trig_complement(MPFloat x)
 TEST_CASE("compl", "[trig]")
 {
     const double ulp = 2.4651903288156619e-32;
-    CMP_UNARY(trig_complement, 0.0, 1.0 * ulp);
-    CMP_UNARY(trig_complement, 1.0, 1.0 * ulp);
+    CMP_UNARY(trig_complement, 0.0, 1 * ulp);
+    CMP_UNARY(trig_complement, 1.0, 1 * ulp);
 
     DDouble x = 0.5;
     while ((x *= 0.98) > 1e-290) {
-        CMP_UNARY(trig_complement, x, 1.0 * ulp);
-        CMP_UNARY(trig_complement, -x, 1.0 * ulp);
+        CMP_UNARY(trig_complement, x, 1 * ulp);
+        CMP_UNARY(trig_complement, -x, 1 * ulp);
     }
 }
 
 TEST_CASE("sin", "[trig]")
 {
-    CMP_UNARY(sin, 0.0, 5e-32);
+    const double ulp = 2.4651903288156619e-32;
+    CMP_UNARY(sin, 0.0, 1 * ulp);
 
     // small values must be very accurate
     DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(sin, x, 5e-32);
-        CMP_UNARY(sin, -x, 5e-32);
+        CMP_UNARY(sin, x, 1 * ulp);
+        CMP_UNARY(sin, -x, 1 * ulp);
     }
 
     // larger values can only be accurate to the magnitude of x
     x = M_PI/4;
     while ((x *= 1.0009) < 10.0) {
-        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, x, 1.5 * ulp * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, -x, 1.5 * ulp * fabs(x.hi()));
     }
     while ((x *= 1.07) < 1e6) {
-        CMP_UNARY_ABS(sin, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(sin, -x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, x, 1.5 * ulp * fabs(x.hi()));
+        CMP_UNARY_ABS(sin, -x, 1.5 * ulp * fabs(x.hi()));
     }
 }
 
 TEST_CASE("cos", "[trig]")
 {
-    CMP_UNARY(cos, 0.0, 1e-31);
+    const double ulp = 2.4651903288156619e-32;
+    CMP_UNARY(cos, 0.0, 1 * ulp);
 
     // small values must be very accurate
     DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(cos, x, 5e-32);
-        CMP_UNARY(cos, -x, 5e-32);
+        CMP_UNARY(cos, x, 1 * ulp);
+        CMP_UNARY(cos, -x, 1 * ulp);
     }
 
     // larger values can only be accurate to the magnitude of x
     x = M_PI/4;
     while ((x *= 1.0009) < 10.0) {
-        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, x, 1.5 * ulp * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, -x, 1.5 * ulp * fabs(x.hi()));
     }
     while ((x *= 1.07) < 1e6) {
-        CMP_UNARY_ABS(cos, x, 5e-32 * fabs(x.hi()));
-        CMP_UNARY_ABS(cos, -x, 5e-32 * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, x, 1.5 * ulp * fabs(x.hi()));
+        CMP_UNARY_ABS(cos, -x, 1.5 * ulp * fabs(x.hi()));
     }
 }
 
 TEST_CASE("tan", "[trig]")
 {
-    CMP_UNARY(tan, 0.0, 1e-31);
+    const double ulp = 2.4651903288156619e-32;
+    CMP_UNARY(tan, 0.0, 1 * ulp);
 
     // small values must be very accurate
     DDouble x = M_PI/4;
     while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(tan, x, 5e-32);
-        CMP_UNARY(tan, -x, 5e-32);
+        CMP_UNARY(tan, x, 2 * ulp);
+        CMP_UNARY(tan, -x, 2 * ulp);
     }
 
     // XXX: larger values are relatively inaccurate
