@@ -28,7 +28,7 @@ DDouble sqrt(DDouble a)
     ExDouble y0 = a.hi() * x0;
     DDouble tt0 = y0 * y0;
     double t0 = 0.5 * x0 * (a - tt0).hi();
-    DDouble y1 = y0 + t0;
+    DDouble y1 = y0.add_small(t0);
     return y1;
 }
 
