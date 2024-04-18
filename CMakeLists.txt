@@ -68,6 +68,7 @@ set(XPREC_INSTALL_LIBDIR "${CMAKE_INSTALL_LIBDIR}"
     CACHE PATH "directory into which to install xprec library files")
 set(XPREC_INSTALL_CMAKEDIR "${CMAKE_INSTALL_DATADIR}/cmake/XPrec"
     CACHE PATH "directory into which to install xprec cmake files")
+option(XPREC_INSTALL_CMAKE_PACKAGE "Installs CMake configuration files" ON)
 
 install(TARGETS xprec
     DESTINATION "${XPREC_INSTALL_LIBDIR}"
@@ -78,29 +79,31 @@ install(DIRECTORY include/
     PATTERN "ddouble-header-only.h" EXCLUDE
     )
 
-# These are essentially magic incantantions copied from the CMake tutorial:
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/XPrecConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
-    INSTALL_DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
-    NO_SET_AND_CHECK_MACRO
-    NO_CHECK_REQUIRED_COMPONENTS_MACRO
-    )
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
-    VERSION "${XPREC_VERSION}"
-    COMPATIBILITY SameMajorVersion
-    )
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
-    DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
-    )
-install(EXPORT XPrecTargets
-    NAMESPACE XPrec::
-    DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
-    )
+if (XPREC_INSTALL_CMAKE_PACKAGE)
+    # These are essentially magic incantantions copied from the CMake tutorial:
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/XPrecConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
+        INSTALL_DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
+        NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO
+        )
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
+        VERSION "${XPREC_VERSION}"
+        COMPATIBILITY SameMajorVersion
+        )
+    install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
+        DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
+        )
+    install(EXPORT XPrecTargets
+        NAMESPACE XPrec::
+        DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
+        )
+endif()
 
 # -------------------------------------
 # Testing
