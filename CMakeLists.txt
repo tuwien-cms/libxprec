@@ -52,19 +52,26 @@ set_target_properties(xprec PROPERTIES
 # Use library convention.
 add_library(XPrec::xprec ALIAS xprec)
 
-install(
-    TARGETS xprec
-    EXPORT xprec_exports
+# Provides CMAKE_INSTALL_* directories
+include(GNUInstallDirs)
+set(XPREC_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}"
+    CACHE PATH "directory into which to install xprec include files")
+set(XPREC_INSTALL_LIBDIR "${CMAKE_INSTALL_LIBDIR}"
+    CACHE PATH "directory into which to install xprec library files")
+set(XPREC_INSTALL_CMAKEDIR "${CMAKE_INSTALL_DATADIR}/cmake/XPrec"
+    CACHE PATH "directory into which to install xprec cmake files")
+
+install(TARGETS xprec
+    DESTINATION "${XPREC_INSTALL_LIBDIR}"
+    EXPORT XPrecTargets
     )
-install(
-    DIRECTORY include/
-    DESTINATION include
+install(DIRECTORY include/
+    DESTINATION "${XPREC_INSTALL_INCLUDEDIR}"
     PATTERN "ddouble-header-only.h" EXCLUDE
     )
-install(
-    EXPORT xprec_exports
+install(EXPORT XPrecTargets
     NAMESPACE XPrec::
-    DESTINATION lib/cmake/XPrec
+    DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
     )
 
 option(XPREC_BUILD_TESTING "Enable creation of xprec tests." ${BUILD_TESTING})
