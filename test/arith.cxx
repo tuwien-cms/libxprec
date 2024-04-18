@@ -41,7 +41,7 @@ TEST_CASE("is_small", "")
     REQUIRE(ExDouble(-1e200).is_small(1e-200));
 }
 
-TEST_CASE("arith", "[arith]")
+TEST_CASE("arith dbl", "[arith]")
 {
     for (double x = 10.0; x > 5.0; x *= .9933) {
         for (double y = x; y > 1e-35; y *= .9383) {
@@ -51,6 +51,34 @@ TEST_CASE("arith", "[arith]")
             CMP_BINARY(operator-, y, x, 2.5e-32);
             CMP_BINARY(operator*, x, y, 2.5e-32);
             CMP_BINARY(operator/, x, y, 5.0e-32);
+        }
+    }
+}
+
+TEST_CASE("arith dbl-small", "[arith]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    for (double x = 10.0; x > 5.0; x *= .9933) {
+        for (double y = x; y > 1e-35; y *= .9883) {
+            MPFloat x_plus_y = MPFloat(x) + y;
+            REQUIRE_THAT(ExDouble(x).add_small(y), WithinRel(x_plus_y, ulp));
+
+            MPFloat x_minus_y = MPFloat(x) - y;
+            REQUIRE_THAT(ExDouble(x).add_small(-y), WithinRel(x_minus_y, ulp));
+        }
+    }
+}
+
+TEST_CASE("arith dbl-small-ddbl", "[arith]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    for (double x = 10.0; x > 5.0; x *= .9933) {
+        for (DDouble y = x; y > 1e-35; y *= .9883) {
+            MPFloat x_plus_y = MPFloat(x) + y;
+            REQUIRE_THAT(ExDouble(x).add_small(y), WithinRel(x_plus_y, ulp));
+
+            MPFloat x_minus_y = MPFloat(x) - y;
+            REQUIRE_THAT(ExDouble(x).add_small(-y), WithinRel(x_minus_y, ulp));
         }
     }
 }

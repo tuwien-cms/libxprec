@@ -95,6 +95,14 @@ inline DDouble ExDouble::add_small(double b) const
     return DDouble(s, t);
 }
 
+inline DDouble ExDouble::add_small(DDouble y) const
+{
+    // Algorithm 4 modified: cost 7 flops, error 2 u^2
+    DDouble s = add_small(y.hi());
+    double v = y.lo() + s.lo();
+    return ExDouble(s.hi()).add_small(v);
+}
+
 inline DDouble operator+(ExDouble a, ExDouble b)
 {
     // Algorithm 2: cost 6 flops

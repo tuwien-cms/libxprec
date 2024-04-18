@@ -191,6 +191,7 @@ public:
      * WARNING: You must ensure that b is small than this in magnitude!
      */
     DDouble add_small(double b) const;
+    DDouble add_small(DDouble b) const;
 
     friend DDouble operator+(ExDouble a, ExDouble b);
     friend DDouble operator+(double a, ExDouble b);
