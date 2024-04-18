@@ -20,7 +20,7 @@ endif()
 
 # Configure project
 project(
-    libxprec
+    XPrec
     LANGUAGES CXX
     VERSION "${XPREC_VERSION}"
     DESCRIPTION "library for emulated extended-precision arithmetic"
@@ -38,7 +38,10 @@ add_library(xprec SHARED
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
-target_include_directories(xprec PUBLIC include)
+target_include_directories(xprec INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    )
 set_target_properties(xprec PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
@@ -46,11 +49,22 @@ set_target_properties(xprec PROPERTIES
     CXX_STANDARD_REQUIRED ON
     )
 
-install(TARGETS xprec)
+# Use library convention.
+add_library(XPrec::xprec ALIAS xprec)
+
+install(
+    TARGETS xprec
+    EXPORT xprec_exports
+    )
 install(
     DIRECTORY include/
     DESTINATION include
     PATTERN "ddouble-header-only.h" EXCLUDE
+    )
+install(
+    EXPORT xprec_exports
+    NAMESPACE XPrec::
+    DESTINATION lib/cmake/XPrec
     )
 
 set(XPREC_TEST OFF

@@ -35,8 +35,7 @@ add_executable(tests
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)
-target_link_libraries(tests PRIVATE xprec)
-target_include_directories(tests PRIVATE ../include)
+target_link_libraries(tests PRIVATE XPrec::xprec)
 target_compile_options(tests PRIVATE -Wall -Wextra)
 
 if (TARGET Eigen3::Eigen)
