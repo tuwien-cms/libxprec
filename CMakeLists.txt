@@ -29,11 +29,11 @@ project(
 # Library
 add_library(xprec SHARED
     src/circular.cxx
-    src/ddouble.cxx
     src/exp.cxx
     src/gauss.cxx
     src/hyperbolic.cxx
     src/io.cxx
+    src/sqrt.cxx
     )
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)

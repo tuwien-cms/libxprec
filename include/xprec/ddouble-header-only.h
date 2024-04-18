@@ -17,9 +17,9 @@
 #define XPREC_API_EXPORT inline
 
 #include "../../src/circular.cxx"
-#include "../../src/ddouble.cxx"
 #include "../../src/exp.cxx"
 #include "../../src/gauss.cxx"
 #include "../../src/hyperbolic.cxx"
 #include "../../src/io.cxx"
+#include "../../src/sqrt.cxx"
 #include "ddouble.h"
