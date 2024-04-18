@@ -53,8 +53,11 @@ install(
     PATTERN "ddouble-header-only.h" EXCLUDE
     )
 
+set(XPREC_TEST OFF
+    CACHE BOOL "Build xprec tests.")
+
 # Tests
-if (BUILD_TESTING)
+if (XPREC_TEST)
     enable_testing()
     add_subdirectory("test")
 endif()

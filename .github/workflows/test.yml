@@ -39,7 +39,7 @@ jobs:
       - name: CMake configure and build
         uses: threeal/cmake-action@v1.3.0
         with:
-          options: BUILD_TESTING=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
+          options: XPREC_TEST=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
           run-build: true
 
       - name: Run tests
