@@ -67,11 +67,10 @@ install(
     DESTINATION lib/cmake/XPrec
     )
 
-set(XPREC_TEST OFF
-    CACHE BOOL "Build xprec tests.")
+option(XPREC_BUILD_TESTING "Enable creation of xprec tests." ${BUILD_TESTING})
 
 # Tests
-if (XPREC_TEST)
+if (XPREC_BUILD_TESTING)
     enable_testing()
     add_subdirectory("test")
 endif()
