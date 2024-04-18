@@ -38,7 +38,7 @@ add_library(xprec SHARED
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
-target_include_directories(xprec INTERFACE
+target_include_directories(xprec PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     )
