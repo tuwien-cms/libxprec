@@ -54,9 +54,8 @@ static DDouble cos_kernel(DDouble x, int n = 13)
 
     // Taylor series of the cos around 0
     DDouble xsq = -x * x;
-    DDouble r = 1.0;
     DDouble xpow = xsq;
-    r = r.add_small(PowerOfTwo(0.5) * xpow);
+    DDouble r = ExDouble(1.0).add_small(PowerOfTwo(0.5) * xpow);
     for (int i = 4; i <= 2 * n; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);

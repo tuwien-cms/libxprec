@@ -120,7 +120,7 @@ static DDouble expm1_quarter(DDouble x)
     DDouble y = x - x0;
 
     DDouble expm1_x0 = expm1_128th(n);
-    DDouble exp_x0 = expm1_x0 + 1.0;
+    DDouble exp_x0 = ExDouble(1.0).add_small(expm1_x0);
     DDouble exp_y = expm1_kernel_taylor(y, 10);
     return expm1_x0.add_small(exp_x0 * exp_y);
 }
@@ -260,7 +260,7 @@ DDouble exp(DDouble x)
     DDouble z = x - y / 2;
 
     // exp(z + y/2) = (1 + expm1(z)) exp(1/2)^y
-    DDouble exp_z = 1.0 + expm1_quarter(z);
+    DDouble exp_z = ExDouble(1.0).add_small(expm1_quarter(z));
     DDouble exp_y = exp_halves(int(y));
     return exp_z * exp_y;
 }
