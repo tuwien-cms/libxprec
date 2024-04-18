@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 #pragma once
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <new>
