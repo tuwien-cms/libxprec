@@ -18,8 +18,6 @@ FetchContent_MakeAvailable(Catch2)
 find_package(MPFR REQUIRED)
 find_package(Eigen3 3.3)
 
-enable_testing()
-
 add_executable(tests
     arith.cxx
     circular.cxx

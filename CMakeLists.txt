@@ -26,7 +26,9 @@ project(
     DESCRIPTION "library for emulated extended-precision arithmetic"
     )
 
-# Library
+# ---------------------------------
+# Building
+
 add_library(xprec SHARED
     src/circular.cxx
     src/exp.cxx
@@ -51,6 +53,12 @@ set_target_properties(xprec PROPERTIES
 
 # Use library convention.
 add_library(XPrec::xprec ALIAS xprec)
+export(TARGETS xprec
+    NAMESPACE XPrec::
+    FILE XPrecTargets.cmake)
+
+# ------------------------------
+# Installation
 
 # Provides CMAKE_INSTALL_* directories
 include(GNUInstallDirs)
@@ -69,14 +77,36 @@ install(DIRECTORY include/
     DESTINATION "${XPREC_INSTALL_INCLUDEDIR}"
     PATTERN "ddouble-header-only.h" EXCLUDE
     )
+
+# These are essentially magic incantantions copied from the CMake tutorial:
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/XPrecConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
+    INSTALL_DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+    )
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
+    VERSION "${XPREC_VERSION}"
+    COMPATIBILITY SameMajorVersion
+    )
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/XPrecConfigVersion.cmake"
+    DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
+    )
 install(EXPORT XPrecTargets
     NAMESPACE XPrec::
     DESTINATION "${XPREC_INSTALL_CMAKEDIR}"
     )
 
+# -------------------------------------
+# Testing
+
 option(XPREC_BUILD_TESTING "Enable creation of xprec tests." ${BUILD_TESTING})
 
-# Tests
 if (XPREC_BUILD_TESTING)
     enable_testing()
     add_subdirectory("test")
