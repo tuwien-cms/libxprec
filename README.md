@@ -79,13 +79,13 @@ Please note that this will likely lead to considerably longer compile times.
 In order to use the library in CMake projects, we recommend using [FetchContent]:
 
     include(FetchContent)
-    FetchContent_Declare(xprec
+    FetchContent_Declare(XPrec
         GIT_REPOSITORY https://github.com/tuwien-cms/libxprec
-        GIT_TAG v0.4.0
+        GIT_TAG v0.4.4
         )
-    FetchContent_MakeAvailable(xprec)
+    FetchContent_MakeAvailable(XPrec)
 
-You then should be able to simply link against the `xprec` target.
+You then should be able to simply link against the `XPrec::xprec` target.
 
 [FetchContent]: https://cmake.org/cmake/help/latest/module/FetchContent.html
 
