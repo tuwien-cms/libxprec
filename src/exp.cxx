@@ -22,10 +22,21 @@ inline DDouble expm1_kernel_taylor(DDouble x, int n)
     assert(fabs(x.hi()) < 1.0);
     DDouble xpow = x * x;
     DDouble r = x.add_small(PowerOfTwo(0.5) * xpow);
-    for (int k = 3; k <= n; ++k) {
+    int k = 3;
+    for (; k <= n/2 + 1; ++k) {
         xpow *= x;
         r = r.add_small(reciprocal_factorial(k) * xpow);
     }
+
+    // Here the terms are so small that they only affect the lo part, so
+    // we can get away with double arithmetic.
+    double xpow_d = xpow.hi();
+    double r_d = 0;
+    for (; k <= n; ++k) {
+        xpow_d *= x.hi();
+        r_d += reciprocal_factorial(k).hi() * xpow_d;
+    }
+    r = r.add_small(r_d);
     return r;
 }
 
