@@ -68,10 +68,22 @@ static DDouble cos_kernel(DDouble x, int n = 13)
     DDouble xsq = -x * x;
     DDouble xpow = xsq;
     DDouble r = ExDouble(1.0).add_small(PowerOfTwo(0.5) * xpow);
-    for (int i = 4; i <= 2 * n; i += 2) {
+    int i = 4;
+    for (; i <= n + 3; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);
     }
+
+    // Here the terms are so small that they only affect the lo part, so
+    // we can get away with double arithmetic.
+    double xsq_d = xsq.hi();
+    double xpow_d = xpow.hi();
+    double r_d = 0;
+    for (; i <= 2 * n; i += 2) {
+        xpow_d *= xsq_d;
+        r_d += reciprocal_factorial(i).hi() * xpow_d;
+    }
+    r = r.add_small(r_d);
     return r;
 }
 
