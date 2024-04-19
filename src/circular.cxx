@@ -39,10 +39,22 @@ static DDouble sin_kernel(DDouble x, int n = 13)
     DDouble xsq = -x * x;
     DDouble r = x;
     DDouble xpow = x;
-    for (int i = 3; i <= 2 * n + 1; i += 2) {
+    int i = 3;
+    for (; i <= n + 2; i += 2) {
         xpow *= xsq;
         r = r.add_small(reciprocal_factorial(i) * xpow);
     }
+
+    // Here the terms are so small that they only affect the lo part, so
+    // we can get away with double arithmetic.
+    double xsq_d = xsq.hi();
+    double xpow_d = xpow.hi();
+    double r_d = 0;
+    for (; i <= 2 * n + 1; i += 2) {
+        xpow_d *= xsq_d;
+        r_d += reciprocal_factorial(i).hi() * xpow_d;
+    }
+    r = r.add_small(r_d);
     return r;
 }
 
