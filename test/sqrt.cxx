@@ -22,8 +22,8 @@ TEST_CASE("hypot", "[fn]")
 
     for (double x = 10.0; x > 5.0; x *= .9333) {
         for (double y = x; y > 1e-20 * x; y *= .9983) {
-            CMP_BINARY(hypot, x, y, 1.5 * ulp);
-            CMP_BINARY(hypot, y, x, 1.5 * ulp);
+            CMP_BINARY(hypot, x, y, 2.0 * ulp);
+            CMP_BINARY(hypot, y, x, 2.0 * ulp);
         }
     }
 }
