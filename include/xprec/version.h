@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 #define XPREC_VERSION_MAJOR 0
-#define XPREC_VERSION_MINOR 4
-#define XPREC_VERSION_PATCH 5
+#define XPREC_VERSION_MINOR 5
+#define XPREC_VERSION_PATCH 0
 
 namespace xprec {
 
