@@ -24,12 +24,12 @@ add_executable(tests
     complex.cxx
     convert.cxx
     exp.cxx
-    funcs.cxx
     gauss.cxx
     hyperbolic.cxx
     inline.cxx
     mpfloat.cxx
     random.cxx
+    sqrt.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)
