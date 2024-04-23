@@ -77,7 +77,7 @@ static DDouble tanh_kernel(DDouble x)
     // precision, which is why we need to have this work till abs(x) < 0.15.
 
     // Convergence of the CF approx to 2e-32
-    assert(greater_in_magnitude(0.23, x));
+    assert(_internal::greater_in_magnitude(0.23, x));
 
     // Continued fraction expansion of the tanh
     // Abramowitz and Stegun 4.5.70
