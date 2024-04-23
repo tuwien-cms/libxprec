@@ -56,7 +56,7 @@ DDouble sinh(DDouble x)
         return x;
 
     // For small values, we use the Taylor series
-    if (fabs(x.hi()) < 0.15)
+    if (std::fabs(x.hi()) < 0.15)
         return sinh_kernel(x);
 
     // Else we simply use the definition
@@ -104,11 +104,11 @@ DDouble tanh(DDouble x)
         return x;
 
     // For small values, use the continued fraction representation
-    if (fabs(x.hi()) < 0.2)
+    if (std::fabs(x.hi()) < 0.2)
         return tanh_kernel(x);
 
     // Asymptotically, we have +- 1
-    if (fabs(x.hi()) > 36.5)
+    if (std::fabs(x.hi()) > 36.5)
         return std::copysign(1.0, x.hi());
 
     // Otherwise, simply use defitions
@@ -148,7 +148,7 @@ DDouble asinh(DDouble x)
     // For small values, use Taylor expansion around the double result,
     // because the bottom expression is log(1 + 2x/3 + ...), subject to
     // cancellation.
-    if (fabs(x.hi()) < 1.0) {
+    if (std::fabs(x.hi()) < 1.0) {
         DDouble y0 = std::asinh(x.hi());
         DDouble x0 = sinh(y0);
 

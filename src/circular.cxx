@@ -16,7 +16,7 @@ namespace xprec {
 XPREC_API_EXPORT
 DDouble trig_complement(DDouble x)
 {
-    if (fabs(x.hi()) > 0.9)
+    if (std::fabs(x.hi()) > 0.9)
         return sqrt(1.0 - x * x);
 
     // Search for a zero of f(y) = y^2 + x^2 - 1
@@ -93,7 +93,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     // remainder.
     using xprec::numbers::pi_half;
     DDouble n = x / pi_half;
-    if (fabs(n.hi()) < 0.5) {
+    if (std::fabs(n.hi()) < 0.5) {
         sector = 0;
         return x;
     }
@@ -141,7 +141,7 @@ DDouble cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
     using xprec::numbers::pi_4;
-    if (fabs(x.hi()) < pi_4.hi())
+    if (std::fabs(x.hi()) < pi_4.hi())
         return cos_kernel(x);
 
     // Otherwise, use common code.
@@ -222,7 +222,7 @@ XPREC_API_EXPORT
 DDouble atan(DDouble x)
 {
     // For large values, use reflection formula
-    if (fabs(x.hi()) > 1.0) {
+    if (std::fabs(x.hi()) > 1.0) {
         DDouble y = copysign(xprec::numbers::pi_half, x);
         if (isfinite(x))
             y -= atan(reciprocal(x));

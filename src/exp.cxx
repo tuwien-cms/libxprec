@@ -19,7 +19,7 @@ namespace xprec {
 
 inline DDouble expm1_kernel_taylor(DDouble x, int n)
 {
-    assert(fabs(x.hi()) < 1.0);
+    assert(std::fabs(x.hi()) < 1.0);
     DDouble xpow = x * x;
     DDouble r = x.add_small(PowerOfTwo(0.5) * xpow);
     int k = 3;
@@ -119,7 +119,7 @@ static DDouble expm1_quarter(DDouble x)
     // digits, so no matter what strategy we choose here, the convergence
     // needs to go out to x = log(1.5) = 0.22. We have it work for until a
     // quarter, because that's a nice round power of two.
-    assert(fabs(x.hi()) <= 0.25);
+    assert(std::fabs(x.hi()) <= 0.25);
 
     // The idea is to use the identity
     //
@@ -280,7 +280,7 @@ XPREC_API_EXPORT
 DDouble expm1(DDouble x)
 {
     // For small values, we call the expm1 kernel directly
-    if (fabs(x.hi()) < 0.25)
+    if (std::fabs(x.hi()) < 0.25)
         return expm1_quarter(x);
 
     // Otherwise, we do a naive computation
