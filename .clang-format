@@ -27,4 +27,4 @@ AllowShortIfStatementsOnASingleLine: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 
 SpaceInEmptyBlock: true
-SpaceAfterCStyleCast: true
+SpaceAfterCStyleCast: false

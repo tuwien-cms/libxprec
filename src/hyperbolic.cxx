@@ -187,8 +187,8 @@ DDouble atanh(DDouble x)
     //
     //   atanh(x) = 1/2 log((1 + x)/(1 - x)) = 1/2 log(1 + 2x/(1 - x))
     //
-    return PowerOfTwo(0.5) * log1p(PowerOfTwo(2.0) * x /
-            (ExDouble(1.0).add_small(-x)));
+    return PowerOfTwo(0.5) *
+           log1p(PowerOfTwo(2.0) * x / (ExDouble(1.0).add_small(-x)));
 }
 
 } /* namespace xprec */

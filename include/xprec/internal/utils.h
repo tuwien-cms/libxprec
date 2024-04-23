@@ -25,7 +25,7 @@ namespace _internal {
  */
 inline bool greater_in_magnitude(double x, double y)
 {
-    if(std::numeric_limits<double>::is_iec559) {
+    if (std::numeric_limits<double>::is_iec559) {
         union {
             double number;
             uint64_t pattern;
@@ -76,5 +76,5 @@ inline bool is_power_of_two(DDouble x)
     return x.lo() == 0 && is_power_of_two(x.hi());
 }
 
-}
-}  // namespace xprec::_internal
+} // namespace _internal
+} // namespace xprec

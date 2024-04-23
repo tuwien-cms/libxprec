@@ -23,7 +23,7 @@ inline DDouble expm1_kernel_taylor(DDouble x, int n)
     DDouble xpow = x * x;
     DDouble r = x.add_small(PowerOfTwo(0.5) * xpow);
     int k = 3;
-    for (; k <= n/2 + 1; ++k) {
+    for (; k <= n / 2 + 1; ++k) {
         xpow *= x;
         r = r.add_small(reciprocal_factorial(k) * xpow);
     }

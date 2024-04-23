@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 #include "xprec/ddouble.h"
-#include "xprec/numbers.h"
 #include "xprec/internal/utils.h"
+#include "xprec/numbers.h"
 #include <cassert>
 
 #ifndef XPREC_API_EXPORT
