@@ -30,14 +30,13 @@ TEST_CASE("sqrt", "[fn]")
     CMP_UNARY(sqrt, 0.25, 1.0 * ulp);
     CMP_UNARY(sqrt, 4.0, 1.0 * ulp);
 
-    // XXX our square root is quite inaccurate in practice :(
     DDouble x = 1.0;
     while ((x *= 0.99) > 1e-290) {
-        CMP_UNARY(sqrt, x, 4.0 * ulp);
+        CMP_UNARY(sqrt, x, 1.5 * ulp);
     }
 
     x = 1.0;
     while ((x /= 0.99) <= 1e290) {
-        CMP_UNARY(sqrt, x, 4.0 * ulp);
+        CMP_UNARY(sqrt, x, 1.5 * ulp);
     }
 }
