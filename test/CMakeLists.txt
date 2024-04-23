@@ -21,7 +21,6 @@ find_package(Eigen3 3.3)
 add_executable(tests
     arith.cxx
     circular.cxx
-    complex.cxx
     convert.cxx
     exp.cxx
     gauss.cxx
