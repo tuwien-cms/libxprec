@@ -5,6 +5,7 @@
  */
 #include "xprec/ddouble.h"
 #include "xprec/numbers.h"
+#include "xprec/internal/utils.h"
 #include <cassert>
 
 #ifndef XPREC_API_EXPORT
@@ -30,7 +31,7 @@ void gauss_chebyshev(int n, DDouble x[], DDouble w[])
 static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
 {
     assert(N >= 1);
-    assert(greater_in_magnitude(1.0, x));
+    assert(_internal::greater_in_magnitude(1.0, x));
 
     DDouble Pn_1 = 1.0;
     DDouble dPn_1 = 0.0;
@@ -71,7 +72,7 @@ void gauss_legendre(int n, DDouble x[], DDouble w[])
             if (w != nullptr)
                 w[i] = dPn;
 
-            if (converged && !greater_in_magnitude(2.5e-32, dx))
+            if (converged && !_internal::greater_in_magnitude(2.5e-32, dx))
                 converged = false;
         }
         if (converged)

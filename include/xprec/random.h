@@ -8,6 +8,7 @@
 #include <random>
 
 #include "ddouble.h"
+#include "internal/utils.h"
 
 namespace xprec {
 
@@ -54,7 +55,7 @@ generate_canonical(Generator &rng,
     DDouble r = _rng_range(rng);
     size_t m = std::ceil(b / std::log2(r.hi()));
 
-    if (is_power_of_two(r))
+    if (_internal::is_power_of_two(r))
         return _generate_canonical(rng, PowerOfTwo(r.hi()), m);
     else if (r.lo() == 0)
         return _generate_canonical(rng, r.hi(), m);

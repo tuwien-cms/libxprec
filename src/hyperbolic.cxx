@@ -5,6 +5,7 @@
  */
 #include "taylor.h"
 #include "xprec/ddouble.h"
+#include "xprec/internal/utils.h"
 
 #ifndef XPREC_API_EXPORT
 #define XPREC_API_EXPORT
@@ -34,7 +35,7 @@ static DDouble sinh_kernel(DDouble x)
     // precision, which is why we need to have this work till abs(x) < 0.15.
 
     // Convergence of the Taylor approx to 2e-32
-    assert(greater_in_magnitude(0.155, x.hi()));
+    assert(_internal::greater_in_magnitude(0.155, x.hi()));
 
     // Taylor series of the sinh around 0
     DDouble xsq = x * x;

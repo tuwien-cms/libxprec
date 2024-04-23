@@ -6,15 +6,15 @@
 #include "catch2-addons.h"
 #include "mpfloat.h"
 #include "xprec/ddouble.h"
+#include "xprec/internal/utils.h"
 #include <catch2/catch_test_macros.hpp>
 
 using xprec::ExDouble;
-using xprec::greater_in_magnitude;
-using xprec::is_power_of_two;
 using xprec::PowerOfTwo;
 
 TEST_CASE("greater_in_magnitude", "")
 {
+    using xprec::_internal::greater_in_magnitude;
     REQUIRE(greater_in_magnitude(2.0, 1.0));
     REQUIRE(greater_in_magnitude(-1e100, 1e50));
     REQUIRE(greater_in_magnitude(-0.1, 0.1));
@@ -22,15 +22,6 @@ TEST_CASE("greater_in_magnitude", "")
     REQUIRE(!greater_in_magnitude(1e200, -INFINITY));
     REQUIRE(greater_in_magnitude(NAN, INFINITY));
     REQUIRE(!greater_in_magnitude(1e200, NAN));
-}
-
-TEST_CASE("is_power_of_two", "")
-{
-    REQUIRE(is_power_of_two(4.0));
-    REQUIRE(is_power_of_two(0.0));
-    REQUIRE(is_power_of_two(-0.25));
-    REQUIRE(!is_power_of_two(0.1));
-    REQUIRE(!is_power_of_two(17.34));
 }
 
 TEST_CASE("is_small", "")

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 #include "xprec/ddouble.h"
+#include "xprec/internal/utils.h"
 
 #ifndef XPREC_API_EXPORT
 #define XPREC_API_EXPORT
@@ -33,6 +34,8 @@ DDouble sqrt(DDouble a)
 XPREC_API_EXPORT
 DDouble hypot(DDouble x, DDouble y)
 {
+    using _internal::greater_in_magnitude;
+
     // Make sure that the values are ordered by magnitude
     if (!greater_in_magnitude(x, y)) {
         swap(x, y);
