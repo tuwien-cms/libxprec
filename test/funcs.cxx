@@ -12,12 +12,20 @@ using xprec::DDouble;
 
 TEST_CASE("hypot", "[fn]")
 {
-    CMP_BINARY(hypot, 1.0, 1.0, 1e-31);
+    const double ulp = 2.4651903288156619e-32;
+    CMP_BINARY(hypot, 1.0, 1.0, 1.5 * ulp);
     CMP_BINARY(hypot, 3.0, -10000.0, 1e-31);
-    CMP_BINARY(hypot, ldexp(3.0, 600), ldexp(1.0, 570), 1e-31);
-    CMP_BINARY(hypot, ldexp(-3.0, 600), ldexp(1.0, 640), 1e-31);
-    CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1e-31);
-    CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1e-31);
+    CMP_BINARY(hypot, ldexp(3.0, 600), ldexp(1.0, 570), 1.5 * ulp);
+    CMP_BINARY(hypot, ldexp(-3.0, 600), ldexp(1.0, 640), 1.5 * ulp);
+    CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1.5 * ulp);
+    CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1.5 * ulp);
+
+    for (double x = 10.0; x > 5.0; x *= .9333) {
+        for (double y = x; y > 1e-20 * x; y *= .9983) {
+            CMP_BINARY(hypot, x, y, 1.5 * ulp);
+            CMP_BINARY(hypot, y, x, 1.5 * ulp);
+        }
+    }
 }
 
 TEST_CASE("sqrt", "[fn]")
