@@ -7,6 +7,7 @@
 #include <array>
 #include <iostream>
 #include <sstream>
+#include <cassert>
 
 #ifndef XPREC_API_EXPORT
 #define XPREC_API_EXPORT
