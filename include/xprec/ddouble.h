@@ -211,8 +211,6 @@ public:
 
     friend DDouble reciprocal(ExDouble y);
 
-    bool is_small(double x) const;
-
 private:
     double _x;
 };

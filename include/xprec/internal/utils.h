@@ -16,6 +16,19 @@
 namespace xprec {
 namespace _internal {
 
+
+/**
+ * Returns the bit pattern of a double number.
+ */
+inline uint64_t bit_pattern(double x)
+{
+    union {
+        double number;
+        uint64_t pattern;
+    } x_u = {x};
+    return x_u.pattern;
+}
+
 /**
  * Return true if x is greater or equal in magnitude as y.
  *
@@ -26,13 +39,8 @@ namespace _internal {
 inline bool greater_in_magnitude(double x, double y)
 {
     if (std::numeric_limits<double>::is_iec559) {
-        union {
-            double number;
-            uint64_t pattern;
-        } x_u = {x}, y_u = {y};
-
         // Shift out sign bit
-        return (x_u.pattern << 1) >= (y_u.pattern << 1);
+        return (bit_pattern(x) << 1) >= (bit_pattern(y) << 1);
     } else {
         return !(std::fabs(x) < std::fabs(y));
     }
@@ -54,21 +62,21 @@ inline bool greater_in_magnitude(double x, DDouble y)
 }
 
 /**
+ * Extract bits of the mantissa
+ */
+inline uint64_t mantissa_bits(double x)
+{
+    static_assert(std::numeric_limits<double>::is_iec559, "needs IEEE floats");
+    static const uint64_t mantissa_mask = 0xFFFFFFFFFFFFFUL;
+    return bit_pattern(x) & mantissa_mask;
+}
+
+/**
  * Return true if the mantissa part of a number is zero.
  */
 inline bool is_power_of_two(double x)
 {
-    if (std::numeric_limits<double>::is_iec559) {
-        static const uint64_t mantissa_mask = 0xFFFFFFFFFFFFFUL;
-        union {
-            double number;
-            uint64_t pattern;
-        } x_u = {x};
-        return (x_u.pattern & mantissa_mask) == 0;
-    } else {
-        double exp;
-        return std::modf(x, &exp);
-    }
+    return mantissa_bits(x) == 0;
 }
 
 inline bool is_power_of_two(DDouble x)
