@@ -57,8 +57,8 @@ public:
     DDouble() = default;
     DDouble(const DDouble &) = default;
     DDouble(DDouble &&) = default;
-    DDouble &operator=(const DDouble &other) = default;
-    DDouble &operator=(DDouble &&other) = default;
+    DDouble &operator=(const DDouble &) = default;
+    DDouble &operator=(DDouble &&) = default;
     ~DDouble() = default;
 
     /**
