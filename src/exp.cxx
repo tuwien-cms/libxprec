@@ -303,7 +303,7 @@ DDouble log(DDouble x)
     //   log(x) = log(x0) + 2 (x - x0)/(x + x0) + O(x - x0)^3
     //
     DDouble x0 = exp(log_x);
-    DDouble corr = PowerOfTwo(2.0) * (x - x0) / (x + x0);
+    DDouble corr = PowerOfTwo(2.0) * x.add_small(-x0) / x.add_small(x0);
     log_x += corr;
     return log_x;
 }
@@ -324,7 +324,7 @@ DDouble log1p(DDouble x)
     // x close to -1, since that is where we have an intrinsic loss of
     // precision anyway
     DDouble x0 = expm1(log_x);
-    DDouble corr = PowerOfTwo(2.0) * (x - x0) / (2 + x + x0);
+    DDouble corr = PowerOfTwo(2.0) * x.add_small(-x0) / (2.0 + x).add_small(x0);
     log_x += corr;
     return log_x;
 }
