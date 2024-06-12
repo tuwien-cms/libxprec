@@ -17,7 +17,7 @@ XPREC_API_EXPORT
 DDouble trig_complement(DDouble x)
 {
     if (std::fabs(x.hi()) > 0.9)
-        return sqrt(1.0 - x * x);
+        return sqrt(ExDouble(1.0).add_small(-x * x));
 
     // Search for a zero of f(y) = y^2 + x^2 - 1
     ExDouble y0 = std::sqrt(std::fma(x.hi(), -x.hi(), 1));
