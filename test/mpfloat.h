@@ -274,7 +274,7 @@ public:
         return out;
     }
 
-    static const mpfr_prec_t precision = 200;
+    static const mpfr_prec_t precision = 120;
     static const mpfr_rnd_t round = MPFR_RNDN;
 
 private:

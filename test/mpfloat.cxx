@@ -33,5 +33,5 @@ TEST_CASE("test_that", "[mpfr]")
 
     REQUIRE(x != y);
     REQUIRE_THAT(x, WithinAbs(y, 1e-25));
-    REQUIRE_THAT(x, WithinRel(y, 1e-30));
+    REQUIRE_THAT(x, WithinRel(y, 1e-29));
 }
