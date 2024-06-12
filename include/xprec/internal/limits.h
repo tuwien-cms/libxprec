@@ -24,7 +24,7 @@ constexpr xprec::DDouble std::numeric_limits<xprec::DDouble>::max() noexcept
 constexpr xprec::DDouble std::numeric_limits<xprec::DDouble>::lowest() noexcept
 {
     return DDouble(_double::lowest(),
-                   _double::lowest() / _double::epsilon() / _double::radix);
+                   _double::lowest() * _double::epsilon() / _double::radix);
 }
 
 constexpr xprec::DDouble std::numeric_limits<xprec::DDouble>::epsilon() noexcept
