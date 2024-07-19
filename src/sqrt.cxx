@@ -25,8 +25,8 @@ DDouble sqrt(DDouble a)
     //   x0 = approx(1/sqrt(A))
     //   x  = x + 0.5 * x * (1.0 - A * x * x)
     //
-    double x0 = 1.0 / (double)y0;
-    double delta_y = 0.5 * x0 * (a.add_small(-y0 * y0)).hi();
+    double x0_half = 0.5 / (double)y0;
+    double delta_y = x0_half * (a.add_small(-y0 * y0)).hi();
     DDouble y1 = y0.add_small(delta_y);
     return y1;
 }
