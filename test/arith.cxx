@@ -34,6 +34,8 @@ TEST_CASE("arith dbl", "[arith]")
             CMP_BINARY(operator-, y, x, 2.5e-32);
             CMP_BINARY(operator*, x, y, 2.5e-32);
             CMP_BINARY(operator/, x, y, 5.0e-32);
+            CMP_BINARY(operator/, -x, y, 5.0e-32);
+            CMP_BINARY(operator/, y, x, 5.0e-32);
         }
     }
 }
@@ -48,6 +50,9 @@ TEST_CASE("arith ex", "[arith]")
             CMP_BINARY_EX(operator-, y, x, 2.5e-32);
             CMP_BINARY_EX(operator*, x, y, 2.5e-32);
             CMP_BINARY_EX(operator/, x, y, 5.0e-32);
+            CMP_BINARY_EX(operator/, y, x, 5.0e-32);
+            CMP_BINARY_EX(operator/, x, -y, 5.0e-32);
+            CMP_BINARY_EX(operator/, -y, x, 5.0e-32);
         }
     }
 }

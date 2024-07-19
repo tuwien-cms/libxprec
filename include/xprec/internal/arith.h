@@ -75,23 +75,21 @@ inline DDouble operator*(ExDouble a, ExDouble b)
 inline DDouble operator*(double a, ExDouble b) { return ExDouble(a) * b; }
 inline DDouble operator*(ExDouble a, double b) { return a * ExDouble(b); }
 
-inline DDouble reciprocal(ExDouble y)
-{
-    // Part of Algorithm 18 for y_lo = 0
-    double th = 1.0 / (double)y;
-    double rh = std::fma(-(double)y, th, 1.0);
-    DDouble delta = ExDouble(rh) * th;
-    return delta + th;
-}
-
 inline DDouble operator/(ExDouble a, ExDouble b)
 {
-    // Algorithm 18 for this special case
-    return reciprocal(b) * (double)a;
+    // Since we are rounding faithfully, the hi part is exact
+    double th = (double)a / (double)b;
+
+    // Multiply hi part with b and compare exactly to a to see difference
+    double rl = std::fma(-(double)b, th, (double)a);
+    double tl = rl / (double)b;
+    assert(th + tl == th);
+    return DDouble(th, tl);
 }
 
 inline DDouble operator/(double a, ExDouble b) { return ExDouble(a) / b; }
 inline DDouble operator/(ExDouble a, double b) { return a / ExDouble(b); }
+inline DDouble reciprocal(ExDouble y) { return 1.0 / y; }
 
 // -------------------------------------------------------------------------
 // DDouble arithmetic
