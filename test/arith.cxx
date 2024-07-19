@@ -38,6 +38,20 @@ TEST_CASE("arith dbl", "[arith]")
     }
 }
 
+TEST_CASE("arith ex", "[arith]")
+{
+    for (double x = 10.0; x > 5.0; x *= .9933) {
+        for (double y = x; y > 1e-35; y *= .9383) {
+            CMP_BINARY_EX(operator+, x, y, 2.5e-32);
+            CMP_BINARY_EX(operator-, x, y, 2.5e-32);
+            CMP_BINARY_EX(operator+, y, x, 2.5e-32);
+            CMP_BINARY_EX(operator-, y, x, 2.5e-32);
+            CMP_BINARY_EX(operator*, x, y, 2.5e-32);
+            CMP_BINARY_EX(operator/, x, y, 5.0e-32);
+        }
+    }
+}
+
 TEST_CASE("arith dbl-small", "[arith]")
 {
     const double ulp = 2.4651903288156619e-32;

@@ -87,7 +87,7 @@ inline DDouble reciprocal(ExDouble y)
 inline DDouble operator/(ExDouble a, ExDouble b)
 {
     // Algorithm 18 for this special case
-    return reciprocal(a) * (double)b;
+    return reciprocal(b) * (double)a;
 }
 
 inline DDouble operator/(double a, ExDouble b) { return ExDouble(a) / b; }

@@ -40,6 +40,14 @@
         REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
     } while (false)
 
+#define CMP_BINARY_EX(fn, x, y, eps)                                           \
+    do {                                                                       \
+        DDouble r_d = fn(ExDouble(x), ExDouble(y));                            \
+        MPFloat r_f = fn(MPFloat(x), MPFloat(y));                              \
+        double eps_d = eps;                                                    \
+        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
+    } while (false)
+
 using std::abs;
 
 template <typename T, typename R>
