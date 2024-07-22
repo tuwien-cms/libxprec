@@ -9,17 +9,22 @@ The rough cost in floating point operations (flops) and relative error as
 multiples of u² = 1.32e-32 (round-off error or half the machine epsilon) is
 as follows:
 
-  | (op)       | (op)double | error | (op)DDouble | error |
-  |------------|-----------:|------:|------------:|------:|
-  | add_small  |    3 flops |   2u² |    17 flops |   3u² |
-  | + -        |   10 flops |   2u² |    20 flops |   3u² |
-  | *          |    6 flops |   2u² |     9 flops |   4u² |
-  | /          |   10 flops |   3u² |    31 flops |   6u² |
-  | reciprocal |   14 flops | 2.3u² |    22 flops | 2.3u² |
+    double d;
+    ExDouble xd;        // double marked for extended computation
+    DDouble dd;
+
+  | (op)       | xd (op) d | error | dd (op) d | error | dd (op) dd | error |
+  |------------|----------:|------:|----------:|------:|-----------:|------:|
+  | add_small  |   3 flops |   0u² |   7 flops |   2u² |   17 flops |   3u² |
+  | + -        |   6 flops |   0u² |  10 flops |   2u² |   20 flops |   3u² |
+  | *          |   2 flops |   0u² |   6 flops |   2u² |    9 flops |   4u² |
+  | /          |   3 flops |   1u² |  10 flops |   3u² |   31 flops |   6u² |
+  | reciprocal |   3 flops |   1u² |  14 flops | 2.3u² |   22 flops | 2.3u² |
 
 The error bounds are tight analytical bounds [^2], except in the case of
 double-double division, where the bound is 10u² but largest observed error
-is 6u². We report the largest observed error here [^1].
+is 6u², and double by double division, where we expect u².  We report the
+largest observed error here [^1].
 
 [^1]: M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
 [^2]: J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022)
