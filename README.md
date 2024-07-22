@@ -10,8 +10,8 @@ multiples of u² = 1.32e-32 (round-off error or half the machine epsilon) is
 as follows:
 
     double d;
-    ExDouble xd;        // double marked for extended computation
-    DDouble dd;
+    xprec::ExDouble xd;        // double "cast" to quad precsion
+    xprec::DDouble dd;         // emulated quad precision number
 
   | (op)       | xd (op) d | error | dd (op) d | error | dd (op) dd | error |
   |------------|----------:|------:|----------:|------:|-----------:|------:|
