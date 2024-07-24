@@ -26,33 +26,35 @@ TEST_CASE("greater_in_magnitude", "")
 
 TEST_CASE("arith dbl", "[arith]")
 {
+    const double ulp = 2.4651903288156619e-32;
     for (double x = 10.0; x > 5.0; x *= .9933) {
         for (double y = x; y > 1e-35; y *= .9383) {
-            CMP_BINARY(operator+, x, y, 2.5e-32);
-            CMP_BINARY(operator-, x, y, 2.5e-32);
-            CMP_BINARY(operator+, y, x, 2.5e-32);
-            CMP_BINARY(operator-, y, x, 2.5e-32);
-            CMP_BINARY(operator*, x, y, 2.5e-32);
-            CMP_BINARY(operator/, x, y, 5.0e-32);
-            CMP_BINARY(operator/, -x, y, 5.0e-32);
-            CMP_BINARY(operator/, y, x, 5.0e-32);
+            CMP_BINARY(operator+, x, y, 1.6*ulp);
+            CMP_BINARY(operator-, x, y, 1.6*ulp);
+            CMP_BINARY(operator+, y, x, 1.6*ulp);
+            CMP_BINARY(operator-, y, x, 1.6*ulp);
+            CMP_BINARY(operator*, x, y, 2*ulp);
+            CMP_BINARY(operator/, x, y, 3*ulp);
+            CMP_BINARY(operator/, -x, y, 3*ulp);
+            CMP_BINARY(operator/, y, x, 3*ulp);
         }
     }
 }
 
 TEST_CASE("arith ex", "[arith]")
 {
+    const double ulp = 2.4651903288156619e-32;
     for (double x = 10.0; x > 5.0; x *= .9933) {
         for (double y = x; y > 1e-35; y *= .9383) {
-            CMP_BINARY_EX(operator+, x, y, 2.5e-32);
-            CMP_BINARY_EX(operator-, x, y, 2.5e-32);
-            CMP_BINARY_EX(operator+, y, x, 2.5e-32);
-            CMP_BINARY_EX(operator-, y, x, 2.5e-32);
-            CMP_BINARY_EX(operator*, x, y, 2.5e-32);
-            CMP_BINARY_EX(operator/, x, y, 5.0e-32);
-            CMP_BINARY_EX(operator/, y, x, 5.0e-32);
-            CMP_BINARY_EX(operator/, x, -y, 5.0e-32);
-            CMP_BINARY_EX(operator/, -y, x, 5.0e-32);
+            CMP_BINARY_EX(operator+, x, y, ulp/4);
+            CMP_BINARY_EX(operator-, x, y, ulp/4);
+            CMP_BINARY_EX(operator+, y, x, ulp/4);
+            CMP_BINARY_EX(operator-, y, x, ulp/4);
+            CMP_BINARY_EX(operator*, x, y, ulp/4);
+            CMP_BINARY_EX(operator/, x, y, ulp);
+            CMP_BINARY_EX(operator/, y, x, ulp);
+            CMP_BINARY_EX(operator/, x, -y, ulp);
+            CMP_BINARY_EX(operator/, -y, x, ulp);
         }
     }
 }
@@ -83,6 +85,64 @@ TEST_CASE("arith dbl-small-ddbl", "[arith]")
             REQUIRE_THAT(ExDouble(x).add_small(-y), WithinRel(x_minus_y, ulp));
         }
     }
+}
+
+TEST_CASE("sum stress test", "[arith]")
+{
+    const double u = 0.5 * std::numeric_limits<double>::epsilon();
+
+    // Propery 2.2 in doi:10.1145/3484514
+    DDouble x(1.0, u - u*u);
+    DDouble y(0.5 * (-1 + u), u * u * (-0.5 + u));
+    MPFloat r_ex = MPFloat(x) + y;
+
+    // The lower tolerances can be relaxed if we find a better algorithm
+    DDouble r = x + y;
+    REQUIRE_THAT(r, WithinRel(r_ex, 3*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 2.5*u*u));
+
+    DDouble r2 = x.add_small(y);
+    REQUIRE_THAT(r, WithinRel(r_ex, 3*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 2.5*u*u));
+}
+
+TEST_CASE("mul stress test", "[arith]")
+{
+    const double u = 0.5 * std::numeric_limits<double>::epsilon();
+
+    DDouble x(ldexp(2251799825991851, -51), ldexp(9007199203085987, -106));
+    DDouble y(ldexp(4503599627471459, -52), ldexp(4503599627284651, -105));
+
+    DDouble r = x * y;
+    MPFloat r_ex = MPFloat(x) * y;
+    REQUIRE_THAT(r, WithinRel(r_ex, 4*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 3.5*u*u));
+}
+
+TEST_CASE("divqd stress test", "[arith]")
+{
+    const double u = 0.5 * std::numeric_limits<double>::epsilon();
+
+    DDouble x(4588860379563012., ldexp(-4474949195791253, -53));
+    double y = 4578284000230917.;
+
+    DDouble r = x / y;
+    MPFloat r_ex = MPFloat(x) / y;
+    REQUIRE_THAT(r, WithinRel(r_ex, 3*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 2.5*u*u));
+}
+
+TEST_CASE("divqq stress test", "[arith]")
+{
+    const double u = 0.5 * std::numeric_limits<double>::epsilon();
+
+    DDouble x(4528288502329187., ldexp(1125391118633487, -51));
+    DDouble y(4522593432466394., ldexp(-9006008290016505, -54));
+
+    DDouble r = x / y;
+    MPFloat r_ex = MPFloat(x) / y;
+    REQUIRE_THAT(r, WithinRel(r_ex, 6*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 5.5*u*u));
 }
 
 TEST_CASE("pow2", "[arith]")
