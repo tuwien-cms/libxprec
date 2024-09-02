@@ -44,4 +44,43 @@ TEST_CASE("lohi", "[limits]")
     REQUIRE(isnormal(dd_limits::min()));
     REQUIRE(isnormal(bigger * dd_limits::min()));
     REQUIRE(!isnormal((1.0 - eps_d) * dd_limits::min()));
+
+    REQUIRE(dd_limits::denorm_min() > 0);
+    REQUIRE(!isnormal(dd_limits::denorm_min()));
+    REQUIRE(0.49 * dd_limits::denorm_min() == 0);
+}
+
+TEST_CASE("infs", "[limits]")
+{
+    REQUIRE(isinf(dd_limits::infinity()));
+    REQUIRE(!isnan(dd_limits::infinity()));
+    REQUIRE(!isfinite(dd_limits::infinity()));
+    REQUIRE(!isnormal(dd_limits::infinity()));
+    REQUIRE(dd_limits::infinity() > dd_limits::max());
+
+    REQUIRE(isinf(-dd_limits::infinity()));
+    REQUIRE(!isnan(-dd_limits::infinity()));
+    REQUIRE(!isfinite(-dd_limits::infinity()));
+    REQUIRE(!isnormal(-dd_limits::infinity()));
+    REQUIRE(-dd_limits::infinity() < dd_limits::lowest());
+}
+
+TEST_CASE("nans", "[limits]")
+{
+    REQUIRE((dd_limits::has_quiet_NaN || dd_limits::has_signaling_NaN));
+
+    if (dd_limits::has_quiet_NaN) {
+        REQUIRE(isnan(dd_limits::quiet_NaN()));
+        REQUIRE(!isinf(dd_limits::quiet_NaN()));
+        REQUIRE(!isfinite(dd_limits::quiet_NaN()));
+        REQUIRE(!isnormal(dd_limits::quiet_NaN()));
+        REQUIRE(dd_limits::quiet_NaN() != dd_limits::quiet_NaN());
+    }
+    if (dd_limits::has_signaling_NaN) {
+        REQUIRE(isnan(dd_limits::signaling_NaN()));
+        REQUIRE(!isinf(dd_limits::signaling_NaN()));
+        REQUIRE(!isfinite(dd_limits::signaling_NaN()));
+        REQUIRE(!isnormal(dd_limits::signaling_NaN()));
+        REQUIRE(dd_limits::signaling_NaN() != dd_limits::signaling_NaN());
+    }
 }
