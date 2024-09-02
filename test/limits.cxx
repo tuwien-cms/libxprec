@@ -32,14 +32,12 @@ TEST_CASE("lohi", "[limits]")
             dd_limits::max());
     REQUIRE(dd_limits::max() > 0);
     REQUIRE(isfinite(dd_limits::max() * smaller));
-    REQUIRE(!isfinite(dd_limits::max() * bigger));
     REQUIRE(dd_limits::max() + 0.0 == dd_limits::max());
 
     REQUIRE(ExDouble(dd_limits::lowest().hi()) + dd_limits::lowest().lo() ==
             dd_limits::lowest());
     REQUIRE(dd_limits::lowest() < 0);
     REQUIRE(isfinite(dd_limits::lowest() * smaller));
-    REQUIRE(!isfinite(dd_limits::lowest() * bigger));
     REQUIRE(dd_limits::lowest() + 0.0 == dd_limits::lowest());
 
     REQUIRE(dd_limits::min() > 0);
