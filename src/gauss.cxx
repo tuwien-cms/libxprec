@@ -82,7 +82,8 @@ void gauss_legendre(int n, DDouble x[], DDouble w[])
     // Compute weights if so desired
     if (w != nullptr) {
         for (int i = 0; i < n; ++i) {
-            w[i] = 2.0 / ((1.0 - x[i] * x[i]) * w[i] * w[i]);
+            DDouble one_minus_x2 = ExDouble(1.0).add_small(-x[i] * x[i]);
+            w[i] = PowerOfTwo(2.0) * reciprocal(one_minus_x2 * w[i] * w[i]);
         }
     }
 }
