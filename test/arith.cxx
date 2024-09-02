@@ -102,8 +102,8 @@ TEST_CASE("sum stress test", "[arith]")
     REQUIRE_THAT(r, !WithinRel(r_ex, 2.5*u*u));
 
     DDouble r2 = x.add_small(y);
-    REQUIRE_THAT(r, WithinRel(r_ex, 3*u*u));
-    REQUIRE_THAT(r, !WithinRel(r_ex, 2.5*u*u));
+    REQUIRE_THAT(r2, WithinRel(r_ex, 3*u*u));
+    REQUIRE_THAT(r2, !WithinRel(r_ex, 2.5*u*u));
 }
 
 TEST_CASE("mul stress test", "[arith]")
