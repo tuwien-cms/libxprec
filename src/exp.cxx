@@ -130,7 +130,7 @@ static DDouble expm1_quarter(DDouble x)
     double x0 = n / 128;
     DDouble y = x - x0;
 
-    DDouble expm1_x0 = expm1_128th(n);
+    DDouble expm1_x0 = expm1_128th((int) n);
     DDouble exp_x0 = ExDouble(1.0).add_small(expm1_x0);
     DDouble exp_y = expm1_kernel_taylor(y, 10);
     return expm1_x0.add_small(exp_x0 * exp_y);
