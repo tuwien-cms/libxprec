@@ -47,9 +47,11 @@ inline bool isnan(DDouble x) { return std::isnan(x.hi()); }
 
 inline bool isnormal(DDouble x)
 {
-    // Here, we have to check the lo part too, since that is where the
-    // denormalization shows up
-    return std::isnormal(x.hi()) && std::isnormal(x.lo());
+    // Denormalization is double-double is a bit of a strange concept,
+    // since the lo part may be a denormalized number even if the whole
+    // number is still "normal".
+    constexpr double eps_d = std::numeric_limits<double>::epsilon();
+    return std::isnormal(x.hi() * eps_d);
 }
 
 inline bool iszero(DDouble x) { return x.hi() == 0; }

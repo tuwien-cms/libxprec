@@ -26,6 +26,7 @@ add_executable(tests
     gauss.cxx
     hyperbolic.cxx
     inline.cxx
+    limits.cxx
     mpfloat.cxx
     random.cxx
     sqrt.cxx
