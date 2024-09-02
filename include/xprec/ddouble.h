@@ -29,15 +29,16 @@ namespace xprec {
  *   | add_small  |    3 flops |   2u² |    17 flops |   3u² |
  *   | + -        |   10 flops |   2u² |    20 flops |   3u² |
  *   | *          |    6 flops |   2u² |     9 flops |   4u² |
- *   | /          |   10 flops |   3u² |    31 flops |   6u² |
- *   | reciprocal |   14 flops | 2.3u² |    22 flops | 2.3u² |
+ *   | /          |   10 flops |   3u² |    28 flops |   6u² |
+ *   | reciprocal |   14 flops | 2.3u² |    19 flops | 2.3u² |
  *
- * The error bounds are tight analytical bounds [^2], except in the case of
+ * The error bounds are tight analytical bounds [^2][^3], except in the case of
  * double-double division, where the bound is 10u² but largest observed error
  * is 6u². We report the largest observed error here [^1].
  *
  * [^1]: M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
  * [^2]: J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022)
+ * [^3]: The flop count has been reduced by 3 for divisons/reciprocals
  */
 class DDouble {
 public:

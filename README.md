@@ -18,8 +18,8 @@ as follows:
   | add_small  |   3 flops |   0u² |   7 flops |   2u² |   17 flops |   3u² |
   | + -        |   6 flops |   0u² |  10 flops |   2u² |   20 flops |   3u² |
   | *          |   2 flops |   0u² |   6 flops |   2u² |    9 flops |   4u² |
-  | /          |  3* flops |   1u² |  10 flops |   3u² |  31* flops |   6u² |
-  | reciprocal |  3* flops |   1u² |  14 flops | 2.3u² |  22* flops | 2.3u² |
+  | /          |  3* flops |   1u² | 10* flops |   3u² |  28* flops |   6u² |
+  | reciprocal |  3* flops |   1u² |           |       |  19* flops | 2.3u² |
 
 The error bounds are tight analytical bounds [^2], except in the case of
 double-double division, where the bound is 10u² but largest observed error
@@ -29,11 +29,12 @@ divisions, which are about an order of magnitude more expensive than regular
 flops on a modern CPU.
 
 The table can be distilled into two rules of thumb: double-double arithmetic
-roughly doubles the number of significant digits at the cost of a roughly 
+roughly doubles the number of significant digits at the cost of a roughly
 15x slowdown compared to double arithmetic.
 
 [^1]: M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
-[^2]: J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022)
+[^2]: J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022).
+      The flop count has been reduced by 3 for divisons/reciprocals.
 
 Usage
 -----

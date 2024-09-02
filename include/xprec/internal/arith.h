@@ -165,24 +165,30 @@ inline DDouble operator/(DDouble x, double y)
 
 inline DDouble reciprocal(DDouble y)
 {
-    // Part of Algorithm 18: cost 22 flops, error 2.3 u^2
+    // Part of Algorithm 18: cost 19 flops, error 2.3 u^2
     double th = 1.0 / y._hi;
     double rh = std::fma(-y._hi, th, 1.0);
     double rl = -y._lo * th;
     DDouble e = ExDouble(rh).add_small(rl);
     DDouble delta = e * th;
-    return delta + th;
+
+    // This saves 3 flops w.r.t. algorithm 18, which uses standard addition.
+    // We should be able to do this since Taylor expanding gives:
+    //
+    //  1/(xh + u*xl) = th * (1 + rh/th) * (1 + u * xl/xh + ...)
+    //
+    return ExDouble(th).add_small(delta);
 }
 
 inline DDouble operator/(DDouble x, DDouble y)
 {
-    // Algorithm 18: cost 31 flops, error 10 u^2 (6 u^2 obs.)
+    // Algorithm 18: cost 28 flops, error 10 u^2 (6 u^2 obs.)
     return x * reciprocal(y);
 }
 
 inline DDouble operator/(double x, DDouble y)
 {
-    // Algorithm 18: cost 28 flops
+    // Algorithm 18: cost 25 flops
     return x * reciprocal(y);
 }
 
