@@ -32,6 +32,8 @@ TEST_CASE("sqrt", "[fn]")
 {
     const double ulp = 2.4651903288156619e-32;
     REQUIRE(isnan(sqrt(DDouble(-1.0))));
+    REQUIRE(isinf(sqrt(DDouble(INFINITY))));
+    REQUIRE(isnan(sqrt(DDouble(-INFINITY))));
 
     CMP_UNARY(sqrt, 0.0, 1.0);
     CMP_UNARY(sqrt, 1.0, 1.0 * ulp);

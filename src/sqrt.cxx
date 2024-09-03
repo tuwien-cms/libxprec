@@ -15,9 +15,9 @@ namespace xprec {
 XPREC_API_EXPORT
 DDouble sqrt(DDouble a)
 {
-    ExDouble y0 = std::sqrt(a.hi());
-    if (a.hi() <= 0)
-        return (double)y0;
+    double y0 = std::sqrt(a.hi());
+    if (a.hi() <= 0 || !isfinite(a.hi()))
+        return y0;
 
     // From: Karp, High Precision Division and Square Root, 1993, Table II
     // This is based on Newton-Ralphson for f(x) = a - 1/x^2:
@@ -25,9 +25,9 @@ DDouble sqrt(DDouble a)
     //   x0 = approx(1/sqrt(A))
     //   x  = x + 0.5 * x * (1.0 - A * x * x)
     //
-    double x0_half = 0.5 / (double)y0;
-    double delta_y = x0_half * (a.add_small(-y0 * y0)).hi();
-    DDouble y1 = y0.add_small(delta_y);
+    double x0_half = 0.5 / y0;
+    double delta_y = x0_half * (std::fma(-y0, y0, a.hi()) + a.lo());
+    DDouble y1 = ExDouble(y0).add_small(delta_y);
     return y1;
 }
 
