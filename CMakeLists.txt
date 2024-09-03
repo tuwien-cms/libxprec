@@ -32,6 +32,7 @@ project(
 add_library(xprec SHARED
     src/circular.cxx
     src/exp.cxx
+    src/floats.cxx
     src/gauss.cxx
     src/hyperbolic.cxx
     src/io.cxx

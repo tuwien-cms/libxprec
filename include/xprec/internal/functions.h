@@ -58,42 +58,36 @@ inline DDouble abs(DDouble x) { return fabs(x); }
 
 inline DDouble fabs(DDouble x) { return signbit(x) ? -x : x; }
 
-inline DDouble trunc(DDouble x)
-{
-    // Truncation simply involves truncating both parts
-    return DDouble(std::trunc(x.hi()), std::trunc(x.lo()));
-}
 
-inline DDouble ceil(DDouble x)
+namespace _internal {
+
+inline DDouble truncate(double (*dir)(double), DDouble x)
 {
-    // If hi was not an integer, we already found our answer
-    double hi = std::ceil(x.hi());
+    // If hi was not an integer, it means that rounding it up/down/towards zero
+    // already gives our answer.  This also covers NaN since then x != x.
+    // We cannot simply truncate both hi and lo since they may have opposite
+    // sign (trunc) or the same sign (ceil, floor)
+    double hi = dir(x.hi());
     if (hi != x.hi())
         return hi;
 
     // hi is an integer, so modify lo instead.  This may actually increase the
     // magnitude above the limit, so let's renormalize to be safe.
-    double lo = std::ceil(x.lo());
+    double lo = dir(x.lo());
     return ExDouble(x.hi()).add_small(lo);
 }
 
-inline DDouble floor(DDouble x)
-{
-    // If hi was not an integer, we already found our answer
-    double hi = std::floor(x.hi());
-    if (hi != x.hi())
-        return hi;
-
-    // hi is an integer, so modify lo instead.  This may actually increase the
-    // magnitude above the limit, so let's renormalize to be safe.
-    double lo = std::floor(x.lo());
-    return ExDouble(x.hi()).add_small(lo);
 }
+
+inline DDouble trunc(DDouble x) { return _internal::truncate(std::trunc, x); }
+
+inline DDouble ceil(DDouble x) { return _internal::truncate(std::ceil, x); }
+
+inline DDouble floor(DDouble x) { return _internal::truncate(std::floor, x); }
 
 inline DDouble round(DDouble x)
 {
-    // trunc is usually encoded with two instructions, so it makes sense
-    // to use this as a building block.
+    // trunc is fast, so it makes sense to use this as a building block.
     double nudge = std::copysign(0.5, x.hi());
     return trunc(x + nudge);
 }

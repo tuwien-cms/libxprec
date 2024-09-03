@@ -112,7 +112,7 @@ static DDouble sin_sector(DDouble x, int sector)
 {
     using xprec::numbers::pi_4;
     assert(sector >= 0 && sector < 4);
-    assert(fabs(x.hi()) <= nextafter(pi_4.hi(), 1));
+    assert(std::fabs(x.hi()) <= std::nextafter(pi_4.hi(), INFINITY));
 
     switch (sector) {
     case 0:

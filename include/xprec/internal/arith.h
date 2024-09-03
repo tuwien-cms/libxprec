@@ -30,7 +30,7 @@ inline DDouble ExDouble::add_small(double b) const
     double s = _x + b;
     double z = s - _x;
     double t = b - z;
-    assert (s + t == s);
+    assert (s + t == s || !std::isfinite(s));
     return DDouble(s, t);
 }
 
@@ -83,7 +83,7 @@ inline DDouble operator/(ExDouble a, ExDouble b)
     // Multiply hi part with b and compare exactly to a to see difference
     double rl = std::fma(-(double)b, th, (double)a);
     double tl = rl / (double)b;
-    assert(th + tl == th);
+    assert(th + tl == th || !std::isfinite(th));
     return DDouble(th, tl);
 }
 

@@ -84,3 +84,19 @@ TEST_CASE("nans", "[limits]")
         REQUIRE(dd_limits::signaling_NaN() != dd_limits::signaling_NaN());
     }
 }
+
+TEST_CASE("nextafter", "[limits]")
+{
+    REQUIRE(isinf(nextafter(+dd_limits::infinity(), +dd_limits::infinity())));
+    REQUIRE(isinf(nextafter(-dd_limits::infinity(), -dd_limits::infinity())));
+    REQUIRE(nextafter(+dd_limits::infinity(), -dd_limits::infinity())
+            == dd_limits::max());
+    REQUIRE(nextafter(-dd_limits::infinity(), +dd_limits::infinity())
+            == -dd_limits::max());
+
+    REQUIRE(nextafter(DDouble(1.0), DDouble(2.0)) > 1.0);
+    REQUIRE(nextafter(DDouble(1.0), DDouble(0.0)) < 1.0);
+
+    REQUIRE(nextafter(DDouble(1.0), DDouble(1.0, 1e-20)) > 1.0);
+    REQUIRE(nextafter(DDouble(1.0), DDouble(1.0, -1e-20)) < 1.0);
+}

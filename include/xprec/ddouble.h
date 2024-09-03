@@ -279,6 +279,7 @@ DDouble log(DDouble a);
 DDouble log1p(DDouble a);
 DDouble logb(DDouble a);
 DDouble modf(DDouble a, DDouble *b);
+DDouble nextafter(DDouble a, DDouble b);
 DDouble pow(DDouble a, DDouble b);
 DDouble pow(DDouble a, int b);
 DDouble round(DDouble a);
