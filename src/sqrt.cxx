@@ -31,40 +31,36 @@ DDouble sqrt(DDouble a)
     return y1;
 }
 
+static DDouble hypot_normalized(DDouble x)
+{
+    // computes sqrt(1 + x*x) with x >= 1
+    assert(x >= std::nextafter(1.0, -INFINITY));
+
+    // For very large arguments, we simply get x
+    if (x.hi() >= 2 / std::numeric_limits<double>::epsilon())
+        return x;
+
+    return sqrt((x * x).add_small(1.0));
+}
+
 XPREC_API_EXPORT
 DDouble hypot(DDouble x, DDouble y)
 {
-    using _internal::greater_in_magnitude;
+    // Handle special cases
+    if (isnan(x) || isnan(y))
+        return NAN;
 
-    // Make sure that the values are ordered by magnitude
-    if (!greater_in_magnitude(x, y)) {
+    // Make sure we have x >= y >= 0 (at least approximately)
+    x = abs(x);
+    y = abs(y);
+    if (y > x)
         swap(x, y);
-    }
 
-    // Check for infinities
-    if (!std::isfinite(x.hi())) {
-        return std::isnan(y.hi()) ? y : x;
-    }
-
-    // Splits the range in half
-    static const PowerOfTwo LARGE =
-        ldexp(PowerOfTwo(1), std::numeric_limits<double>::max_exponent / 2);
-    static const PowerOfTwo SMALL = reciprocal(LARGE);
-
-    if (greater_in_magnitude(x, LARGE)) {
-        // For large values, scale down to avoid overflow
-        x *= SMALL;
-        y *= SMALL;
-        return sqrt((x * x).add_small(y * y)) * LARGE;
-    } else if (greater_in_magnitude(SMALL, x)) {
-        // For small values, scale up to avoid underflow
-        x *= LARGE;
-        y *= LARGE;
-        return sqrt((x * x).add_small(y * y)) * SMALL;
-    } else {
-        // We're fine
-        return sqrt((x * x).add_small(y * y));
-    }
+    // Rescale and use inner function
+    if (y == 0)
+        return x;
+    else
+        return y * hypot_normalized(x / y);
 }
 
 XPREC_API_EXPORT

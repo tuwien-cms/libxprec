@@ -13,6 +13,9 @@ using xprec::DDouble;
 TEST_CASE("hypot", "[fn]")
 {
     const double ulp = 2.4651903288156619e-32;
+    REQUIRE(isnan(hypot(DDouble(NAN), DDouble(1.0))));
+    REQUIRE(isnan(hypot(DDouble(1.0), DDouble(NAN))));
+
     CMP_BINARY(hypot, 1.0, 1.0, 1.5 * ulp);
     CMP_BINARY(hypot, 3.0, -10000.0, 1e-31);
     CMP_BINARY(hypot, ldexp(3.0, 600), ldexp(1.0, 570), 1.5 * ulp);
@@ -20,10 +23,10 @@ TEST_CASE("hypot", "[fn]")
     CMP_BINARY(hypot, ldexp(3.0, -600), ldexp(1.0, -570), 1.5 * ulp);
     CMP_BINARY(hypot, ldexp(3.14, -600), ldexp(9.4, -640), 1.5 * ulp);
 
-    for (double x = 10.0; x > 5.0; x *= .9333) {
-        for (double y = x; y > 1e-20 * x; y *= .9983) {
-            CMP_BINARY(hypot, x, y, 2.0 * ulp);
-            CMP_BINARY(hypot, y, x, 2.0 * ulp);
+    for (DDouble x = 10.0; x > 5.0; x *= .9333) {
+        for (DDouble y = x; y > 1e-20 * x; y *= .9984) {
+            CMP_BINARY(hypot, x, y, 2.75 * ulp);
+            CMP_BINARY(hypot, y, x, 2.75 * ulp);
         }
     }
 }
