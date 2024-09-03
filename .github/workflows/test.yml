@@ -37,9 +37,10 @@ jobs:
           brew install mpfr catch2 eigen
 
       - name: CMake configure and build
-        uses: threeal/cmake-action@v1.3.0
+        uses: threeal/cmake-action@v2.0.0
         with:
-          options: XPREC_BUILD_TESTING=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
+          options: |
+            XPREC_BUILD_TESTING=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
           run-build: true
 
       - name: Run tests
