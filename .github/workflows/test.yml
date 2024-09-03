@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
           - os: macos-latest
           - os: windows-latest
 
@@ -29,7 +29,7 @@ jobs:
       - name: Install Linux dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install libmpfr-dev libeigen3-dev
+          sudo apt-get install libmpfr-dev libeigen3-dev catch2
 
       - name: Install MacOS dependencies
         if: startsWith(matrix.os, 'macos')
