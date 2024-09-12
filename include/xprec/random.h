@@ -30,7 +30,7 @@ template <typename Generator, typename Range>
 inline DDouble _generate_canonical(Generator &rng, Range range, size_t m)
 {
     if (m == 0)
-        return 0;
+        return 0.0;
 
     constexpr double max_exact = 1 / std::numeric_limits<double>::epsilon();
     DDouble sum = rng();

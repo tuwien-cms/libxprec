@@ -181,7 +181,7 @@ class ExDouble {
 public:
     constexpr ExDouble(double x) : _x(x) { }
 
-    constexpr operator double() const { return _x; }
+    constexpr explicit operator double() const { return _x; }
 
     friend ExDouble operator+(ExDouble a) { return ExDouble(+a._x); }
     friend ExDouble operator-(ExDouble a) { return ExDouble(-a._x); }
@@ -211,6 +211,7 @@ public:
     friend DDouble operator/(ExDouble a, double b);
 
     friend DDouble reciprocal(ExDouble y);
+    friend DDouble fma(ExDouble a, ExDouble b, ExDouble c);
 
 private:
     double _x;
