@@ -27,8 +27,9 @@ DDouble sqrt(DDouble a)
     //
     double x0_half = 0.5 / y0;
     double delta_y = x0_half * (std::fma(-y0, y0, a.hi()) + a.lo());
-    DDouble y1 = ExDouble(y0).add_small(delta_y);
-    return y1;
+
+    assert (y0 + delta_y == y0);
+    return DDouble(y0, delta_y);
 }
 
 XPREC_API_EXPORT
