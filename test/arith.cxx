@@ -193,10 +193,3 @@ TEST_CASE("Divide pow2", "[arith]")
     CMP_BINARY(operator/, 1, 137, 1e-31);
     REQUIRE_THAT(reciprocal(ExDouble(137)), WithinRel(MPFloat(1) / 137, 1e-21));
 }
-
-TEST_CASE("trunc", "[round]")
-{
-    DDouble x(ldexp(1, 61), 0.5);
-    REQUIRE(round(x) == DDouble(ldexp(1, 61), 1));
-    REQUIRE(round(-x) == DDouble(-ldexp(1, 61), -1));
-}

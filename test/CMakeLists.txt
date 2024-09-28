@@ -29,6 +29,7 @@ add_executable(tests
     limits.cxx
     mpfloat.cxx
     random.cxx
+    round.cxx
     sqrt.cxx
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
