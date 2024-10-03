@@ -105,7 +105,7 @@ static DDouble remainder_pi2(DDouble x, int &sector)
     sector = n_int % 4;
     if (sector < 0)
         sector += 4;
-    return x - pi_half * n;
+    return x.add_small(-pi_half * n);
 }
 
 static DDouble sin_sector(DDouble x, int sector)
