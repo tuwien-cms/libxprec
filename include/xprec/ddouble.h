@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
+#include <type_traits>
 
 #include "version.h"
 
