@@ -57,12 +57,7 @@ inline DDouble operator+(ExDouble a, ExDouble b)
 // We must place this here rather than in-place in the class, because
 // the type DDouble is still incomplete
 
-inline DDouble operator+(double a, ExDouble b) { return ExDouble(a) + b; }
-inline DDouble operator+(ExDouble a, double b) { return a + ExDouble(b); }
-
 inline DDouble operator-(ExDouble a, ExDouble b) { return a + (-b); }
-inline DDouble operator-(ExDouble a, double b) { return a + (-b); }
-inline DDouble operator-(double a, ExDouble b) { return a + (-b); }
 
 inline DDouble operator*(ExDouble a, ExDouble b)
 {
@@ -71,9 +66,6 @@ inline DDouble operator*(ExDouble a, ExDouble b)
     double rho = std::fma((double)a, (double)b, -pi);
     return DDouble(pi, rho);
 }
-
-inline DDouble operator*(double a, ExDouble b) { return ExDouble(a) * b; }
-inline DDouble operator*(ExDouble a, double b) { return a * ExDouble(b); }
 
 inline DDouble operator/(ExDouble a, ExDouble b)
 {
@@ -87,8 +79,6 @@ inline DDouble operator/(ExDouble a, ExDouble b)
     return DDouble(th, tl);
 }
 
-inline DDouble operator/(double a, ExDouble b) { return ExDouble(a) / b; }
-inline DDouble operator/(ExDouble a, double b) { return a / ExDouble(b); }
 inline DDouble reciprocal(ExDouble y) { return 1.0 / y; }
 
 // -------------------------------------------------------------------------

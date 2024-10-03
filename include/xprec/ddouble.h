@@ -184,20 +184,9 @@ public:
     DDouble add_small(DDouble b) const;
 
     friend DDouble operator+(ExDouble a, ExDouble b);
-    friend DDouble operator+(double a, ExDouble b);
-    friend DDouble operator+(ExDouble a, double b);
-
     friend DDouble operator-(ExDouble a, ExDouble b);
-    friend DDouble operator-(ExDouble a, double b);
-    friend DDouble operator-(double a, ExDouble b);
-
     friend DDouble operator*(ExDouble a, ExDouble b);
-    friend DDouble operator*(double a, ExDouble b);
-    friend DDouble operator*(ExDouble a, double b);
-
     friend DDouble operator/(ExDouble a, ExDouble b);
-    friend DDouble operator/(double a, ExDouble b);
-    friend DDouble operator/(ExDouble a, double b);
 
     friend DDouble reciprocal(ExDouble y);
     friend DDouble fma(ExDouble a, ExDouble b, ExDouble c);
