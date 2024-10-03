@@ -61,6 +61,16 @@ inline bool greater_in_magnitude(double x, DDouble y)
     return greater_in_magnitude(x, y.hi());
 }
 
+inline bool greater_in_magnitude(DDouble x, PowerOfTwo y)
+{
+    return greater_in_magnitude(x, static_cast<DDouble>(y));
+}
+
+inline bool greater_in_magnitude(PowerOfTwo x, DDouble y)
+{
+    return greater_in_magnitude(static_cast<DDouble>(x), y);
+}
+
 /**
  * Extract bits of the mantissa
  */

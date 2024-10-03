@@ -20,6 +20,8 @@ inline PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b) { return a._x * b._x; }
 
 inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b) { return a._x / b._x; }
 
+inline PowerOfTwo operator==(PowerOfTwo a, PowerOfTwo b) { return a._x == b._x; }
+
 // -------------------------------------------------------------------------
 // ExDouble
 

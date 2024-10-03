@@ -53,7 +53,10 @@ public:
     constexpr DDouble(uint32_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(int16_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(uint16_t x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(long x) : _hi((double)x), _lo((long double)x - _hi) { }
+
+    // Only define this constructor if long is not the same as int64_t
+    template <typename T = long, typename std::enable_if<!std::is_same<T, int64_t>::value>::type* = nullptr>
+    constexpr DDouble(T x) : _hi((double)x), _lo((long double)x - _hi) { }
 
     // Ensure that trivially_*_constructible work.
     DDouble() = default;
@@ -235,6 +238,7 @@ public:
 
     friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
     friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
+    friend PowerOfTwo operator==(PowerOfTwo a, PowerOfTwo b);
 
     friend double operator*(PowerOfTwo a, double b) { return (double)a * b; }
     friend double operator*(double a, PowerOfTwo b) { return a * (double)b; }
