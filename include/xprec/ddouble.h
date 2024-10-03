@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
+#include <type_traits>
 
 #include "version.h"
 
@@ -45,14 +46,13 @@ public:
     constexpr DDouble(double x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
 
-    // TODO: requires extended precision to work.
-    constexpr DDouble(int64_t x) : _hi((double)x), _lo((long double)x - _hi) { }
-    constexpr DDouble(uint64_t x)
-        : _hi((double)x), _lo((long double)x - _hi) { }
-    constexpr DDouble(int32_t x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(uint32_t x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(int16_t x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(uint16_t x) : _hi(x), _lo(0.0) { }
+    template <typename T, 
+              typename std::enable_if<std::is_integral<T>::value,
+                                      bool>::type = true>
+    constexpr DDouble(T x)
+        : _hi((double)x)
+        , _lo(sizeof(T) < sizeof(double) ? 0.0 : (long double)x - _hi) 
+    { }
 
     // Ensure that trivially_*_constructible work.
     DDouble() = default;
