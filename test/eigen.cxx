@@ -35,4 +35,15 @@ TEST_CASE("Singular values", "[svd]")
 
     Eigen::JacobiSVD<decltype(A)> svd;
     svd.compute(A, Eigen::ComputeThinU | Eigen::ComputeThinV);
+
+    auto U = svd.matrixU();
+    auto V = svd.matrixV();
+    auto S = svd.singularValues().asDiagonal();
+
+    auto A_reconstructed = U * S * V.transpose();
+
+    auto diff = A - A_reconstructed;
+
+    auto reconstruction_error = diff.norm();
+    REQUIRE(reconstruction_error < 1e-29);
 }
