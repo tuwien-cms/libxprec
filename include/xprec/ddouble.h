@@ -53,6 +53,7 @@ public:
     constexpr DDouble(uint32_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(int16_t x) : _hi(x), _lo(0.0) { }
     constexpr DDouble(uint16_t x) : _hi(x), _lo(0.0) { }
+    constexpr DDouble(long x) : _hi((double)x), _lo((long double)x - _hi) { }
 
     // Ensure that trivially_*_constructible work.
     DDouble() = default;
