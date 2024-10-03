@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
-#include <type_traits>
 
 #include "version.h"
 
@@ -44,15 +43,6 @@ namespace xprec {
 class DDouble {
 public:
     constexpr DDouble(double x) : _hi(x), _lo(0.0) { }
-    constexpr DDouble(long double x) : _hi(x), _lo(x - _hi) { }
-
-    template <typename T, 
-              typename std::enable_if<std::is_integral<T>::value,
-                                      bool>::type = true>
-    constexpr DDouble(T x)
-        : _hi((double)x)
-        , _lo(sizeof(T) < sizeof(double) ? 0.0 : (long double)x - _hi) 
-    { }
 
     // Ensure that trivially_*_constructible work.
     DDouble() = default;
@@ -76,8 +66,7 @@ public:
         return static_cast<T>(_hi) + static_cast<T>(_lo);
     }
 
-    // XXX this is a bit of a hack to make complex work on MacOS
-    constexpr explicit operator int() const { return this->as<int>(); }
+    constexpr explicit operator double() const { return _hi; }
 
     /** Get high part of a ddouble */
     constexpr double hi() const { return _hi; }
