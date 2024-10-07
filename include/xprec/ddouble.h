@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <limits>
+#include <string>
 
 #include "version.h"
 
@@ -276,6 +277,7 @@ bool isinf(DDouble x);
 bool isnan(DDouble x);
 bool isnormal(DDouble x);
 bool iszero(DDouble x);
+std::string to_string(DDouble d, size_t nDigits = 34);
 
 /**
  * Gauss-Chebyshev quadrature rule.
