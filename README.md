@@ -21,20 +21,20 @@ as follows:
   | /          |  3* flops |   1u² | 10* flops |   3u² |  28* flops |   6u² |
   | reciprocal |  3* flops |   1u² |           |       |  19* flops | 2.3u² |
 
-The error bounds are tight analytical bounds [^2], except in the case of
-double-double division, where the bound is 10u² but largest observed error
-is 6u², and double by double division, where we expect u².  We report the
-largest observed error here [^1]. * indicates the need for one or two double
-divisions, which are about an order of magnitude more expensive than regular
-flops on a modern CPU.
+The error bounds are mostly tight analytical bounds (except for divisions).[^1]
+An asterisk indicates the need for one or two double divisions, which are about
+an order of magnitude more expensive than regular flops on a modern CPU.
 
 The table can be distilled into two rules of thumb: double-double arithmetic
 roughly doubles the number of significant digits at the cost of a roughly
 15x slowdown compared to double arithmetic.
 
-[^1]: M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
-[^2]: J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022).
+[^1]: M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018) and
+      J.-M. Muller and L. Rideau, ACM Trans. Math. Softw. 48, 1, 9 (2022).
       The flop count has been reduced by 3 for divisons/reciprocals.
+      In the case of double-double division, the bound is 10u² but largest
+      observed error is 6u². In double by double division, we expect u². We
+      report the largest observed error.
 
 Usage
 -----
@@ -93,7 +93,8 @@ In order to use the library in CMake projects, we recommend using [FetchContent]
     include(FetchContent)
     FetchContent_Declare(XPrec
         GIT_REPOSITORY https://github.com/tuwien-cms/libxprec
-        GIT_TAG v0.5.0
+        GIT_TAG v0.6.0
+        FIND_PACKAGE_ARGS 0.6.0
         )
     FetchContent_MakeAvailable(XPrec)
 
