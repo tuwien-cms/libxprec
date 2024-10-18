@@ -19,18 +19,18 @@ find_package(MPFR REQUIRED)
 find_package(Eigen3 3.3)
 
 add_executable(tests
-    arith.cxx
-    circular.cxx
-    convert.cxx
-    exp.cxx
-    gauss.cxx
-    hyperbolic.cxx
-    inline.cxx
-    limits.cxx
-    mpfloat.cxx
-    random.cxx
-    round.cxx
-    sqrt.cxx
+    arith.cpp
+    circular.cpp
+    convert.cpp
+    exp.cpp
+    gauss.cpp
+    hyperbolic.cpp
+    inline.cpp
+    limits.cpp
+    mpfloat.cpp
+    random.cpp
+    round.cpp
+    sqrt.cpp
     )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)
@@ -38,7 +38,7 @@ target_link_libraries(tests PRIVATE XPrec::xprec)
 target_compile_options(tests PRIVATE -Wall -Wextra)
 
 if (TARGET Eigen3::Eigen)
-    target_sources(tests PRIVATE eigen.cxx)
+    target_sources(tests PRIVATE eigen.cpp)
     target_link_libraries(tests PRIVATE Eigen3::Eigen)
 endif()
 

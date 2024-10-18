@@ -41,7 +41,7 @@ Usage
 Simple example:
 
     #include <iostream>
-    #include <xprec/ddouble.h>
+    #include <xprec/ddouble.hpp>
 
     int main()
     {
@@ -81,7 +81,7 @@ libxprec can also be used in header-only mode, which does not require
 installation. For this, simply drop the full libxprec directory into your project
 and use the following header:
 
-    #include "libxprec/include/xprec/ddouble-header-only.h"
+    #include "libxprec/include/xprec/ddouble-header-only.hpp"
 
 Please note that this will likely lead to considerably longer compile times.
 

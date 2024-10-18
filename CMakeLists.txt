@@ -30,13 +30,13 @@ project(
 # Building
 
 add_library(xprec SHARED
-    src/circular.cxx
-    src/exp.cxx
-    src/floats.cxx
-    src/gauss.cxx
-    src/hyperbolic.cxx
-    src/io.cxx
-    src/sqrt.cxx
+    src/circular.cpp
+    src/exp.cpp
+    src/floats.cpp
+    src/gauss.cpp
+    src/hyperbolic.cpp
+    src/io.cpp
+    src/sqrt.cpp
     )
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
