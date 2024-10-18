@@ -30,6 +30,7 @@ project(
 # Building
 
 add_library(xprec SHARED
+    src/cinterface.cpp
     src/circular.cpp
     src/exp.cpp
     src/floats.cpp
