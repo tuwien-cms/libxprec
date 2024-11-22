@@ -147,9 +147,9 @@ TEST_CASE("divqq stress test", "[arith]")
 
 TEST_CASE("pow2", "[arith]")
 {
-    REQUIRE(PowerOfTwo(4.0) * PowerOfTwo(-8.0) == PowerOfTwo(-32.0));
-    REQUIRE(PowerOfTwo(16.0) / PowerOfTwo(64.0) == PowerOfTwo(0.25));
-    REQUIRE(reciprocal(PowerOfTwo(8.0)) == PowerOfTwo(0.125));
+    REQUIRE_THAT(PowerOfTwo(4.0) * PowerOfTwo(-8.0), Equals<PowerOfTwo>(-32.0));
+    REQUIRE_THAT(PowerOfTwo(16.0) / PowerOfTwo(64.0), Equals<PowerOfTwo>(0.25));
+    REQUIRE_THAT(reciprocal(PowerOfTwo(8.0)), Equals<PowerOfTwo>(0.125));
 }
 
 TEST_CASE("Relational", "[rel]")
@@ -161,15 +161,15 @@ TEST_CASE("Relational", "[rel]")
 
 TEST_CASE("MinMax", "[rel]")
 {
-    REQUIRE(fmin(DDouble(1.0), DDouble(2.5)) == 1.0);
-    REQUIRE(fmin(DDouble(2.0), DDouble(-4.0)) == -4.0);
-    REQUIRE(fmin(DDouble(NAN), DDouble(100.0)) == 100);
-    REQUIRE(fmin(DDouble(50.0), DDouble(NAN)) == 50);
+    REQUIRE_THAT(fmin(DDouble(1.0), DDouble(2.5)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(fmin(DDouble(2.0), DDouble(-4.0)), Equals<DDouble>(-4.0));
+    REQUIRE_THAT(fmin(DDouble(NAN), DDouble(100.0)), Equals<DDouble>(100));
+    REQUIRE_THAT(fmin(DDouble(50.0), DDouble(NAN)), Equals<DDouble>(50));
 
-    REQUIRE(fmax(DDouble(1.0), DDouble(2.5)) == 2.5);
-    REQUIRE(fmax(DDouble(2.0), DDouble(-4.0)) == 2.0);
-    REQUIRE(fmax(DDouble(NAN), DDouble(100.0)) == 100);
-    REQUIRE(fmax(DDouble(50.0), DDouble(NAN)) == 50);
+    REQUIRE_THAT(fmax(DDouble(1.0), DDouble(2.5)), Equals<DDouble>(2.5));
+    REQUIRE_THAT(fmax(DDouble(2.0), DDouble(-4.0)), Equals<DDouble>(2.0));
+    REQUIRE_THAT(fmax(DDouble(NAN), DDouble(100.0)), Equals<DDouble>(100));
+    REQUIRE_THAT(fmax(DDouble(50.0), DDouble(NAN)), Equals<DDouble>(50));
 }
 
 TEST_CASE("Mul", "[arith]")
@@ -183,7 +183,7 @@ TEST_CASE("Mul", "[arith]")
 
 TEST_CASE("Divide", "[arith]")
 {
-    REQUIRE((DDouble(3) / DDouble(2)).as<double>() == 1.5);
+    REQUIRE_THAT((DDouble(3) / DDouble(2)).as<double>(), Equals<DDouble>(1.5));
     CMP_BINARY(operator/, 3, 4, 1e-31);
     CMP_BINARY(operator/, -149, 53.25, 1e-30);
 }

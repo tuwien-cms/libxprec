@@ -77,6 +77,25 @@ private:
     R _margin;
 };
 
+template <typename M, typename T>
+class EqualsMatcher : public Catch::Matchers::MatcherBase<M> {
+public:
+    EqualsMatcher(const T &target) : _target(target) { }
+
+    bool match(const M &matchee) const override
+    {
+        return matchee == _target;
+    }
+
+    std::string describe() const override
+    {
+        return "is equal to " + ::Catch::Detail::stringify(_target);
+    }
+
+private:
+    T _target;
+};
+
 template <typename T, typename R>
 WithinAbsMatcher<T, R> WithinAbs(const T &target, const R &margin)
 {
@@ -90,4 +109,10 @@ WithinAbsMatcher<T, decltype(R() * abs(T()))> WithinRel(const T &target,
     using std::abs;
     auto margin = eps * abs(target);
     return WithinAbsMatcher<T, decltype(margin)>(target, margin);
+}
+
+template <typename M, typename T>
+EqualsMatcher<M,T> Equals(const T &target)
+{
+    return EqualsMatcher<M,T>(target);
 }

@@ -47,7 +47,7 @@ TEST_CASE("exp", "[exp]")
             CMP_UNARY(exp, -x, 2.0 * ulp);
     }
 
-    REQUIRE(exp(DDouble(-1000)) == 0);
+    REQUIRE_THAT(exp(DDouble(-1000)), Equals<DDouble>(0));
 }
 
 TEST_CASE("expm1", "[exp]")

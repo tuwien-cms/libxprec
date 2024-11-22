@@ -19,8 +19,8 @@ TEST_CASE("epsilon", "[limits]")
     const DDouble almost_one(1.0, eps_d/2);
     REQUIRE(almost_one + dd_limits::epsilon() != almost_one);
     REQUIRE(almost_one - dd_limits::epsilon() != almost_one);
-    REQUIRE(almost_one + PowerOfTwo(0.25) * dd_limits::epsilon() == almost_one);
-    REQUIRE(almost_one - PowerOfTwo(0.25) * dd_limits::epsilon() == almost_one);
+    REQUIRE_THAT(almost_one + PowerOfTwo(0.25) * dd_limits::epsilon(), Equals<DDouble>(almost_one));
+    REQUIRE_THAT(almost_one - PowerOfTwo(0.25) * dd_limits::epsilon(), Equals<DDouble>(almost_one));
 }
 
 TEST_CASE("lohi", "[limits]")
@@ -32,13 +32,13 @@ TEST_CASE("lohi", "[limits]")
             dd_limits::max());
     REQUIRE(dd_limits::max() > 0);
     REQUIRE(isfinite(dd_limits::max() * smaller));
-    REQUIRE(dd_limits::max() + 0.0 == dd_limits::max());
+    REQUIRE_THAT(dd_limits::max() + 0.0, Equals<DDouble>(dd_limits::max()));
 
     REQUIRE(ExDouble(dd_limits::lowest().hi()) + dd_limits::lowest().lo() ==
             dd_limits::lowest());
     REQUIRE(dd_limits::lowest() < 0);
     REQUIRE(isfinite(dd_limits::lowest() * smaller));
-    REQUIRE(dd_limits::lowest() + 0.0 == dd_limits::lowest());
+    REQUIRE_THAT(dd_limits::lowest() + 0.0, Equals<DDouble>(dd_limits::lowest()));
 
     REQUIRE(dd_limits::min() > 0);
     REQUIRE(isnormal(dd_limits::min()));
@@ -47,7 +47,7 @@ TEST_CASE("lohi", "[limits]")
 
     REQUIRE(dd_limits::denorm_min() > 0);
     REQUIRE(!isnormal(dd_limits::denorm_min()));
-    REQUIRE(0.49 * dd_limits::denorm_min() == 0);
+    REQUIRE_THAT(0.49 * dd_limits::denorm_min(), Equals<DDouble>(0));
 }
 
 TEST_CASE("infs", "[limits]")
