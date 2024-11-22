@@ -1,7 +1,7 @@
 # Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
 #
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.9...3.31)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # extract version information from header file

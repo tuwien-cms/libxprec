@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2023 Markus Wallerberger and others
 # SPDX-License-Identifier: MIT
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.9...3.31)
 
 # Function to extract version string from header file
 #
