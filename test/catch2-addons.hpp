@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 #pragma once
-#include "mpfloat.hpp"
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <catch2/matchers/catch_matchers_predicate.hpp>
 #include <iostream>
+
+#include "mpfloat.hpp"
 
 #define CMP_UNARY(fn, x, eps)                                                  \
     do {                                                                       \
@@ -116,3 +118,19 @@ EqualsMatcher<M,T> Equals(const T &target)
 {
     return EqualsMatcher<M,T>(target);
 }
+
+static auto IsPlusInf = Catch::Matchers::Predicate<DDouble>(
+        [] (DDouble x) -> bool { return x.hi() == INFINITY; },
+        "Must be +Infinity");
+static auto IsMinusInf = Catch::Matchers::Predicate<DDouble>(
+        [] (DDouble x) -> bool { return x.hi() == -INFINITY; },
+        "Must be -Infinity");
+static auto IsPlusZero = Catch::Matchers::Predicate<DDouble>(
+        [] (DDouble x) -> bool { return x.hi() == 0 && !std::signbit(x.hi()); },
+        "Must be +0.0");
+static auto IsMinusZero = Catch::Matchers::Predicate<DDouble>(
+        [] (DDouble x) -> bool { return x.hi() == 0 && std::signbit(x.hi()); },
+        "Must be -0.0");
+static auto IsNaN = Catch::Matchers::Predicate<DDouble>(
+        [] (DDouble x) -> bool { return isnan(x); },
+        "Must be NAN");

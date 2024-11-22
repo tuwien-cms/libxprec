@@ -22,9 +22,9 @@ TEST_CASE("trunc", "[round]")
     REQUIRE_THAT(trunc(DDouble(-2, +u/2)), Equals<DDouble>(-1));
     REQUIRE_THAT(trunc(DDouble(-2, -u/2)), Equals<DDouble>(-2));
 
-    REQUIRE(isinf(trunc(DDouble(INFINITY))));
-    REQUIRE(isinf(trunc(DDouble(-INFINITY))));
-    REQUIRE(isnan(trunc(DDouble(NAN))));
+    REQUIRE_THAT(trunc(DDouble(INFINITY)), IsPlusInf);
+    REQUIRE_THAT(trunc(DDouble(-INFINITY)), IsMinusInf);
+    REQUIRE_THAT(trunc(DDouble(NAN)), IsNaN);
 }
 
 TEST_CASE("ceil", "[round]")
@@ -40,9 +40,9 @@ TEST_CASE("ceil", "[round]")
     REQUIRE_THAT(ceil(DDouble(-2, +u/2)), Equals<DDouble>(-1));
     REQUIRE_THAT(ceil(DDouble(-2, -u/2)), Equals<DDouble>(-2));
 
-    REQUIRE(isinf(ceil(DDouble(INFINITY))));
-    REQUIRE(isinf(ceil(DDouble(-INFINITY))));
-    REQUIRE(isnan(ceil(DDouble(NAN))));
+    REQUIRE_THAT(ceil(DDouble(INFINITY)), IsPlusInf);
+    REQUIRE_THAT(ceil(DDouble(-INFINITY)), IsMinusInf);
+    REQUIRE_THAT(ceil(DDouble(NAN)), IsNaN);
 }
 
 TEST_CASE("floor", "[round]")
@@ -58,7 +58,7 @@ TEST_CASE("floor", "[round]")
     REQUIRE_THAT(floor(DDouble(-2, +u/2)), Equals<DDouble>(-2));
     REQUIRE_THAT(floor(DDouble(-2, -u/2)), Equals<DDouble>(-3));
 
-    REQUIRE(isinf(floor(DDouble(INFINITY))));
-    REQUIRE(isinf(floor(DDouble(-INFINITY))));
-    REQUIRE(isnan(floor(DDouble(NAN))));
+    REQUIRE_THAT(floor(DDouble(INFINITY)), IsPlusInf);
+    REQUIRE_THAT(floor(DDouble(-INFINITY)), IsMinusInf);
+    REQUIRE_THAT(floor(DDouble(NAN)), IsNaN);
 }
