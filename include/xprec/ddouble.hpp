@@ -260,7 +260,6 @@ DDouble logb(DDouble a);
 DDouble modf(DDouble a, DDouble *b);
 DDouble nextafter(DDouble a, DDouble b);
 DDouble pow(DDouble a, DDouble b);
-DDouble pow(DDouble a, int b);
 DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
 DDouble sin(DDouble a);

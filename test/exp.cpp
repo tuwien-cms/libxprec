@@ -25,6 +25,43 @@ TEST_CASE("pow", "[fn]")
                  WithinRel(pow(DDouble(-2.25), 100), 1e-30));
 }
 
+TEST_CASE("pow special", "[pow]")
+{
+    // pow(anything, +-0) == 1
+    REQUIRE_THAT(pow(DDouble(+0.0), -0.0), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(DDouble(+14.0), +0.0), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(DDouble(-77.0), -0.0), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(DDouble(INFINITY), -0.0), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(DDouble(-INFINITY), 0.0), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(DDouble(NAN), 0.0), Equals<DDouble>(1.0));
+
+    // pow(1, anything) == 1
+    REQUIRE_THAT(pow(1.0, DDouble(0.0)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(1.0, DDouble(-0.0)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(1.0, DDouble(-119139.0)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(1.0, DDouble(INFINITY)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(1.0, DDouble(-INFINITY)), Equals<DDouble>(1.0));
+    REQUIRE_THAT(pow(1.0, DDouble(NAN)), Equals<DDouble>(1.0));
+
+    // pow(+-0, -odd) == +-inf
+    REQUIRE_THAT(pow(DDouble(+0.0), -5.0), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(+0.0), -17.0), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -3.0), IsMinusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -1e15 + 1), IsMinusInf);
+
+    // pow(+-0, -[non-odd]) == +inf
+    REQUIRE_THAT(pow(DDouble(+0.0), -4.0), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(+0.0), -1e200), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -1e15 + 2), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -1e100), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -2.1), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -2.95), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -3.1), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -3.8), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(+0.0), -INFINITY), IsPlusInf);
+    REQUIRE_THAT(pow(DDouble(-0.0), -INFINITY), IsPlusInf);
+}
+
 TEST_CASE("exp", "[exp]")
 {
     const double ulp = 2.4651903288156619e-32;
