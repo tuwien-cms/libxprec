@@ -40,10 +40,9 @@ jobs:
         uses: threeal/cmake-action@v2.0.0
         with:
           options: |
-            XPREC_BUILD_TESTING=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
+            XPREC_BUILD_TESTING='ON'
           run-build: true
 
       - name: Run tests
-        if: (!startsWith(matrix.os, 'windows'))
         run: |
           build/test/tests
