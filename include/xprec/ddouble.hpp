@@ -147,8 +147,6 @@ public:
 
     friend void swap(DDouble &x, DDouble &y);
 
-    friend std::ostream &operator<<(std::ostream &out, DDouble x);
-
 private:
     double _hi;
     double _lo;
@@ -236,38 +234,39 @@ private:
 // "using std::sin" and then call "sin".
 
 DDouble abs(DDouble a);
-DDouble acos(DDouble a);
-DDouble acosh(DDouble a);
-DDouble asin(DDouble a);
-DDouble asinh(DDouble a);
-DDouble atan(DDouble a);
-DDouble atan2(DDouble a, DDouble b);
-DDouble atanh(DDouble a);
 DDouble ceil(DDouble a);
-DDouble cos(DDouble a);
-DDouble cosh(DDouble a);
-DDouble exp(DDouble a);
-DDouble expm1(DDouble a);
 DDouble fabs(DDouble a);
 DDouble fmax(DDouble a, DDouble b);
 DDouble fmin(DDouble a, DDouble b);
 DDouble floor(DDouble a);
-DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
-DDouble log(DDouble a);
-DDouble log1p(DDouble a);
 DDouble logb(DDouble a);
-DDouble modf(DDouble a, DDouble *b);
-DDouble nextafter(DDouble a, DDouble b);
-DDouble pow(DDouble a, DDouble b);
-DDouble pow(DDouble a, int b);
 DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
-DDouble sin(DDouble a);
-DDouble sinh(DDouble a);
-DDouble sqrt(DDouble a);
-DDouble tan(DDouble a);
-DDouble tanh(DDouble a);
+
+XPREC_API_EXPORT DDouble acos(DDouble a);
+XPREC_API_EXPORT DDouble acosh(DDouble a);
+XPREC_API_EXPORT DDouble asin(DDouble a);
+XPREC_API_EXPORT DDouble asinh(DDouble a);
+XPREC_API_EXPORT DDouble atan(DDouble a);
+XPREC_API_EXPORT DDouble atan2(DDouble a, DDouble b);
+XPREC_API_EXPORT DDouble atanh(DDouble a);
+XPREC_API_EXPORT DDouble cos(DDouble a);
+XPREC_API_EXPORT DDouble cosh(DDouble a);
+XPREC_API_EXPORT DDouble exp(DDouble a);
+XPREC_API_EXPORT DDouble expm1(DDouble a);
+XPREC_API_EXPORT DDouble hypot(DDouble a, DDouble b);
+XPREC_API_EXPORT DDouble log(DDouble a);
+XPREC_API_EXPORT DDouble log1p(DDouble a);
+XPREC_API_EXPORT DDouble modf(DDouble a, DDouble *b);
+XPREC_API_EXPORT DDouble nextafter(DDouble a, DDouble b);
+XPREC_API_EXPORT DDouble pow(DDouble a, DDouble b);
+XPREC_API_EXPORT DDouble pow(DDouble a, int b);
+XPREC_API_EXPORT DDouble sin(DDouble a);
+XPREC_API_EXPORT DDouble sinh(DDouble a);
+XPREC_API_EXPORT DDouble sqrt(DDouble a);
+XPREC_API_EXPORT DDouble tan(DDouble a);
+XPREC_API_EXPORT DDouble tanh(DDouble a);
 
 int fpclassify(DDouble x);
 int ilogb(DDouble x);
@@ -277,6 +276,9 @@ bool isnan(DDouble x);
 bool isnormal(DDouble x);
 bool iszero(DDouble x);
 
+XPREC_API_EXPORT std::ostream &operator<<(std::ostream &out, DDouble x);
+
+
 /**
  * Gauss-Chebyshev quadrature rule.
  *
@@ -285,7 +287,7 @@ bool iszero(DDouble x);
  * the n-th Chebyshev polynomial. If w is given, store the quadrature weights
  * there.
  */
-void gauss_chebyshev(int n, DDouble x[], DDouble w[] = nullptr);
+XPREC_API_EXPORT void gauss_chebyshev(int n, DDouble x[], DDouble w[] = nullptr);
 
 /**
  * Gauss-Legendre quadrature rule.
@@ -294,10 +296,10 @@ void gauss_chebyshev(int n, DDouble x[], DDouble w[] = nullptr);
  * the Gauss-Legendre quadrature nodes of order n, i.e., the roots of the n-th
  * Legendre polynomial. If w is given, store the quadrature weights there.
  */
-void gauss_legendre(int n, DDouble x[], DDouble w[] = nullptr);
+XPREC_API_EXPORT void gauss_legendre(int n, DDouble x[], DDouble w[] = nullptr);
 
 /** Trigonometric complement sqrt(1 - x*x) to full precision. */
-DDouble trig_complement(DDouble x);
+XPREC_API_EXPORT DDouble trig_complement(DDouble x);
 
 } /* namespace xprec*/
 

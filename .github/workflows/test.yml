@@ -41,6 +41,7 @@ jobs:
         with:
           options: |
             XPREC_BUILD_TESTING='ON'
+            CMAKE_VERBOSE_MAKEFILE='ON'
           run-build: true
 
       - name: Run tests

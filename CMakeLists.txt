@@ -42,6 +42,16 @@ add_library(xprec SHARED
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
+if (MSVC)
+    cmake_minimum_required(VERSION 3.11..3.31)
+    target_compile_definitions(xprec PRIVATE
+        "XPREC_API_EXPORT=__declspec(dllexport)"
+        )
+    target_compile_definitions(xprec INTERFACE
+        "XPREC_API_EXPORT=__declspec(dllimport)"
+        )
+endif()
+
 target_include_directories(xprec PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
