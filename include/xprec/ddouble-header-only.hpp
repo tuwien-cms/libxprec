@@ -14,6 +14,7 @@
 // The strategy for header only use of ddouble is pretty simple:
 // conditionally inline globally defined functions and include the cxx files
 // directly.
+#undef XPREC_API_EXPORT
 #define XPREC_API_EXPORT static
 
 #include "../../src/circular.cpp"
