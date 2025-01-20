@@ -16,12 +16,12 @@
 
 #include "xprec/ddouble.hpp"
 
-using xprec::DDouble;
-
 /**
  * Class wrapping a MPFR object at certain precision.
  */
 class MPFloat {
+    using DDouble = xprec::DDouble;
+
 public:
     MPFloat()
     {

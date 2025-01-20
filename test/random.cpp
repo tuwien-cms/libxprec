@@ -3,10 +3,11 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "xprec/random.hpp"
+#include <catch2/catch_test_macros.hpp>
+
 #include "catch2-addons.hpp"
 #include "xprec/ddouble.hpp"
-#include <catch2/catch_test_macros.hpp>
+#include "xprec/random.hpp"
 
 using xprec::DDouble;
 

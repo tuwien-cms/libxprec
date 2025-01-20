@@ -3,8 +3,9 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "xprec/ddouble-header-only.hpp"
 #include <catch2/catch_test_macros.hpp>
+
+#include "xprec/ddouble-header-only.hpp"
 
 using xprec::DDouble;
 

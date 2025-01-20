@@ -6,51 +6,10 @@
 #pragma once
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <catch2/matchers/catch_matchers_predicate.hpp>
+
+#include <cmath>
 #include <iostream>
-
-#include "mpfloat.hpp"
-
-#define CMP_UNARY(fn, x, eps)                                                  \
-    do {                                                                       \
-        DDouble r_d = fn(DDouble(x));                                          \
-        MPFloat r_f = fn(MPFloat(x));                                          \
-        double eps_d = eps;                                                    \
-        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
-    } while (false)
-
-#define CMP_UNARY_ABS(fn, x, eps)                                              \
-    do {                                                                       \
-        DDouble r_d = fn(DDouble(x));                                          \
-        MPFloat r_f = fn(MPFloat(x));                                          \
-        double eps_d = eps;                                                    \
-        REQUIRE_THAT(r_d, WithinAbs(r_f, eps_d));                              \
-    } while (false)
-
-#define CMP_BINARY(fn, x, y, eps)                                              \
-    do {                                                                       \
-        DDouble r_d = fn(DDouble(x), DDouble(y));                              \
-        MPFloat r_f = fn(MPFloat(x), MPFloat(y));                              \
-        double eps_d = eps;                                                    \
-        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
-    } while (false)
-
-#define CMP_BINARY_1(fn, x, y, eps)                                            \
-    do {                                                                       \
-        DDouble r_d = fn(DDouble(x), y);                                       \
-        MPFloat r_f = fn(MPFloat(x), y);                                       \
-        double eps_d = eps;                                                    \
-        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
-    } while (false)
-
-#define CMP_BINARY_EX(fn, x, y, eps)                                           \
-    do {                                                                       \
-        DDouble r_d = fn(ExDouble(x), ExDouble(y));                            \
-        MPFloat r_f = fn(MPFloat(x), MPFloat(y));                              \
-        double eps_d = eps;                                                    \
-        REQUIRE_THAT(r_d, WithinRel(r_f, eps_d));                              \
-    } while (false)
-
-using std::abs;
+#include <xprec/ddouble.hpp>
 
 template <typename T, typename R>
 class WithinAbsMatcher : public Catch::Matchers::MatcherBase<T> {
@@ -119,18 +78,18 @@ EqualsMatcher<M,T> Equals(const T &target)
     return EqualsMatcher<M,T>(target);
 }
 
-static auto IsPlusInf = Catch::Matchers::Predicate<DDouble>(
-        [] (DDouble x) -> bool { return x.hi() == INFINITY; },
+static auto IsPlusInf = Catch::Matchers::Predicate<xprec::DDouble>(
+        [] (xprec::DDouble x) -> bool { return x.hi() == INFINITY; },
         "Must be +Infinity");
-static auto IsMinusInf = Catch::Matchers::Predicate<DDouble>(
-        [] (DDouble x) -> bool { return x.hi() == -INFINITY; },
+static auto IsMinusInf = Catch::Matchers::Predicate<xprec::DDouble>(
+        [] (xprec::DDouble x) -> bool { return x.hi() == -INFINITY; },
         "Must be -Infinity");
-static auto IsPlusZero = Catch::Matchers::Predicate<DDouble>(
-        [] (DDouble x) -> bool { return x.hi() == 0 && !std::signbit(x.hi()); },
+static auto IsPlusZero = Catch::Matchers::Predicate<xprec::DDouble>(
+        [] (xprec::DDouble x) -> bool { return x.hi() == 0 && !std::signbit(x.hi()); },
         "Must be +0.0");
-static auto IsMinusZero = Catch::Matchers::Predicate<DDouble>(
-        [] (DDouble x) -> bool { return x.hi() == 0 && std::signbit(x.hi()); },
+static auto IsMinusZero = Catch::Matchers::Predicate<xprec::DDouble>(
+        [] (xprec::DDouble x) -> bool { return x.hi() == 0 && std::signbit(x.hi()); },
         "Must be -0.0");
-static auto IsNaN = Catch::Matchers::Predicate<DDouble>(
-        [] (DDouble x) -> bool { return isnan(x); },
+static auto IsNaN = Catch::Matchers::Predicate<xprec::DDouble>(
+        [] (xprec::DDouble x) -> bool { return isnan(x); },
         "Must be NAN");

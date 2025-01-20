@@ -3,9 +3,9 @@
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "mpfloat.hpp"
-#include "catch2-addons.hpp"
 #include <catch2/catch_test_macros.hpp>
+
+#include "compare-mpfloat.hpp"
 
 TEST_CASE("basic", "[mpfr]")
 {

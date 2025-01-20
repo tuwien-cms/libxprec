@@ -3,14 +3,15 @@
  * Copyright (C) 2024Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
-#include "xprec/eigen.hpp"
-#include "catch2-addons.hpp"
-#include "xprec/ddouble.hpp"
 #include <catch2/catch_test_macros.hpp>
-
 #include <Eigen/Dense>
 
+#include "catch2-addons.hpp"
+#include "xprec/eigen.hpp"
+#include "xprec/ddouble.hpp"
+
 using Eigen::Dynamic;
+using xprec::DDouble;
 
 TEST_CASE("eigenvalues", "[eigen]")
 {
