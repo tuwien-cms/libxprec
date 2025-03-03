@@ -279,7 +279,7 @@ XPREC_API_EXPORT
 DDouble expm1(DDouble x)
 {
     // For small values, we call the expm1 kernel directly
-    if (std::fabs(x.hi()) < M_LN2 / 2)
+    if (std::fabs(x.hi()) < 0.34657359)
         return expm1_small(x);
 
     // Otherwise, we do a naive computation
