@@ -20,6 +20,7 @@ find_package(Eigen3 3.3)
 
 add_executable(tests
     arith.cpp
+    benchmarks.cpp
     circular.cpp
     convert.cpp
     exp.cpp
