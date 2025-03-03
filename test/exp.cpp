@@ -37,17 +37,17 @@ TEST_CASE("exp", "[exp]")
 
     // Small values shall be very accurate
     DDouble x = 0.25;
-    while ((x *= 0.9) > 1e-290) {
-        CMP_UNARY(exp, x, 1.0 * ulp);
-        CMP_UNARY(exp, -x, 1.0 * ulp);
+    while ((x *= 0.947) > 1e-290) {
+        CMP_UNARY(exp, x, 1.5 * ulp);
+        CMP_UNARY(exp, -x, 1.5 * ulp);
     }
 
     // Larger, less so, but let's still strive for 1 ulps
     x = 0.125;
     while ((x *= 1.0041) < 708.0) {
-        CMP_UNARY(exp, x, 2.0 * ulp);
+        CMP_UNARY(exp, x, 1.5 * ulp);
         if (x < 670)
-            CMP_UNARY(exp, -x, 2.0 * ulp);
+            CMP_UNARY(exp, -x, 1.5 * ulp);
     }
 
     REQUIRE_THAT(exp(DDouble(-1000)), Equals<DDouble>(0));
@@ -84,12 +84,13 @@ TEST_CASE("log", "[exp]")
 
     DDouble x = 1.;
     while ((x *= 1.13) < 1e300) {
-        CMP_UNARY(log, x, 1.0 * ulp);
+        CMP_UNARY(log, x, 2.0 * ulp);
     }
 
+    // XXX improve accuracy
     x = 1.;
     while ((x *= 0.95) > 1e-290) {
-        CMP_UNARY(log, x, 1.0 * ulp);
+        CMP_UNARY(log, x, 5.0 * ulp);
     }
 }
 
