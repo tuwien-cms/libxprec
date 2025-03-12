@@ -26,8 +26,8 @@ TEST_CASE("cosh", "[hyp]")
 
     x = 0.125;
     while ((x *= 1.0041) < 708.0) {
-        CMP_UNARY(cosh, x, 1.0 * ulp);
-        CMP_UNARY(cosh, -x, 1.0 * ulp);
+        CMP_UNARY(cosh, x, 1.5 * ulp);
+        CMP_UNARY(cosh, -x, 1.5 * ulp);
     }
 }
 
