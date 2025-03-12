@@ -43,7 +43,7 @@ inline DDouble expm1_kernel_taylor(DDouble x, int nquad, int n)
 static DDouble expm1_alphas(int n)
 {
     // For multiples of alpha = log(2)/128, precompute and store the
-    // exponential function in a table, from -64*alpha until 63*alpha
+    // exponential function in a table, from -64*alpha until 64*alpha
     static const DDouble EXPM1_ALPHAS[128] = {
         {-0.2928932188134525, 7.174684663993261e-18},
         {-0.2890536989154172, -8.038914457945122e-18},
@@ -172,11 +172,28 @@ static DDouble expm1_alphas(int n)
         {0.38390988196383197, -1.2193965356690036e-17},
         {0.3914243757719262, 6.4494025783679345e-18},
         {0.3989796725383111, 1.4880170372002426e-17},
-        {0.40657599381901544, 7.034914812136422e-18},
+        {0.40657599381901544, 7.034914812136422e-18}
         };
 
     assert(n >= -64 && n < 64);
     return EXPM1_ALPHAS[n + 64];
+}
+
+static DDouble expm1_small(int n, DDouble y)
+{
+    // Assuming a reduction mod α = log(2)/128:
+    //
+    //     x = n * α + y,
+    //
+    // the idea is to use the identity
+    //
+    //     expm1(x) = expm1(n * α) + exp(n * α) * expm1(y)
+    //
+    // to reduce the expansion order.
+    DDouble expm1_n = expm1_alphas(n);
+    DDouble exp_n = ExDouble(1.0).add_small(expm1_n);
+    DDouble expm1_y = expm1_kernel_taylor(y, 6, 10);
+    return expm1_n.add_small(expm1_y * exp_n);
 }
 
 static DDouble reduce_mod_alpha(DDouble x, double &n)
@@ -234,59 +251,60 @@ DDouble exp(DDouble x)
         else if (x.hi() > 0)
             return INFINITY;
         else
-            return 0;
+            return 0.0;
     }
 
     // We further split k = 128 * m + n, where `n` is between {0, ..., 127}
     // Then we have that:
     //
-    //     exp(x) = ldexp(1, m) * exp(n * ALPHA) * exp(y)
+    //     exp(x) = ldexp(1, m) * exp(n * ALPHA + y)
     //
     int m;
     int n = reduce_mod_128((int) k, m);
 
     PowerOfTwo exp_m = std::ldexp(1.0, m);
-    DDouble exp_n = ExDouble(1.0).add_small(expm1_alphas(n));
-    DDouble exp_y = ExDouble(1.0).add_small(expm1_kernel_taylor(y, 6, 10));
-    return exp_m * exp_n * exp_y;
-}
-
-static DDouble expm1_small(DDouble x)
-{
-    // Reduce mod α = log(2)/128 similar to exp:
-    //
-    //     x = k * α + y = n * α + y
-    //
-    double k;
-    DDouble y = reduce_mod_alpha(x, k);
-
-    int m;
-    int n = reduce_mod_128((int) k, m);
-    assert(m == 0);
-
-    // The idea is to use the identity
-    //
-    //     expm1(x) = expm1(n * α) + exp(n * α) * expm1(y)
-    //
-    // to reduce the expansion order.
-    DDouble expm1_n = expm1_alphas(n);
-    DDouble exp_n = ExDouble(1.0).add_small(expm1_n);
-    DDouble expm1_y = expm1_kernel_taylor(y, 6, 10);
-    return expm1_n.add_small(expm1_y * exp_n);
+    DDouble exp_y = ExDouble(1.0).add_small(expm1_small(n, y));
+    return exp_m * exp_y;
 }
 
 XPREC_API_EXPORT
 DDouble expm1(DDouble x)
 {
-    // For small values, we call the expm1 kernel directly
-    if (std::fabs(x.hi()) < 0.34657359)
-        return expm1_small(x);
+    // Again first reduce the argument x modulo α, i.e.:
+    //
+    //     x = k * α + y
+    //
+    double k;
+    DDouble y = reduce_mod_alpha(x, k);
 
-    // Otherwise, we do a naive computation
-    DDouble res = exp(x);
-    if (x.hi() < 75)
-        res -= 1.0;
-    return res;
+    // Now we perform checks for special values. Using not <= instead of >
+    // also catches NaNs.
+    const double MAX_ALPHA = 128 * 1024;
+    if (!(std::fabs(k) <= MAX_ALPHA)) {
+        if (isnan(x))
+            return x;
+        else if (x.hi() > 0)
+            return INFINITY;
+        else
+            return -1.0;
+    }
+
+    // We further split k = 128 * m + n, where `n` is between {0, ..., 127}
+    int m;
+    int n = reduce_mod_128((int) k, m);
+
+    // If m == 0, then it means we can and should use the expm1 kernel
+    // directly, otherwise it is okay to simply subtract 1.0
+    if (m == 0) {
+        return expm1_small(n, y);
+    } else {
+        PowerOfTwo exp_m = std::ldexp(1.0, m);
+        DDouble exp_y = ExDouble(1.0).add_small(expm1_small(n, y));
+        DDouble exp_x = exp_m * exp_y;
+
+        // XXX dispatch based on magnitude
+        return exp_x - 1.0;
+    }
 }
 
 XPREC_API_EXPORT
