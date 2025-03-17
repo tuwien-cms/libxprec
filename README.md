@@ -18,7 +18,7 @@ as follows:
   | add_small  |   3 flops |   0u² |   7 flops |   2u² |   17 flops |   3u² |
   | + -        |   6 flops |   0u² |  10 flops |   2u² |   20 flops |   3u² |
   | *          |   2 flops |   0u² |   6 flops |   2u² |    9 flops |   4u² |
-  | /          |  3* flops |   1u² | 10* flops |   3u² |  28* flops |   6u² |
+  | /          |  3* flops |   1u² |  7* flops |   3u² |  28* flops |   6u² |
   | reciprocal |  3* flops |   1u² |           |       |  19* flops | 2.3u² |
 
 The error bounds are mostly tight analytical bounds (except for divisions).[^1]

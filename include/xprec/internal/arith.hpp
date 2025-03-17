@@ -143,14 +143,23 @@ inline DDouble operator*(DDouble x, DDouble y)
 
 inline DDouble operator/(DDouble x, double y)
 {
-    // Algorithm 15: cost 10 flops, error 3 u^2
-    ExDouble th = x._hi / y;
-    DDouble pi = th * y;
-    double delta_h = x._hi - pi._hi;
-    double delta_tee = delta_h - pi._lo;
-    double delta = delta_tee + x._lo;
-    double tl = delta / y;
-    return th.add_small(tl);
+    // We could have used algorithm 15 here: cost 10 flops, error 3 u^2.
+    // It turns out however by using fma, we can reduce this to 7 flops:
+    //
+    //    x / y = (x.hi + x.lo) / y = x.hi / y + x.lo / y .
+    //
+    // Defining the th = double(x.hi / y), we can rewrite this further as:
+    //
+    //    x / y = th + (x.hi - th * y) / y + x.lo / y ,
+    //
+    // where the second term can be computed to double precision by fma, and
+    // the together with the third term they are scaled by u, so are safe to
+    // compute in double precision.
+    double th = x._hi / y;
+    double rl = std::fma(-y, (double)th, x._hi);
+    rl += x._lo;
+    double tl = rl / y;
+    return ExDouble(th).add_small(tl);
 }
 
 inline DDouble reciprocal(DDouble y)
