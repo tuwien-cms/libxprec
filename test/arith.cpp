@@ -60,6 +60,26 @@ TEST_CASE("arith ex", "[arith]")
     }
 }
 
+TEST_CASE("arith mixed", "[arith]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    for (DDouble x = 10.0; x > 5.0; x *= .9933) {
+        for (DDouble y = x; y > 1e-35; y *= .9383) {
+            REQUIRE_THAT(x + y.hi(), WithinRel(MPFloat(x) + y.hi(), 2*ulp));
+            REQUIRE_THAT(x.hi() + y, WithinRel(x.hi() + MPFloat(y), 2*ulp));
+
+            REQUIRE_THAT(x - y.hi(), WithinRel(MPFloat(x) - y.hi(), 2*ulp));
+            REQUIRE_THAT(x.hi() - y, WithinRel(x.hi() - MPFloat(y), 2*ulp));
+
+            REQUIRE_THAT(x * y.hi(), WithinRel(MPFloat(x) * y.hi(), 2*ulp));
+            REQUIRE_THAT(x.hi() * y, WithinRel(x.hi() * MPFloat(y), 2*ulp));
+
+            REQUIRE_THAT(x / y.hi(), WithinRel(MPFloat(x) / y.hi(), 3*ulp));
+            REQUIRE_THAT(y / x.hi(), WithinRel(MPFloat(y) / x.hi(), 3*ulp));
+        }
+    }
+}
+
 TEST_CASE("arith dbl-small", "[arith]")
 {
     const double ulp = 2.4651903288156619e-32;
