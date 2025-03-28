@@ -17,14 +17,31 @@ struct _xprec_ddouble {
 
 typedef struct _xprec_ddouble xprec_ddouble;
 
-xprec_ddouble xprec_add(xprec_ddouble a, xprec_ddouble b);
-xprec_ddouble xprec_sub(xprec_ddouble a, xprec_ddouble b);
-xprec_ddouble xprec_mul(xprec_ddouble a, xprec_ddouble b);
-xprec_ddouble xprec_div(xprec_ddouble a, xprec_ddouble b);
+inline xprec_ddouble xprec_addfast_dd(double a, double b);
+inline xprec_ddouble xprec_addfast_dq(double a, xprec_ddouble b);
+inline xprec_ddouble xprec_addfast_qd(xprec_ddouble a, double b);
+inline xprec_ddouble xprec_addfast_qq(xprec_ddouble a, xprec_ddouble b);
+
+inline xprec_ddouble xprec_add_dd(double a, double b);
+inline xprec_ddouble xprec_add_dq(double a, xprec_ddouble b);
+inline xprec_ddouble xprec_add_qd(xprec_ddouble a, double b);
+inline xprec_ddouble xprec_add_qq(xprec_ddouble a, xprec_ddouble b);
+
+inline xprec_ddouble xprec_mul_dd(double a, double b);
+inline xprec_ddouble xprec_mul_dq(double a, xprec_ddouble b);
+inline xprec_ddouble xprec_mul_qd(xprec_ddouble a, double b);
+inline xprec_ddouble xprec_mul_qq(xprec_ddouble a, xprec_ddouble b);
+
+inline xprec_ddouble xprec_div_dd(double a, double b);
+inline xprec_ddouble xprec_div_dq(double a, xprec_ddouble b);
+inline xprec_ddouble xprec_div_qd(xprec_ddouble a, double b);
+inline xprec_ddouble xprec_div_qq(xprec_ddouble a, xprec_ddouble b);
+
+inline xprec_ddouble xprec_reciprocal_d(double a);
+inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 
 xprec_ddouble xprec_pos(xprec_ddouble a);
 xprec_ddouble xprec_neg(xprec_ddouble a);
-xprec_ddouble xprec_reciprocal(xprec_ddouble a);
 
 xprec_ddouble xprec_abs(xprec_ddouble a);
 xprec_ddouble xprec_acos(xprec_ddouble a);
@@ -55,6 +72,8 @@ xprec_ddouble xprec_sinh(xprec_ddouble a);
 xprec_ddouble xprec_sqrt(xprec_ddouble a);
 xprec_ddouble xprec_tan(xprec_ddouble a);
 xprec_ddouble xprec_tanh(xprec_ddouble a);
+
+#include "internal/arith.h"
 
 #ifdef __cplusplus
 }
