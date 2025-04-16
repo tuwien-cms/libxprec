@@ -10,6 +10,7 @@
 #include <limits>
 
 #include "ddouble-fwd.hpp"
+#include "ddouble.h"
 
 namespace xprec {
 
@@ -59,6 +60,8 @@ public:
      */
     constexpr DDouble(double hi, double lo) : _hi(hi), _lo(lo) { }
 
+    constexpr DDouble(xprec_ddouble x) : _hi(x.hi), _lo(x.lo) { }
+
     /** Convert DDouble to different type */
     template <typename T>
     constexpr T as() const
@@ -66,6 +69,7 @@ public:
         return static_cast<T>(_hi) + static_cast<T>(_lo);
     }
 
+    constexpr operator xprec_ddouble() const { return xprec_ddouble{_hi, _lo}; }
     constexpr explicit operator double() const { return _hi; }
 
     /** Get high part of a ddouble */
@@ -79,71 +83,27 @@ public:
      *
      * WARNING: You must ensure that b is small than this in magnitude!
      */
-    DDouble add_small(double y);
+    DDouble add_small(double y) { return xprec_addfast_qd(*this, y); }
 
     /**
      * Add small number to this.
      *
      * WARNING: You must ensure that b is small than this in magnitude!
      */
-    DDouble add_small(DDouble y);
+    DDouble add_small(DDouble y) { return xprec_addfast_qq(*this, y); }
 
-    friend DDouble operator+(DDouble x, double y);
-    friend DDouble operator+(DDouble x, DDouble y);
-    friend DDouble operator+(double x, DDouble y) { return y + x; }
+    DDouble &operator+=(double y) { return *this = xprec_add_qd(*this, y); }
+    DDouble &operator-=(double y) { return *this = xprec_add_qd(*this, -y); }
+    DDouble &operator*=(double y) { return *this = xprec_mul_qd(*this, y); }
+    DDouble &operator/=(double y) { return *this = xprec_div_qd(*this, y); }
 
-    friend DDouble operator-(DDouble x, double y) { return x + (-y); }
-    friend DDouble operator-(double x, DDouble y) { return x + (-y); }
-    friend DDouble operator-(DDouble x, DDouble y) { return x + (-y); }
-
-    friend DDouble operator+(DDouble x) { return x; }
-    friend DDouble operator-(DDouble x) { return DDouble(-x._hi, -x._lo); }
-
-    friend DDouble operator*(DDouble x, double y);
-    friend DDouble operator*(DDouble x, DDouble y);
-    friend DDouble operator*(double x, DDouble y) { return y * x; }
-
-    friend DDouble operator/(double x, DDouble y);
-    friend DDouble operator/(DDouble x, double y);
-    friend DDouble operator/(DDouble x, DDouble y);
-
-    friend DDouble operator*(DDouble x, PowerOfTwo y);
-    friend DDouble operator*(PowerOfTwo x, DDouble y);
-    friend DDouble operator/(DDouble x, PowerOfTwo y);
-
-    friend DDouble reciprocal(DDouble y);
-
-    DDouble &operator+=(double y) { return *this = *this + y; }
-    DDouble &operator-=(double y) { return *this = *this - y; }
-    DDouble &operator*=(double y) { return *this = *this * y; }
-    DDouble &operator/=(double y) { return *this = *this / y; }
-
-    DDouble &operator+=(DDouble y) { return *this = *this + y; }
-    DDouble &operator-=(DDouble y) { return *this = *this - y; }
-    DDouble &operator*=(DDouble y) { return *this = *this * y; }
-    DDouble &operator/=(DDouble y) { return *this = *this / y; }
+    DDouble &operator+=(DDouble y) { return *this = xprec_add_qq(*this, y); }
+    DDouble &operator-=(DDouble y) { return *this = xprec_add_qq(*this, -y); }
+    DDouble &operator*=(DDouble y) { return *this = xprec_mul_qq(*this, y); }
+    DDouble &operator/=(DDouble y) { return *this = xprec_div_qq(*this, y); }
 
     DDouble &operator*=(PowerOfTwo y);
     DDouble &operator/=(PowerOfTwo y);
-
-    friend bool operator==(DDouble x, DDouble y);
-    friend bool operator!=(DDouble x, DDouble y);
-    friend bool operator<=(DDouble x, DDouble y);
-    friend bool operator<(DDouble x, DDouble y);
-    friend bool operator>=(DDouble x, DDouble y);
-    friend bool operator>(DDouble x, DDouble y);
-
-    friend bool operator==(DDouble x, double y) { return x == DDouble(y); }
-    friend bool operator!=(DDouble x, double y) { return x != DDouble(y); }
-    friend bool operator<=(DDouble x, double y) { return x <= DDouble(y); }
-    friend bool operator>=(DDouble x, double y) { return x >= DDouble(y); }
-    friend bool operator>(DDouble x, double y) { return x > DDouble(y); }
-
-    friend bool operator==(double x, DDouble y) { return DDouble(x) == y; }
-    friend bool operator!=(double x, DDouble y) { return DDouble(x) != y; }
-    friend bool operator<=(double x, DDouble y) { return DDouble(x) <= y; }
-    friend bool operator>=(double x, DDouble y) { return DDouble(x) >= y; }
-    friend bool operator>(double x, DDouble y) { return DDouble(x) > y; }
 
     friend void swap(DDouble &x, DDouble &y);
 
@@ -153,6 +113,46 @@ private:
     double _hi;
     double _lo;
 };
+
+DDouble operator+(DDouble x, double y) { return xprec_add_qd(x, y); }
+DDouble operator+(DDouble x, DDouble y) { return xprec_add_qq(x, y); }
+DDouble operator+(double x, DDouble y) { return  xprec_add_dq(x, y); }
+
+DDouble operator-(DDouble x, double y) { return xprec_add_qd(x, -y); }
+DDouble operator-(double x, DDouble y) { return xprec_add_dq(x, -y); }
+DDouble operator-(DDouble x, DDouble y) { return xprec_add_qq(x, -y); }
+
+DDouble operator+(DDouble x) { return x; }
+DDouble operator-(DDouble x) { return xprec_neg(x); }
+
+DDouble operator*(DDouble x, double y) { return xprec_mul_qd(x, y); }
+DDouble operator*(DDouble x, DDouble y) { return xprec_mul_qq(x, y); }
+DDouble operator*(double x, DDouble y) { return xprec_mul_dq(x, y); }
+
+DDouble operator/(double x, DDouble y) { return xprec_div_dq(x, y); }
+DDouble operator/(DDouble x, double y) { return xprec_div_qd(x, y); }
+DDouble operator/(DDouble x, DDouble y) { return xprec_div_qq(x, y); }
+
+DDouble reciprocal(DDouble y) { return xprec_reciprocal_q(y); }
+
+bool operator==(DDouble x, DDouble y);
+bool operator!=(DDouble x, DDouble y);
+bool operator<=(DDouble x, DDouble y);
+bool operator<(DDouble x, DDouble y);
+bool operator>=(DDouble x, DDouble y);
+bool operator>(DDouble x, DDouble y);
+
+bool operator==(DDouble x, double y) { return x == DDouble(y); }
+bool operator!=(DDouble x, double y) { return x != DDouble(y); }
+bool operator<=(DDouble x, double y) { return x <= DDouble(y); }
+bool operator>=(DDouble x, double y) { return x >= DDouble(y); }
+bool operator>(DDouble x, double y) { return x > DDouble(y); }
+
+bool operator==(double x, DDouble y) { return DDouble(x) == y; }
+bool operator!=(double x, DDouble y) { return DDouble(x) != y; }
+bool operator<=(double x, DDouble y) { return DDouble(x) <= y; }
+bool operator>=(double x, DDouble y) { return DDouble(x) >= y; }
+bool operator>(double x, DDouble y) { return DDouble(x) > y; }
 
 /**
  * Class wrapping a double, but marking it for extended precision computation
@@ -180,20 +180,20 @@ public:
      *
      * WARNING: You must ensure that b is small than this in magnitude!
      */
-    DDouble add_small(double b) const;
-    DDouble add_small(DDouble b) const;
+    DDouble add_small(double b) const { return xprec_addfast_dd(_x, b); }
+    DDouble add_small(DDouble b) const { return xprec_addfast_dq(_x, b); }
 
-    friend DDouble operator+(ExDouble a, ExDouble b);
-    friend DDouble operator-(ExDouble a, ExDouble b);
-    friend DDouble operator*(ExDouble a, ExDouble b);
-    friend DDouble operator/(ExDouble a, ExDouble b);
-
-    friend DDouble reciprocal(ExDouble y);
-    friend DDouble fma(ExDouble a, ExDouble b, ExDouble c);
 
 private:
     double _x;
 };
+
+DDouble operator+(ExDouble a, ExDouble b) { return xprec_add_dd((double)a, (double)b); }
+DDouble operator-(ExDouble a, ExDouble b) { return xprec_add_dd((double)a, -(double)b);}
+DDouble operator*(ExDouble a, ExDouble b) { return xprec_mul_dd((double)a, (double)b); }
+DDouble operator/(ExDouble a, ExDouble b) { return xprec_div_dd((double)a, (double)b); }
+
+DDouble reciprocal(ExDouble y) { return xprec_reciprocal_d((double)y); }
 
 /**
  * Class for wrapping a power of two.
@@ -208,10 +208,10 @@ public:
      *
      * WARNING: You MUST ensure that x is a power of two or zero.
      */
-    constexpr PowerOfTwo(double x) : _x(x) { }
+    constexpr explicit PowerOfTwo(double x) : _x(x) { }
 
-    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b);
-    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b);
+    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo(a._x* b._x); }
+    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo(a._x / b._x); }
 
     friend double operator*(PowerOfTwo a, double b) { return (double)a * b; }
     friend double operator*(double a, PowerOfTwo b) { return a * (double)b; }
@@ -219,15 +219,20 @@ public:
     friend double operator/(PowerOfTwo a, double b) { return (double)a / b; }
     friend double operator/(double a, PowerOfTwo b) { return a / (double)b; }
 
-    friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return std::ldexp(x._x, m); }
+    friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return PowerOfTwo(std::ldexp(x._x, m)); }
 
-    friend PowerOfTwo reciprocal(PowerOfTwo x) { return 1.0 / x._x; }
+    friend PowerOfTwo reciprocal(PowerOfTwo x) { return PowerOfTwo(1.0 / x._x); }
 
     constexpr operator double() const { return _x; }
 
 private:
     double _x;
 };
+
+DDouble operator*(DDouble x, PowerOfTwo y) { return xprec_mul_pow2(x, (double)y); }
+DDouble operator*(PowerOfTwo x, DDouble y) { return xprec_mul_pow2(y, (double)x); }
+DDouble operator/(DDouble x, PowerOfTwo y) { return xprec_div_pow2(x, (double)y); }
+
 
 // C++ forbids overloading functions in the std namespace, which is why we
 // define it outside of that.

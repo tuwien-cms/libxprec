@@ -262,7 +262,7 @@ DDouble exp(DDouble x)
     int m;
     int n = reduce_mod_128((int) k, m);
 
-    PowerOfTwo exp_m = std::ldexp(1.0, m);
+    PowerOfTwo exp_m = ldexp(PowerOfTwo(1.0), m);
     DDouble exp_y = ExDouble(1.0).add_small(expm1_small(n, y));
     return exp_m * exp_y;
 }
@@ -298,7 +298,7 @@ DDouble expm1(DDouble x)
     if (m == 0) {
         return expm1_small(n, y);
     } else {
-        PowerOfTwo exp_m = std::ldexp(1.0, m);
+        PowerOfTwo exp_m = ldexp(PowerOfTwo(1.0), m);
         DDouble exp_y = ExDouble(1.0).add_small(expm1_small(n, y));
         DDouble exp_x = exp_m * exp_y;
 

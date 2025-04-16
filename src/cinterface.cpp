@@ -24,15 +24,6 @@ using xprec::DDouble;
         return {r.hi(), r.lo()};                                        \
     }
 
-BINARY_OP(xprec_add, operator+)
-BINARY_OP(xprec_sub, operator-)
-BINARY_OP(xprec_mul, operator*)
-BINARY_OP(xprec_div, operator/)
-
-UNARY_OP(xprec_pos, operator+)
-UNARY_OP(xprec_neg, operator-)
-UNARY_OP(xprec_reciprocal, reciprocal)
-
 UNARY_OP(xprec_abs, abs)
 UNARY_OP(xprec_acos, acos)
 UNARY_OP(xprec_acosh, acosh)

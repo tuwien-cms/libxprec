@@ -3,73 +3,25 @@
  * DO NOT INCLUDE THIS FILE DIRECTLY: Include ddouble.h instead.
  *
  * Most of the basic numerical algorithms are directly lifted from:
- * M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
+ *  - M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
+ *  - Karp, High Precision Division and Square Root (1993)
  *
  * Copyright (C) 2023 Markus Wallerberger and others
  * SPDX-License-Identifier: MIT
  */
+#pragma once
 #include "../ddouble.h"
 #include <assert.h>
+#include <float.h>
 #include <math.h>
-
-#if __STDC_VERSION__ >= 201112L
-
-#define xprec_addfast(a, b) _Generic((a),         \
-            xprec_ddouble: _Generic((b),          \
-                xprec_ddouble: xprec_addfast_qq,  \
-                default:       xprec_addfast_qd), \
-            default: _Generic((b),                \
-                xprec_ddouble: xprec_addfast_dq,  \
-                default:       xprec_addfast_dd), \
-            )(a, b)
-
-#define xprec_add(a, b) _Generic((a),             \
-            xprec_ddouble: _Generic((b),          \
-                xprec_ddouble: xprec_add_qq,      \
-                default:       xprec_add_qd),     \
-            default: _Generic((b),                \
-                xprec_ddouble: xprec_add_dq,      \
-                default:       xprec_add_dd),     \
-            )(a, b)
-
-#define xprec_sub(a, b) _Generic((a),             \
-            xprec_ddouble: _Generic((b),          \
-                xprec_ddouble: xprec_add_qq,      \
-                default:       xprec_add_qd),     \
-            default: _Generic((b),                \
-                xprec_ddouble: xprec_add_dq,      \
-                default:       xprec_add_dd),     \
-            )(a, -(b))
-
-#define xprec_mul(a, b) _Generic((a),             \
-            xprec_ddouble: _Generic((b),          \
-                xprec_ddouble: xprec_mul_qq,      \
-                default:       xprec_mul_qd),     \
-            default: _Generic((b),                \
-                xprec_ddouble: xprec_mul_dq,      \
-                default:       xprec_mul_dd),     \
-            )(a, b)
-
-#define xprec_div(a, b) _Generic((a),             \
-            xprec_ddouble: _Generic((b),          \
-                xprec_ddouble: xprec_div_qq,      \
-                default:       xprec_div_qd),     \
-            default: _Generic((b),                \
-                xprec_ddouble: xprec_div_dq,      \
-                default:       xprec_div_dd),     \
-            )(a, b)
-
-#define xprec_reciprocal(a) _Generic((a),         \
-            xprec_ddouble: xprec_reciprocal_q,    \
-            default:       xprec_reciprocal_d,    \
-            )(a)
-
-#endif
-
-inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 
 // ---------------------------------------------------------------------------
 // double (op) double -> quad
+
+inline bool xprec_is_valid(xprec_ddouble x)
+{
+    return x.hi + x.lo == x.hi || !isfinite(x.hi);
+}
 
 inline xprec_ddouble xprec_addfast_dd(double a, double b)
 {
@@ -78,7 +30,6 @@ inline xprec_ddouble xprec_addfast_dd(double a, double b)
     double s = a + b;
     double z = s - a;
     double t = b - z;
-    assert(s + t == 0 || !isfinite(s));
     return {s, t};
 }
 
@@ -116,6 +67,17 @@ inline xprec_ddouble xprec_div_dd(double a, double b)
 inline xprec_ddouble xprec_reciprocal_d(double x)
 {
     return xprec_div_dd(1, x);
+}
+
+inline xprec_ddouble xprec_sqrt_d(double a)
+{
+    // Karp, Table II, cost 4 flops, error 1 u^2
+    double y0 = sqrt(a);
+    if (a < DBL_MIN || !isfinite(a))
+        return {y0, 0};
+
+    double delta_y = fma(-y0, y0, a) / y0;
+    return {y0, 0.5 * delta_y};
 }
 
 // ---------------------------------------------------------------------------
@@ -164,6 +126,25 @@ inline xprec_ddouble xprec_div_qd(xprec_ddouble x, double y)
     rl += x.lo;
     double tl = rl / y;
     return xprec_addfast_dd(th, tl);
+}
+
+// ---------------------------------------------------------------------------
+// quad (op) power of two -> quad
+
+inline xprec_ddouble xprec_add_pow2(xprec_ddouble a, double p)
+{
+    // This can be added quickly because the mantissa part is zero.
+    return xprec_addfast_qd(a, p);
+}
+
+inline xprec_ddouble xprec_mul_pow2(xprec_ddouble a, double p)
+{
+    return {a.hi * p, a.lo * p};
+}
+
+inline xprec_ddouble xprec_div_pow2(xprec_ddouble a, double p)
+{
+    return xprec_mul_pow2(a, 1 / p);
 }
 
 // ---------------------------------------------------------------------------
@@ -233,6 +214,11 @@ inline xprec_ddouble xprec_div_qq(xprec_ddouble x, xprec_ddouble y)
     return xprec_mul_qq(xprec_reciprocal_q(y), x);
 }
 
+inline xprec_ddouble xprec_neg(xprec_ddouble x)
+{
+    return {-x.hi, -x.lo};
+}
+
 inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble y)
 {
     // Part of Algorithm 18: cost 19 flops, error 2.3 u^2
@@ -248,4 +234,25 @@ inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble y)
     //  1/(xh + u*xl) = th * (1 + rh/th) * (1 + u * xl/xh + ...)
     //
     return xprec_addfast_dq(th, delta);
+}
+
+inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a)
+{
+    // Karp, Table II, cost 8 flops, error 2 u^2
+    // The double result provides a approximation to sqrt(a). It performs
+    // all the special-case handling, which is why we defer to it in these
+    // cases.
+    double y0 = sqrt(a.hi);
+    if (a.hi < DBL_MIN || !isfinite(a.hi))
+        return {y0, 0};
+
+    // This is based on Newton-Ralphson for f(x) = a - 1/x^2:
+    //
+    //   x0 = approx(1/sqrt(A))
+    //   x  = x + 0.5 * x * (1.0 - A * x * x)
+    //
+    double delta_y = (fma(-y0, y0, a.hi) + a.lo) / y0;
+
+    // delta_y may alter the least significant digit of y0.
+    return xprec_addfast_dd(y0, 0.5 * delta_y);
 }
