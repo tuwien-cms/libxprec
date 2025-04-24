@@ -38,10 +38,11 @@ jobs:
             CMAKE_VERBOSE_MAKEFILE='ON'
           run-build: true
 
+      # XXX this is a hack to allow CMake to find the library
       - name: Move DLL to build directory
         if: startsWith(matrix.os, 'windows')
         run: |
-          copy Debug\\xprec.dll .
+          copy build\\Debug\\xprec.dll build
 
       - name: Run unit tests
         uses: threeal/ctest-action@v1.1.0
