@@ -44,6 +44,11 @@ jobs:
             CMAKE_VERBOSE_MAKEFILE='ON'
           run-build: true
 
+      - name: Move DLL to build directory
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          copy Debug\\xprec.dll .
+
       - name: Run unit tests
         uses: threeal/ctest-action@v1.1.0
         with:
