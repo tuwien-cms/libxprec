@@ -1,12 +1,6 @@
 name: Build/test suite
 
-on:
-  push:
-    branches:
-      mainline
-  pull_request:
-    branches:
-      mainline
+on: push
 
 jobs:
   build:
