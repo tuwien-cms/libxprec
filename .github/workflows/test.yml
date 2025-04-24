@@ -42,7 +42,7 @@ jobs:
       - name: Move DLL to build directory
         if: startsWith(matrix.os, 'windows')
         run: |
-          copy build\\Debug\\xprec.dll build
+          copy build\\Debug\\xprec.dll build\\test
 
       - name: Run unit tests
         uses: threeal/ctest-action@v1.1.0
