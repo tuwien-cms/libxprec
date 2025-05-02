@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <float.h>
 #include <math.h>
+#include <stdbool.h>
 
 // ---------------------------------------------------------------------------
 // double (op) double -> quad
@@ -30,7 +31,8 @@ inline xprec_ddouble xprec_addfast_dd(double a, double b)
     double s = a + b;
     double z = s - a;
     double t = b - z;
-    return {s, t};
+    xprec_ddouble r = {s, t};
+    return r;
 }
 
 inline xprec_ddouble xprec_add_dd(double a, double b)
@@ -42,7 +44,8 @@ inline xprec_ddouble xprec_add_dd(double a, double b)
     double delta_a = a - aprime;
     double delta_b = b - bprime;
     double t = delta_a + delta_b;
-    return {s, t};
+    xprec_ddouble r = {s, t};
+    return r;
 }
 
 inline xprec_ddouble xprec_mul_dd(double a, double b)
@@ -50,7 +53,8 @@ inline xprec_ddouble xprec_mul_dd(double a, double b)
     // Algorithm 3: cost 2 flops
     double pi = a * b;
     double rho = fma(a, b, -pi);
-    return {pi, rho};
+    xprec_ddouble r = {pi, rho};
+    return r;
 }
 
 inline xprec_ddouble xprec_div_dd(double a, double b)
@@ -61,7 +65,8 @@ inline xprec_ddouble xprec_div_dd(double a, double b)
     // Multiply hi part with b and compare exactly to a to see difference
     double rl = fma(-b, th, a);
     double tl = rl / b;
-    return {th, tl};
+    xprec_ddouble r = {th, tl};
+    return r;
 }
 
 inline xprec_ddouble xprec_reciprocal_d(double x)
@@ -73,11 +78,12 @@ inline xprec_ddouble xprec_sqrt_d(double a)
 {
     // Karp, Table II, cost 4 flops, error 1 u^2
     double y0 = sqrt(a);
-    if (a < DBL_MIN || !isfinite(a))
-        return {y0, 0};
-
-    double delta_y = fma(-y0, y0, a) / y0;
-    return {y0, 0.5 * delta_y};
+    xprec_ddouble r = {y0, 0};
+    if (a > DBL_MIN && isfinite(a)) {
+        double delta_y = fma(-y0, y0, a) / y0;
+        r.lo = 0.5 * delta_y;
+    }
+    return r;
 }
 
 // ---------------------------------------------------------------------------
@@ -139,7 +145,8 @@ inline xprec_ddouble xprec_add_pow2(xprec_ddouble a, double p)
 
 inline xprec_ddouble xprec_mul_pow2(xprec_ddouble a, double p)
 {
-    return {a.hi * p, a.lo * p};
+    xprec_ddouble r = {a.hi * p, a.lo * p};
+    return r;
 }
 
 inline xprec_ddouble xprec_div_pow2(xprec_ddouble a, double p)
@@ -216,7 +223,8 @@ inline xprec_ddouble xprec_div_qq(xprec_ddouble x, xprec_ddouble y)
 
 inline xprec_ddouble xprec_neg(xprec_ddouble x)
 {
-    return {-x.hi, -x.lo};
+    xprec_ddouble r = {-x.hi, -x.lo};
+    return r;
 }
 
 inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble y)
@@ -243,8 +251,10 @@ inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a)
     // all the special-case handling, which is why we defer to it in these
     // cases.
     double y0 = sqrt(a.hi);
-    if (a.hi < DBL_MIN || !isfinite(a.hi))
-        return {y0, 0};
+    if (a.hi < DBL_MIN || !isfinite(a.hi)) {
+        xprec_ddouble r = {y0, 0};
+        return r;
+    }
 
     // This is based on Newton-Ralphson for f(x) = a - 1/x^2:
     //

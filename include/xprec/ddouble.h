@@ -51,10 +51,6 @@ inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 inline xprec_ddouble xprec_sqrt_d(double a);
 inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a);
 
-
-
-
-
 xprec_ddouble xprec_abs(xprec_ddouble a);
 xprec_ddouble xprec_acos(xprec_ddouble a);
 xprec_ddouble xprec_acosh(xprec_ddouble a);

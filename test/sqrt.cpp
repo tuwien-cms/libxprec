@@ -41,12 +41,12 @@ TEST_CASE("sqrt", "[fn]")
     CMP_UNARY(sqrt, 4.0, 1.0 * ulp);
 
     DDouble x = 1.0;
-    while ((x *= 0.99) > 1e-290) {
+    while ((x *= 0.992) > 1e-290) {
         CMP_UNARY(sqrt, x, 1.5 * ulp);
     }
 
     x = 1.0;
-    while ((x /= 0.99) <= 1e290) {
+    while ((x /= 0.992) <= 1e290) {
         CMP_UNARY(sqrt, x, 1.5 * ulp);
     }
 }

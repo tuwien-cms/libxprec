@@ -21,7 +21,7 @@ endif()
 # Configure project
 project(
     XPrec
-    LANGUAGES CXX
+    LANGUAGES C CXX
     VERSION "${XPREC_VERSION}"
     DESCRIPTION "library for emulated extended-precision arithmetic"
     )
@@ -30,6 +30,7 @@ project(
 # Building
 
 add_library(xprec SHARED
+    src/impl.c
     src/cinterface.cpp
     src/circular.cpp
     src/exp.cpp
