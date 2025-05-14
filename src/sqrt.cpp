@@ -14,8 +14,7 @@
 
 namespace xprec {
 
-XPREC_API_EXPORT
-DDouble hypot(DDouble x, DDouble y)
+static inline DDouble _hypot(DDouble x, DDouble y)
 {
     using _internal::greater_in_magnitude;
 
@@ -50,14 +49,22 @@ DDouble hypot(DDouble x, DDouble y)
     }
 }
 
-XPREC_API_EXPORT
-DDouble modf(DDouble x, DDouble &i)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_hypot(xprec_ddouble x, xprec_ddouble y)
+{
+    return _hypot(x, y);
+}
+
+static inline DDouble _modf(DDouble x, DDouble &i)
 {
     i = trunc(x);
     return x.add_small(-i);
 }
 
-XPREC_API_EXPORT
-DDouble modf(DDouble x, DDouble *iptr) { return modf(x, *iptr); }
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_modf(xprec_ddouble x, xprec_ddouble *iptr)
+{
+    return _modf(x, *(DDouble *)iptr);
+}
 
 } // namespace xprec

@@ -265,12 +265,12 @@ DDouble fabs(DDouble a);
 DDouble fmax(DDouble a, DDouble b);
 DDouble fmin(DDouble a, DDouble b);
 DDouble floor(DDouble a);
-DDouble hypot(DDouble a, DDouble b);
+inline DDouble hypot(DDouble a, DDouble b) { return xprec_hypot(a, b); };
 DDouble ldexp(DDouble a, int m);
 inline DDouble log(DDouble a) { return xprec_log(a); }
 inline DDouble log1p(DDouble a) { return xprec_log1p(a); }
 DDouble logb(DDouble a);
-DDouble modf(DDouble a, DDouble *b);
+inline DDouble modf(DDouble a, DDouble *b) { return xprec_modf(a, (xprec_ddouble*)b); }
 inline DDouble nextafter(DDouble a, DDouble b) { return xprec_nextafter(a, b); }
 inline DDouble pow(DDouble a, DDouble b) { return xprec_pow_qq(a, b); }
 inline DDouble pow(DDouble a, int b) { return xprec_pow_qi(a, b); }

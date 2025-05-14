@@ -72,6 +72,7 @@ xprec_ddouble xprec_hypot(xprec_ddouble a, xprec_ddouble b);
 xprec_ddouble xprec_log(xprec_ddouble a);
 xprec_ddouble xprec_log1p(xprec_ddouble a);
 xprec_ddouble xprec_logb(xprec_ddouble a);
+xprec_ddouble xprec_modf(xprec_ddouble a, xprec_ddouble *i);
 xprec_ddouble xprec_nextafter(xprec_ddouble a, xprec_ddouble b);
 xprec_ddouble xprec_pow_qq(xprec_ddouble a, xprec_ddouble b);
 xprec_ddouble xprec_pow_qi(xprec_ddouble a, int b);
