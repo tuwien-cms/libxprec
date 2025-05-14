@@ -13,8 +13,7 @@
 
 namespace xprec {
 
-XPREC_API_EXPORT
-DDouble cosh(DDouble x)
+static inline DDouble _cosh(DDouble x)
 {
     // simply use the definition:
     //
@@ -27,6 +26,12 @@ DDouble cosh(DDouble x)
     if (x.hi() < 36.5)
         res += reciprocal(res);
     return PowerOfTwo(0.5) * res;
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_cosh(xprec_ddouble x)
+{
+    return _cosh(x);
 }
 
 static DDouble sinh_kernel(DDouble x)
@@ -48,8 +53,7 @@ static DDouble sinh_kernel(DDouble x)
     return r;
 }
 
-XPREC_API_EXPORT
-DDouble sinh(DDouble x)
+static inline DDouble _sinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
     if (!isfinite(x))
@@ -69,6 +73,12 @@ DDouble sinh(DDouble x)
     if (x.hi() < 36.5)
         res -= reciprocal(res);
     return PowerOfTwo(0.5) * res;
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_sinh(xprec_ddouble x)
+{
+    return _sinh(x);
 }
 
 static DDouble tanh_kernel(DDouble x)
@@ -96,8 +106,7 @@ static DDouble tanh_kernel(DDouble x)
     return r;
 }
 
-XPREC_API_EXPORT
-DDouble tanh(DDouble x)
+static inline DDouble _tanh(DDouble x)
 {
     // Special values
     if (isnan(x))
@@ -117,8 +126,13 @@ DDouble tanh(DDouble x)
     return (exp_x - exp_mx) / (exp_x + exp_mx);
 }
 
-XPREC_API_EXPORT
-DDouble acosh(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_tanh(xprec_ddouble x)
+{
+    return _tanh(x);
+}
+
+static inline DDouble _acosh(DDouble x)
 {
     // Special values: domain starts at 1, rest is preserved
     if (x.hi() < 1.0)
@@ -138,8 +152,13 @@ DDouble acosh(DDouble x)
     return log(arg);
 }
 
-XPREC_API_EXPORT
-DDouble asinh(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_acosh(xprec_ddouble x)
+{
+    return _acosh(x);
+}
+
+static inline DDouble _asinh(DDouble x)
 {
     // Special values: +Inf, -Inf are all preserved
     if (!isfinite(x))
@@ -168,8 +187,13 @@ DDouble asinh(DDouble x)
     return copysign(log(arg), x);
 }
 
-XPREC_API_EXPORT
-DDouble atanh(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_asinh(xprec_ddouble x)
+{
+    return _asinh(x);
+}
+
+static inline DDouble _atanh(DDouble x)
 {
     // Use symmetry
     if (x.hi() < 0)
@@ -189,6 +213,12 @@ DDouble atanh(DDouble x)
     //
     return PowerOfTwo(0.5) *
            log1p(PowerOfTwo(2.0) * x / (ExDouble(1.0).add_small(-x)));
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_atanh(xprec_ddouble x)
+{
+    return _atanh(x);
 }
 
 } /* namespace xprec */

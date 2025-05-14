@@ -25,11 +25,7 @@ using xprec::DDouble;
     }
 
 UNARY_OP(xprec_abs, abs)
-UNARY_OP(xprec_acosh, acosh)
-UNARY_OP(xprec_asinh, asinh)
-UNARY_OP(xprec_atanh, atanh)
 UNARY_OP(xprec_ceil, ceil)
-UNARY_OP(xprec_cosh, cosh)
 UNARY_OP(xprec_fabs, fabs)
 BINARY_OP(xprec_fmax, fmax)
 BINARY_OP(xprec_fmin, fmin)
@@ -37,6 +33,4 @@ UNARY_OP(xprec_floor, floor)
 BINARY_OP(xprec_hypot, hypot)
 UNARY_OP(xprec_logb, logb)
 UNARY_OP(xprec_round, round)
-UNARY_OP(xprec_sinh, sinh)
 UNARY_OP(xprec_sqrt, sqrt)
-UNARY_OP(xprec_tanh, tanh)

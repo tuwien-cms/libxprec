@@ -250,15 +250,15 @@ inline PowerOfTwo reciprocal(PowerOfTwo x) { return PowerOfTwo(1.0 / (double)x);
 
 DDouble abs(DDouble a);
 inline DDouble acos(DDouble a) { return xprec_acos(a); }
-DDouble acosh(DDouble a);
+inline DDouble acosh(DDouble a) { return xprec_acosh(a); }
 inline DDouble asin(DDouble a)  { return xprec_asin(a); }
-DDouble asinh(DDouble a);
+inline DDouble asinh(DDouble a)  { return xprec_asinh(a); }
 inline DDouble atan(DDouble a)  { return xprec_atan(a); }
 inline DDouble atan2(DDouble a, DDouble b)  { return xprec_atan2(a, b); }
-DDouble atanh(DDouble a);
+inline DDouble atanh(DDouble a)  { return xprec_atanh(a); }
 DDouble ceil(DDouble a);
 inline DDouble cos(DDouble a) { return xprec_cos(a); }
-DDouble cosh(DDouble a);
+inline DDouble cosh(DDouble a) { return xprec_cosh(a); }
 inline DDouble exp(DDouble a) { return xprec_exp(a); }
 inline DDouble expm1(DDouble a) { return xprec_expm1(a); }
 DDouble fabs(DDouble a);
@@ -277,10 +277,10 @@ inline DDouble pow(DDouble a, int b) { return xprec_pow_qi(a, b); }
 DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
 inline DDouble sin(DDouble a) { return xprec_sin(a); }
-DDouble sinh(DDouble a);
+inline DDouble sinh(DDouble a) { return xprec_sinh(a); }
 DDouble sqrt(DDouble a);
 inline DDouble tan(DDouble a) { return xprec_tan(a); }
-DDouble tanh(DDouble a);
+inline DDouble tanh(DDouble a) { return xprec_tanh(a); }
 
 int fpclassify(DDouble x);
 int ilogb(DDouble x);
