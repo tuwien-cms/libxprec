@@ -278,7 +278,7 @@ DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
 inline DDouble sin(DDouble a) { return xprec_sin(a); }
 inline DDouble sinh(DDouble a) { return xprec_sinh(a); }
-DDouble sqrt(DDouble a);
+inline DDouble sqrt(DDouble a) { return xprec_sqrt_q(a); }
 inline DDouble tan(DDouble a) { return xprec_tan(a); }
 inline DDouble tanh(DDouble a) { return xprec_tanh(a); }
 

@@ -15,30 +15,6 @@
 namespace xprec {
 
 XPREC_API_EXPORT
-DDouble sqrt(DDouble a)
-{
-    // The double result provides a approximation to sqrt(a). It performs
-    // all the special-case handling, which is why we defer to it in these
-    // cases.
-    double y0 = std::sqrt(a.hi());
-    if (a.hi() <= 0.0 || !isfinite(a.hi()))
-        return y0;
-
-    // From: Karp, High Precision Division and Square Root, 1993, Table II
-    // This is based on Newton-Ralphson for f(x) = a - 1/x^2:
-    //
-    //   x0 = approx(1/sqrt(A))
-    //   x  = x + 0.5 * x * (1.0 - A * x * x)
-    //
-    double x0_half = 0.5 / y0;
-    double delta_y = x0_half * (std::fma(-y0, y0, a.hi()) + a.lo());
-
-    // We would like to do DDouble(y0, delta_y), however, delta_y may alter
-    // the least significant digit of y0.
-    return ExDouble(y0).add_small(delta_y);
-}
-
-XPREC_API_EXPORT
 DDouble hypot(DDouble x, DDouble y)
 {
     using _internal::greater_in_magnitude;
