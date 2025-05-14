@@ -82,6 +82,9 @@ xprec_ddouble xprec_sinh(xprec_ddouble a);
 xprec_ddouble xprec_tan(xprec_ddouble a);
 xprec_ddouble xprec_tanh(xprec_ddouble a);
 
+void xprec_gauss_chebyshev(int n, xprec_ddouble x[], xprec_ddouble w[]);
+void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
+
 #include "internal/arith.h"
 
 #ifdef __cplusplus
