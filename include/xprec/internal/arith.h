@@ -261,8 +261,8 @@ inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a)
     //   x0 = approx(1/sqrt(A))
     //   x  = x + 0.5 * x * (1.0 - A * x * x)
     //
-    double delta_y = (fma(-y0, y0, a.hi) + a.lo) / y0;
+    double delta_y = (fma(-y0, y0, a.hi) + a.lo) / (2 * y0);
 
     // delta_y may alter the least significant digit of y0.
-    return xprec_addfast_dd(y0, 0.5 * delta_y);
+    return xprec_addfast_dd(y0, delta_y);
 }

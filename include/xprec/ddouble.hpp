@@ -194,6 +194,7 @@ inline DDouble operator*(ExDouble a, ExDouble b) { return xprec_mul_dd((double)a
 inline DDouble operator/(ExDouble a, ExDouble b) { return xprec_div_dd((double)a, (double)b); }
 
 inline DDouble reciprocal(ExDouble y) { return xprec_reciprocal_d((double)y); }
+inline DDouble sqrt(ExDouble y) { return xprec_sqrt_d((double)y); }
 
 /**
  * Class for wrapping a power of two.
@@ -210,31 +211,36 @@ public:
      */
     constexpr explicit PowerOfTwo(double x) : _x(x) { }
 
-    friend PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo(a._x* b._x); }
-    friend PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo(a._x / b._x); }
-
-    friend double operator*(PowerOfTwo a, double b) { return (double)a * b; }
-    friend double operator*(double a, PowerOfTwo b) { return a * (double)b; }
-
-    friend double operator/(PowerOfTwo a, double b) { return (double)a / b; }
-    friend double operator/(double a, PowerOfTwo b) { return a / (double)b; }
-
-    friend PowerOfTwo ldexp(PowerOfTwo x, int m) { return PowerOfTwo(std::ldexp(x._x, m)); }
-
-    friend PowerOfTwo reciprocal(PowerOfTwo x) { return PowerOfTwo(1.0 / x._x); }
-
     constexpr operator double() const { return _x; }
 
 private:
     double _x;
 };
 
+inline PowerOfTwo operator+(PowerOfTwo x) { return x; }
+inline PowerOfTwo operator-(PowerOfTwo x) { return PowerOfTwo((double)(-x)); }
+
+inline DDouble operator+(PowerOfTwo x, DDouble y) { return xprec_add_pow2(y, (double)x); }
+inline DDouble operator+(DDouble y, PowerOfTwo x) { return xprec_add_pow2(y, (double)x); }
+inline DDouble operator-(PowerOfTwo x, DDouble y) { return xprec_add_pow2(xprec_neg(y), (double)x); }
+inline DDouble operator-(DDouble x, PowerOfTwo y) { return xprec_add_pow2(x, (double)(-y)); }
+
+inline double operator*(PowerOfTwo a, double b) { return (double)a * b; }
+inline double operator*(double a, PowerOfTwo b) { return a * (double)b; }
 inline DDouble operator*(DDouble x, PowerOfTwo y) { return xprec_mul_pow2(x, (double)y); }
 inline DDouble operator*(PowerOfTwo x, DDouble y) { return xprec_mul_pow2(y, (double)x); }
+inline PowerOfTwo operator*(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo((double)a * (double)b); }
+
+inline double operator/(double a, PowerOfTwo b) { return a / (double)b; }
 inline DDouble operator/(DDouble x, PowerOfTwo y) { return xprec_div_pow2(x, (double)y); }
+inline PowerOfTwo operator/(PowerOfTwo a, PowerOfTwo b) { return PowerOfTwo((double)a / (double)b); }
 
 inline DDouble &DDouble::operator*=(PowerOfTwo y) { return *this = xprec_mul_pow2(*this, (double)y); }
 inline DDouble &DDouble::operator/=(PowerOfTwo y) { return *this = xprec_div_pow2(*this, (double)y); }
+
+inline PowerOfTwo ldexp(PowerOfTwo x, int m) { return PowerOfTwo(std::ldexp((double) x, m)); }
+inline PowerOfTwo reciprocal(PowerOfTwo x) { return PowerOfTwo(1.0 / (double)x); }
+
 
 // C++ forbids overloading functions in the std namespace, which is why we
 // define it outside of that.
@@ -243,15 +249,15 @@ inline DDouble &DDouble::operator/=(PowerOfTwo y) { return *this = xprec_div_pow
 // "using std::sin" and then call "sin".
 
 DDouble abs(DDouble a);
-DDouble acos(DDouble a);
+inline DDouble acos(DDouble a) { return xprec_acos(a); }
 DDouble acosh(DDouble a);
-DDouble asin(DDouble a);
+inline DDouble asin(DDouble a)  { return xprec_asin(a); }
 DDouble asinh(DDouble a);
-DDouble atan(DDouble a);
-DDouble atan2(DDouble a, DDouble b);
+inline DDouble atan(DDouble a)  { return xprec_atan(a); }
+inline DDouble atan2(DDouble a, DDouble b)  { return xprec_atan2(a, b); }
 DDouble atanh(DDouble a);
 DDouble ceil(DDouble a);
-DDouble cos(DDouble a);
+inline DDouble cos(DDouble a) { return xprec_cos(a); }
 DDouble cosh(DDouble a);
 DDouble exp(DDouble a);
 DDouble expm1(DDouble a);
@@ -270,10 +276,10 @@ DDouble pow(DDouble a, DDouble b);
 DDouble pow(DDouble a, int b);
 DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
-DDouble sin(DDouble a);
+inline DDouble sin(DDouble a) { return xprec_sin(a); }
 DDouble sinh(DDouble a);
 DDouble sqrt(DDouble a);
-DDouble tan(DDouble a);
+inline DDouble tan(DDouble a) { return xprec_tan(a); }
 DDouble tanh(DDouble a);
 
 int fpclassify(DDouble x);
