@@ -28,12 +28,6 @@ TEST_CASE("hypot", "[fn]")
     }
 }
 
-#ifdef FP_FAST_FMA
-constexpr bool have_fast_fma = true;
-#else
-constexpr bool have_fast_fma = false;
-#endif
-
 TEST_CASE("sqrt", "[fn]")
 {
     const double ulp = 2.4651903288156619e-32;
@@ -46,16 +40,13 @@ TEST_CASE("sqrt", "[fn]")
     CMP_UNARY(sqrt, 0.25, 1.0 * ulp);
     CMP_UNARY(sqrt, 4.0, 1.0 * ulp);
 
-    // emulated FMA can be less accurate
-    const double thr = have_fast_fma ? 1.5 * ulp : 2 * ulp;
-
     DDouble x = 1.0;
     while ((x *= 0.992) > 1e-290) {
-        CMP_UNARY(sqrt, x, thr);
+        CMP_UNARY(sqrt, x, 2 * ulp);
     }
 
     x = 1.0;
     while ((x /= 0.992) <= 1e290) {
-        CMP_UNARY(sqrt, x, thr);
+        CMP_UNARY(sqrt, x, 2 * ulp);
     }
 }
