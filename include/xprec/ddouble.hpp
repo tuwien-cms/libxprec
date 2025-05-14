@@ -259,21 +259,21 @@ DDouble atanh(DDouble a);
 DDouble ceil(DDouble a);
 inline DDouble cos(DDouble a) { return xprec_cos(a); }
 DDouble cosh(DDouble a);
-DDouble exp(DDouble a);
-DDouble expm1(DDouble a);
+inline DDouble exp(DDouble a) { return xprec_exp(a); }
+inline DDouble expm1(DDouble a) { return xprec_expm1(a); }
 DDouble fabs(DDouble a);
 DDouble fmax(DDouble a, DDouble b);
 DDouble fmin(DDouble a, DDouble b);
 DDouble floor(DDouble a);
 DDouble hypot(DDouble a, DDouble b);
 DDouble ldexp(DDouble a, int m);
-DDouble log(DDouble a);
-DDouble log1p(DDouble a);
+inline DDouble log(DDouble a) { return xprec_log(a); }
+inline DDouble log1p(DDouble a) { return xprec_log1p(a); }
 DDouble logb(DDouble a);
 DDouble modf(DDouble a, DDouble *b);
-DDouble nextafter(DDouble a, DDouble b);
-DDouble pow(DDouble a, DDouble b);
-DDouble pow(DDouble a, int b);
+inline DDouble nextafter(DDouble a, DDouble b) { return xprec_nextafter(a, b); }
+inline DDouble pow(DDouble a, DDouble b) { return xprec_pow_qq(a, b); }
+inline DDouble pow(DDouble a, int b) { return xprec_pow_qi(a, b); }
 DDouble round(DDouble a);
 DDouble scalbn(DDouble a, int m);
 inline DDouble sin(DDouble a) { return xprec_sin(a); }

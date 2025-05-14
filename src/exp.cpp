@@ -231,8 +231,7 @@ static int reduce_mod_128(int k, int &m)
     return n;
 }
 
-XPREC_API_EXPORT
-DDouble exp(DDouble x)
+static inline DDouble _exp(DDouble x)
 {
     // Here is the main strategy. Let α be log(2)/128. Then we first reduce the
     // argument x modulo α, i.e.:
@@ -267,8 +266,13 @@ DDouble exp(DDouble x)
     return exp_m * exp_y;
 }
 
-XPREC_API_EXPORT
-DDouble expm1(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_exp(xprec_ddouble x)
+{
+    return _exp(x);
+}
+
+static inline DDouble _expm1(DDouble x)
 {
     // Again first reduce the argument x modulo α, i.e.:
     //
@@ -307,8 +311,13 @@ DDouble expm1(DDouble x)
     }
 }
 
-XPREC_API_EXPORT
-DDouble log(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_expm1(xprec_ddouble x)
+{
+    return _expm1(x);
+}
+
+static inline DDouble _log(DDouble x)
 {
     // Start with logarithm of hi part
     DDouble log_x = std::log(x.hi());
@@ -325,8 +334,13 @@ DDouble log(DDouble x)
     return log_x;
 }
 
-XPREC_API_EXPORT
-DDouble log1p(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_log(xprec_ddouble x)
+{
+    return _log(x);
+}
+
+static inline DDouble _log1p(DDouble x)
 {
     // Start with logarithm of hi part
     DDouble log_x = std::log1p(x.hi());
@@ -346,8 +360,13 @@ DDouble log1p(DDouble x)
     return log_x;
 }
 
-XPREC_API_EXPORT
-DDouble pow(DDouble x, int n)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_log1p(xprec_ddouble x)
+{
+    return _log1p(x);
+}
+
+static inline DDouble _pow(DDouble x, int n)
 {
     if (n < 0) {
         DDouble res = pow(x, -n);
@@ -374,7 +393,23 @@ DDouble pow(DDouble x, int n)
     return res;
 }
 
-XPREC_API_EXPORT
-DDouble pow(DDouble x, DDouble y) { return exp(log(x) * y); }
+static inline DDouble _pow(DDouble x, DDouble y)
+{
+    // XXX special-case handling
+    return exp(log(x) * y);
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_pow_qq(xprec_ddouble x, xprec_ddouble y)
+{
+    return _pow(x, y);
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_pow_qi(xprec_ddouble x, int y)
+{
+    return _pow(x, y);
+}
+
 
 } // namespace xprec
