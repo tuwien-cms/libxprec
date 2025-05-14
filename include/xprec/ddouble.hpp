@@ -218,7 +218,7 @@ private:
 };
 
 inline PowerOfTwo operator+(PowerOfTwo x) { return x; }
-inline PowerOfTwo operator-(PowerOfTwo x) { return PowerOfTwo((double)(-x)); }
+inline PowerOfTwo operator-(PowerOfTwo x) { return PowerOfTwo(-((double)x)); }
 
 inline DDouble operator+(PowerOfTwo x, DDouble y) { return xprec_add_pow2(y, (double)x); }
 inline DDouble operator+(DDouble y, PowerOfTwo x) { return xprec_add_pow2(y, (double)x); }
