@@ -80,6 +80,10 @@ install(DIRECTORY include/
     DESTINATION "${XPREC_INSTALL_INCLUDEDIR}"
     PATTERN "ddouble-header-only.h" EXCLUDE
     )
+install(DIRECTORY src/
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/src"
+    FILES_MATCHING PATTERN "*.cpp" PATTERN "*.hpp"
+    )
 
 if (XPREC_INSTALL_CMAKE_PACKAGE)
     # These are essentially magic incantantions copied from the CMake tutorial:
