@@ -376,7 +376,6 @@ public:
 
 } /* namespace std */
 
-#include "internal/arith.hpp"
 #include "internal/checks.hpp"
 #include "internal/functions.hpp"
 #include "internal/limits.hpp"
