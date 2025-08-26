@@ -135,12 +135,12 @@ inline DDouble operator/(DDouble x, DDouble y) { return xprec_div_qq(x, y); }
 
 inline DDouble reciprocal(DDouble y) { return xprec_reciprocal_q(y); }
 
-inline bool operator==(DDouble x, DDouble y);
-inline bool operator!=(DDouble x, DDouble y);
-inline bool operator<=(DDouble x, DDouble y);
-inline bool operator<(DDouble x, DDouble y);
-inline bool operator>=(DDouble x, DDouble y);
-inline bool operator>(DDouble x, DDouble y);
+inline bool operator==(DDouble x, DDouble y) { return xprec_equal(x, y); }
+inline bool operator!=(DDouble x, DDouble y) { return xprec_not_equal(x, y); }
+inline bool operator<=(DDouble x, DDouble y) { return xprec_less_equal(x, y); }
+inline bool operator<(DDouble x, DDouble y) { return xprec_less(x, y); }
+inline bool operator>=(DDouble x, DDouble y) { return xprec_greater_equal(x, y); }
+inline bool operator>(DDouble x, DDouble y) { return xprec_greater(x, y); }
 
 inline bool operator==(DDouble x, double y) { return x == DDouble(y); }
 inline bool operator!=(DDouble x, double y) { return x != DDouble(y); }
@@ -262,8 +262,8 @@ inline DDouble cosh(DDouble a) { return xprec_cosh(a); }
 inline DDouble exp(DDouble a) { return xprec_exp(a); }
 inline DDouble expm1(DDouble a) { return xprec_expm1(a); }
 DDouble fabs(DDouble a);
-DDouble fmax(DDouble a, DDouble b);
-DDouble fmin(DDouble a, DDouble b);
+inline DDouble fmax(DDouble a, DDouble b) { return xprec_max(a, b); }
+inline DDouble fmin(DDouble a, DDouble b) { return xprec_min(a, b); }
 DDouble floor(DDouble a);
 inline DDouble hypot(DDouble a, DDouble b) { return xprec_hypot(a, b); };
 DDouble ldexp(DDouble a, int m);
@@ -282,13 +282,14 @@ inline DDouble sqrt(DDouble a) { return xprec_sqrt_q(a); }
 inline DDouble tan(DDouble a) { return xprec_tan(a); }
 inline DDouble tanh(DDouble a) { return xprec_tanh(a); }
 
-int fpclassify(DDouble x);
+inline int fpclassify(DDouble x) { return xprec_classify(x); }
 int ilogb(DDouble x);
-bool isfinite(DDouble x);
-bool isinf(DDouble x);
-bool isnan(DDouble x);
-bool isnormal(DDouble x);
-bool iszero(DDouble x);
+
+inline bool isfinite(DDouble x) { return xprec_isfinite(x); }
+inline bool isinf(DDouble x) { return xprec_isinf(x); }
+inline bool isnan(DDouble x) { return xprec_isnan(x); }
+inline bool isnormal(DDouble x) { return xprec_isnormal(x); }
+inline bool iszero(DDouble x) { return xprec_iszero(x); }
 
 /**
  * Gauss-Chebyshev quadrature rule.
@@ -376,6 +377,5 @@ public:
 
 } /* namespace std */
 
-#include "internal/checks.hpp"
 #include "internal/functions.hpp"
 #include "internal/limits.hpp"

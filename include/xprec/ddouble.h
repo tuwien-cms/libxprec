@@ -51,6 +51,29 @@ inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 inline xprec_ddouble xprec_sqrt_d(double a);
 inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a);
 
+// Checks and relations
+
+inline xprec_ddouble xprec_max(xprec_ddouble a, xprec_ddouble b);
+inline xprec_ddouble xprec_min(xprec_ddouble a, xprec_ddouble b);
+
+inline bool xprec_equal(xprec_ddouble x, xprec_ddouble y);
+inline bool xprec_not_equal(xprec_ddouble x, xprec_ddouble y);
+inline bool xprec_greater(xprec_ddouble x, xprec_ddouble y);
+inline bool xprec_greater_equal(xprec_ddouble x, xprec_ddouble y);
+inline bool xprec_less(xprec_ddouble x, xprec_ddouble y);
+inline bool xprec_less_equal(xprec_ddouble x, xprec_ddouble y);
+
+inline bool xprec_isfinite(xprec_ddouble x);
+inline bool xprec_isinf(xprec_ddouble x);
+inline bool xprec_isnan(xprec_ddouble x);
+inline bool xprec_isnormal(xprec_ddouble x);
+inline bool xprec_iszero(xprec_ddouble x);
+inline int xprec_classify(xprec_ddouble x);
+
+
+
+// Functions
+
 xprec_ddouble xprec_abs(xprec_ddouble a);
 xprec_ddouble xprec_acos(xprec_ddouble a);
 xprec_ddouble xprec_acosh(xprec_ddouble a);
@@ -65,8 +88,6 @@ xprec_ddouble xprec_cosh(xprec_ddouble a);
 xprec_ddouble xprec_exp(xprec_ddouble a);
 xprec_ddouble xprec_expm1(xprec_ddouble a);
 xprec_ddouble xprec_fabs(xprec_ddouble a);
-xprec_ddouble xprec_fmax(xprec_ddouble a, xprec_ddouble b);
-xprec_ddouble xprec_fmin(xprec_ddouble a, xprec_ddouble b);
 xprec_ddouble xprec_floor(xprec_ddouble a);
 xprec_ddouble xprec_hypot(xprec_ddouble a, xprec_ddouble b);
 xprec_ddouble xprec_log(xprec_ddouble a);
@@ -86,6 +107,7 @@ void xprec_gauss_chebyshev(int n, xprec_ddouble x[], xprec_ddouble w[]);
 void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
 
 #include "internal/arith.h"
+#include "internal/checks.h"
 
 #ifdef __cplusplus
 }

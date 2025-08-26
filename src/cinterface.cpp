@@ -27,8 +27,6 @@ using xprec::DDouble;
 UNARY_OP(xprec_abs, abs)
 UNARY_OP(xprec_ceil, ceil)
 UNARY_OP(xprec_fabs, fabs)
-BINARY_OP(xprec_fmax, fmax)
-BINARY_OP(xprec_fmin, fmin)
 UNARY_OP(xprec_floor, floor)
 UNARY_OP(xprec_logb, logb)
 UNARY_OP(xprec_round, round)

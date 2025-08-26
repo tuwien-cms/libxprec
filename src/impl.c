@@ -36,3 +36,20 @@ extern inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 
 extern inline xprec_ddouble xprec_sqrt_d(double a);
 extern inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a);
+
+extern inline xprec_ddouble xprec_max(xprec_ddouble a, xprec_ddouble b);
+extern inline xprec_ddouble xprec_min(xprec_ddouble a, xprec_ddouble b);
+
+extern inline _Bool xprec_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline _Bool xprec_not_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline _Bool xprec_greater(xprec_ddouble x, xprec_ddouble y);
+extern inline _Bool xprec_greater_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline _Bool xprec_less(xprec_ddouble x, xprec_ddouble y);
+extern inline _Bool xprec_less_equal(xprec_ddouble x, xprec_ddouble y);
+
+extern inline _Bool xprec_isfinite(xprec_ddouble x);
+extern inline _Bool xprec_isinf(xprec_ddouble x);
+extern inline _Bool xprec_isnan(xprec_ddouble x);
+extern inline _Bool xprec_isnormal(xprec_ddouble x);
+extern inline _Bool xprec_iszero(xprec_ddouble x);
+extern inline int xprec_classify(xprec_ddouble x);
