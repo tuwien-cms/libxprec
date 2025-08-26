@@ -58,63 +58,12 @@ inline DDouble abs(DDouble x) { return fabs(x); }
 
 inline DDouble fabs(DDouble x) { return signbit(x) ? -x : x; }
 
-inline DDouble ceil(DDouble x)
-{
-    // If hi was not an integer, it means that rounding it up/down/towards zero
-    // already gives our answer.  This also covers NaN since then x != x.
-    // We cannot simply truncate both hi and lo since they may have the same
-    // sign
-    double hi = std::ceil(x.hi());
-    if (hi != x.hi())
-        return hi;
+inline DDouble trunc(DDouble x) { return xprec_trunc(x); }
 
-    // hi is an integer, so modify lo instead.  This may actually increase the
-    // magnitude above the limit, so let's renormalize to be safe.
-    double lo = std::ceil(x.lo());
-    return ExDouble(x.hi()).add_small(lo);
-}
+inline DDouble ceil(DDouble x) { return xprec_ceil(x); }
 
-inline DDouble floor(DDouble x)
-{
-    // If hi was not an integer, it means that rounding it up/down/towards zero
-    // already gives our answer.  This also covers NaN since then x != x.
-    // We cannot simply truncate both hi and lo since they may have the same
-    // sign
-    double hi = std::floor(x.hi());
-    if (hi != x.hi())
-        return hi;
+inline DDouble floor(DDouble x) { return xprec_floor(x); }
 
-    // hi is an integer, so modify lo instead.  This may actually increase the
-    // magnitude above the limit, so let's renormalize to be safe.
-    double lo = std::floor(x.lo());
-    return ExDouble(x.hi()).add_small(lo);
-}
-
-inline DDouble trunc(DDouble x)
-{
-    // If hi was not an integer, it means that rounding it up/down/towards zero
-    // already gives our answer.  This also covers NaN since then x != x.
-    // We cannot simply truncate both hi and lo since they may have opposite
-    // signs.
-    double hi = std::trunc(x.hi());
-    if (hi != x.hi())
-        return hi;
-
-    // hi is an integer, so modify lo instead.  Here, one needs to be careful
-    // to respect the truncation direction that hi requires, and so we have
-    // to round towards -+infinity, for x > 0 and x < 0, repectively.
-    //
-    // This may actually increase the  magnitude above the limit, so let's
-    // renormalize to be safe.
-    double lo = std::signbit(x.hi()) ? std::ceil(x.lo()) : std::floor(x.lo());
-    return ExDouble(x.hi()).add_small(lo);
-}
-
-inline DDouble round(DDouble x)
-{
-    // trunc is fast, so it makes sense to use this as a building block.
-    double nudge = std::copysign(0.5, x.hi());
-    return trunc(x + nudge);
-}
+inline DDouble round(DDouble x) { return xprec_round(x); }
 
 } /* namespace xprec */

@@ -53,3 +53,8 @@ extern inline _Bool xprec_isnan(xprec_ddouble x);
 extern inline _Bool xprec_isnormal(xprec_ddouble x);
 extern inline _Bool xprec_iszero(xprec_ddouble x);
 extern inline int xprec_classify(xprec_ddouble x);
+
+extern inline xprec_ddouble xprec_ceil(xprec_ddouble x);
+extern inline xprec_ddouble xprec_floor(xprec_ddouble x);
+extern inline xprec_ddouble xprec_trunc(xprec_ddouble x);
+extern inline xprec_ddouble xprec_round(xprec_ddouble x);

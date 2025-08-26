@@ -108,6 +108,7 @@ void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
 
 #include "internal/arith.h"
 #include "internal/checks.h"
+#include "internal/round.h"
 
 #ifdef __cplusplus
 }
