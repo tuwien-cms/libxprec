@@ -24,10 +24,28 @@ inline bool xprec_is_valid(xprec_ddouble x)
     return x.hi + x.lo == x.hi || !isfinite(x.hi);
 }
 
+// Compensated addition collapses to simple addition if the optimizer is
+// permitted to break floating point rules and reassociate operations. This
+// is the INSANE default on Intel icx, and equally insanely, often recommended
+// as `-ffast-math` to coders as a make-my-program-faster hack.
+//
+// We set pragmas for GCC and MSVC here and for clang inside the function scope
+// to override it. For GCC, that change must be permanent, since push_options
+// stops GCC from inlining the corresponding functions.
+//
+#if defined(__GNUC__) && !defined(__clang__)
+#   pragma GCC optimize ("-fno-associative-math")
+#elif defined(_MSC_VER)
+#   pragma float_control(precise, on, push)
+#endif
+
 inline xprec_ddouble xprec_addfast_dd(double a, double b)
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
+    #if defined(__clang__)
+    #   pragma clang fp reassociate (off)
+    #endif
     double s = a + b;
     double z = s - a;
     double t = b - z;
@@ -38,6 +56,9 @@ inline xprec_ddouble xprec_addfast_dd(double a, double b)
 inline xprec_ddouble xprec_add_dd(double a, double b)
 {
     // Algorithm 2: cost 6 flops
+    #if defined(__clang__)
+    #   pragma clang fp reassociate (off)
+    #endif
     double s = a + b;
     double aprime = s - b;
     double bprime = s - aprime;
@@ -47,6 +68,11 @@ inline xprec_ddouble xprec_add_dd(double a, double b)
     xprec_ddouble r = {s, t};
     return r;
 }
+
+// Restore old FP settings
+#if defined(_MSC_VER)
+#   pragma float_control(pop)
+#endif
 
 inline xprec_ddouble xprec_mul_dd(double a, double b)
 {
