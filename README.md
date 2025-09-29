@@ -114,8 +114,8 @@ In order to use the library in CMake projects, we recommend using [FetchContent]
     include(FetchContent)
     FetchContent_Declare(XPrec
         GIT_REPOSITORY https://github.com/tuwien-cms/libxprec
-        GIT_TAG v0.7.0
-        FIND_PACKAGE_ARGS 0.7.0
+        GIT_TAG v0.8.0
+        FIND_PACKAGE_ARGS 0.8.0
         )
     FetchContent_MakeAvailable(XPrec)
 

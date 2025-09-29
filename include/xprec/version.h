@@ -5,5 +5,5 @@
  */
 #pragma once
 #define XPREC_VERSION_MAJOR 0
-#define XPREC_VERSION_MINOR 7
+#define XPREC_VERSION_MINOR 8
 #define XPREC_VERSION_PATCH 0
