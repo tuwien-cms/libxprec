@@ -40,21 +40,33 @@ extern inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a);
 extern inline xprec_ddouble xprec_max(xprec_ddouble a, xprec_ddouble b);
 extern inline xprec_ddouble xprec_min(xprec_ddouble a, xprec_ddouble b);
 
-extern inline _Bool xprec_equal(xprec_ddouble x, xprec_ddouble y);
-extern inline _Bool xprec_not_equal(xprec_ddouble x, xprec_ddouble y);
-extern inline _Bool xprec_greater(xprec_ddouble x, xprec_ddouble y);
-extern inline _Bool xprec_greater_equal(xprec_ddouble x, xprec_ddouble y);
-extern inline _Bool xprec_less(xprec_ddouble x, xprec_ddouble y);
-extern inline _Bool xprec_less_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_not_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_greater(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_greater_equal(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_less(xprec_ddouble x, xprec_ddouble y);
+extern inline bool xprec_less_equal(xprec_ddouble x, xprec_ddouble y);
 
-extern inline _Bool xprec_isfinite(xprec_ddouble x);
-extern inline _Bool xprec_isinf(xprec_ddouble x);
-extern inline _Bool xprec_isnan(xprec_ddouble x);
-extern inline _Bool xprec_isnormal(xprec_ddouble x);
-extern inline _Bool xprec_iszero(xprec_ddouble x);
+extern inline bool xprec_isfinite(xprec_ddouble x);
+extern inline bool xprec_isinf(xprec_ddouble x);
+extern inline bool xprec_isnan(xprec_ddouble x);
+extern inline bool xprec_isnormal(xprec_ddouble x);
+extern inline bool xprec_iszero(xprec_ddouble x);
 extern inline int xprec_classify(xprec_ddouble x);
 
 extern inline xprec_ddouble xprec_ceil(xprec_ddouble x);
 extern inline xprec_ddouble xprec_floor(xprec_ddouble x);
 extern inline xprec_ddouble xprec_trunc(xprec_ddouble x);
 extern inline xprec_ddouble xprec_round(xprec_ddouble x);
+
+extern inline void xprec_swap(xprec_ddouble *x, xprec_ddouble *y);
+extern inline int xprec_ilogb(xprec_ddouble x);
+extern inline bool xprec_signbit(xprec_ddouble a);
+
+extern inline xprec_ddouble xprec_abs(xprec_ddouble x);
+extern inline xprec_ddouble xprec_ldexp(xprec_ddouble a, int n);
+extern inline xprec_ddouble xprec_logb(xprec_ddouble x);
+extern inline xprec_ddouble xprec_scalbn(xprec_ddouble a, int n);
+extern inline xprec_ddouble xprec_copysign_qd(xprec_ddouble mag, double sgn);
+extern inline xprec_ddouble xprec_copysign_qq(xprec_ddouble mag, xprec_ddouble sgn);
+extern inline xprec_ddouble xprec_copysign_dq(double mag, xprec_ddouble sgn);

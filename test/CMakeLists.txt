@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(Catch2)
 
 # MPFR is required for tests
 find_package(MPFR REQUIRED)
-find_package(Eigen3 3.3)
+find_package(Eigen3)
 
 add_executable(tests
     arith.cpp

@@ -7,23 +7,3 @@
 #include "xprec/ddouble.hpp"
 
 using xprec::DDouble;
-
-#define UNARY_OP(cfunc, cxxop)                                          \
-    extern "C"                                                          \
-    xprec_ddouble cfunc(xprec_ddouble a)                                \
-    {                                                                   \
-        DDouble r = cxxop(DDouble(a.hi, a.lo));                         \
-        return {r.hi(), r.lo()};                                        \
-    }
-
-#define BINARY_OP(cfunc, cxxop)                                         \
-    extern "C"                                                          \
-    xprec_ddouble cfunc(xprec_ddouble a, xprec_ddouble b)               \
-    {                                                                   \
-        DDouble r = cxxop(DDouble(a.hi, a.lo), DDouble(b.hi, b.lo));    \
-        return {r.hi(), r.lo()};                                        \
-    }
-
-UNARY_OP(xprec_abs, abs)
-UNARY_OP(xprec_fabs, fabs)
-UNARY_OP(xprec_logb, logb)

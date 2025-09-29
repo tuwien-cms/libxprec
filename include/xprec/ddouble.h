@@ -72,8 +72,6 @@ inline bool xprec_isnormal(xprec_ddouble x);
 inline bool xprec_iszero(xprec_ddouble x);
 inline int xprec_classify(xprec_ddouble x);
 
-
-
 // Functions
 
 xprec_ddouble xprec_abs(xprec_ddouble a);
@@ -110,6 +108,7 @@ void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
 
 #include "internal/arith.h"
 #include "internal/checks.h"
+#include "internal/functions.h"
 #include "internal/round.h"
 
 #ifdef __cplusplus

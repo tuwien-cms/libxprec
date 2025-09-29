@@ -105,7 +105,10 @@ public:
     DDouble &operator*=(PowerOfTwo y);
     DDouble &operator/=(PowerOfTwo y);
 
-    friend void swap(DDouble &x, DDouble &y);
+    friend void swap(DDouble &x, DDouble &y)
+    {
+        return xprec_swap((xprec_ddouble *)&x, (xprec_ddouble *)&y);
+    }
 
     friend std::ostream &operator<<(std::ostream &out, DDouble x);
 
@@ -248,7 +251,7 @@ inline PowerOfTwo reciprocal(PowerOfTwo x) { return PowerOfTwo(1.0 / (double)x);
 // Type-generic code should use argument-dependent lookup (ADL), i.e., use
 // "using std::sin" and then call "sin".
 
-DDouble abs(DDouble a);
+inline DDouble abs(DDouble a) { return xprec_abs(a); }
 inline DDouble acos(DDouble a) { return xprec_acos(a); }
 inline DDouble acosh(DDouble a) { return xprec_acosh(a); }
 inline DDouble asin(DDouble a)  { return xprec_asin(a); }
@@ -256,35 +259,40 @@ inline DDouble asinh(DDouble a)  { return xprec_asinh(a); }
 inline DDouble atan(DDouble a)  { return xprec_atan(a); }
 inline DDouble atan2(DDouble a, DDouble b)  { return xprec_atan2(a, b); }
 inline DDouble atanh(DDouble a)  { return xprec_atanh(a); }
-DDouble ceil(DDouble a);
+inline DDouble ceil(DDouble a) { return xprec_ceil(a); }
+inline DDouble copysign(DDouble a, double b) { return xprec_copysign_qd(a, b); }
+inline DDouble copysign(DDouble a, DDouble b) { return xprec_copysign_qq(a, b); }
+inline DDouble copysign(double a, DDouble b) { return xprec_copysign_dq(a, b); }
 inline DDouble cos(DDouble a) { return xprec_cos(a); }
 inline DDouble cosh(DDouble a) { return xprec_cosh(a); }
 inline DDouble exp(DDouble a) { return xprec_exp(a); }
 inline DDouble expm1(DDouble a) { return xprec_expm1(a); }
-DDouble fabs(DDouble a);
+inline DDouble fabs(DDouble a) { return xprec_abs(a); }
 inline DDouble fmax(DDouble a, DDouble b) { return xprec_max(a, b); }
 inline DDouble fmin(DDouble a, DDouble b) { return xprec_min(a, b); }
-DDouble floor(DDouble a);
+inline DDouble floor(DDouble a) { return xprec_floor(a); }
 inline DDouble hypot(DDouble a, DDouble b) { return xprec_hypot(a, b); };
-DDouble ldexp(DDouble a, int m);
+inline DDouble ldexp(DDouble a, int m) { return xprec_ldexp(a, m); }
 inline DDouble log(DDouble a) { return xprec_log(a); }
 inline DDouble log1p(DDouble a) { return xprec_log1p(a); }
-DDouble logb(DDouble a);
+inline DDouble logb(DDouble a) { return xprec_logb(a); }
 inline DDouble modf(DDouble a, DDouble *b) { return xprec_modf(a, (xprec_ddouble*)b); }
 inline DDouble nextafter(DDouble a, DDouble b) { return xprec_nextafter(a, b); }
 inline DDouble pow(DDouble a, DDouble b) { return xprec_pow_qq(a, b); }
 inline DDouble pow(DDouble a, int b) { return xprec_pow_qi(a, b); }
-DDouble round(DDouble a);
-DDouble scalbn(DDouble a, int m);
+inline DDouble round(DDouble a) { return xprec_round(a); }
+inline DDouble scalbn(DDouble a, int m) { return xprec_scalbn(a, m); }
 inline DDouble sin(DDouble a) { return xprec_sin(a); }
 inline DDouble sinh(DDouble a) { return xprec_sinh(a); }
 inline DDouble sqrt(DDouble a) { return xprec_sqrt_q(a); }
 inline DDouble tan(DDouble a) { return xprec_tan(a); }
 inline DDouble tanh(DDouble a) { return xprec_tanh(a); }
+inline DDouble trunc(DDouble a) { return xprec_trunc(a); }
 
 inline int fpclassify(DDouble x) { return xprec_classify(x); }
-int ilogb(DDouble x);
+inline int ilogb(DDouble x) { return xprec_ilogb(x); }
 
+inline bool signbit(DDouble x) { return xprec_signbit(x); }
 inline bool isfinite(DDouble x) { return xprec_isfinite(x); }
 inline bool isinf(DDouble x) { return xprec_isinf(x); }
 inline bool isnan(DDouble x) { return xprec_isnan(x); }
@@ -377,5 +385,4 @@ public:
 
 } /* namespace std */
 
-#include "internal/functions.hpp"
 #include "internal/limits.hpp"
