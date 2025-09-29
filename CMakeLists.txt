@@ -31,7 +31,6 @@ project(
 
 add_library(xprec SHARED
     src/impl.c
-    src/cinterface.cpp
     src/circular.cpp
     src/exp.cpp
     src/floats.cpp
@@ -79,7 +78,7 @@ install(TARGETS xprec
     )
 install(DIRECTORY include/
     DESTINATION "${XPREC_INSTALL_INCLUDEDIR}"
-    PATTERN "ddouble-header-only.h" EXCLUDE
+    PATTERN "ddouble-header-only.hpp" EXCLUDE
     )
 
 if (XPREC_INSTALL_CMAKE_PACKAGE)

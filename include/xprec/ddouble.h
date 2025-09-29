@@ -7,9 +7,13 @@
 #include "version.h"
 
 #ifdef __cplusplus
+#include <cfloat>
+#include <cmath>
 extern "C" {
 #else
 #include <stdbool.h>
+#include <float.h>
+#include <math.h>
 #endif
 
 struct _xprec_ddouble {
