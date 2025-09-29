@@ -8,6 +8,8 @@
 
 #ifdef __cplusplus
 extern "C" {
+#else
+#include <stdbool.h>
 #endif
 
 struct _xprec_ddouble {

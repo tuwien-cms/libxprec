@@ -14,7 +14,6 @@
 #include <assert.h>
 #include <float.h>
 #include <math.h>
-#include <stdbool.h>
 
 inline bool xprec_equal(xprec_ddouble x, xprec_ddouble y)
 {
@@ -81,4 +80,3 @@ inline xprec_ddouble xprec_max(xprec_ddouble a, xprec_ddouble b)
 {
     return xprec_less_equal(a, b) || xprec_isnan(a) ? b : a;
 }
-
