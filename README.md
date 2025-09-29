@@ -1,5 +1,5 @@
-Small double-double library
-===========================
+libxprec - fast emulated quadruple (double-double) precision in C and C++
+=========================================================================
 
 Emulates quadruple precision with a pair of doubles.  This roughly doubles
 the mantissa bits (and thus squares the precision of double).  The range
@@ -38,7 +38,9 @@ roughly doubles the number of significant digits at the cost of a roughly
 
 Usage
 -----
-Simple example:
+libxprec can be used directly from C or C++.
+
+Simple example in C++:
 
     #include <iostream>
     #include <xprec/ddouble.hpp>
@@ -52,9 +54,23 @@ Simple example:
       std::cout << exp(x) << std::endl;      // higher-precision exp
     }
 
+Simple example in C:
+
+    #include <stdio.h>
+    #include <xprec/ddouble.h>
+
+    int main()
+    {
+      xprec_ddouble x = {1.0};
+      x = xprec_add_dq(4.0, x);
+      x = xprec_sub_qq(x, xprec_mul_dq(5.0, x));
+      printf("%.16g %.16g", x.hi, x.lo);
+    }
+
 Installation
 ------------
-libxprec has no mandatory dependencies other than a C++11-compliant compiler.
+libxprec has no mandatory build dependencies other than a C99- and
+C++11-compliant compiler.
 
     mkdir build
     cd build
@@ -68,13 +84,18 @@ Useful CMake flags:
  - `-DBUILD_TESTING=ON`: builds unit tests. You need to have the [GNU MPFR]
    library installed for this to work.
 
+ - `-DCMAKE_BUILD_TYPE=Release`: turns on optimizations. Use `RelWithDebInfo`
+   instead of `Release` to build with debug information enabled.
+
  - `-DCMAKE_CXX_FLAGS=-mfma`: the double-double arithmetic in libxprec is much
    faster when using the fused-multiply add (FMA) instruction, which should
    be available on most modern CPUs. We recommend adding this flag unless you
-   require portable binaries.
+   require portable binaries.  If you do not need a portable library, instead
+   use `-DCMAKE_CXX_FLAGS=-march=native` for even more optimizations.
 
  - `-DCMAKE_INSTALL_PREFIX=/path/to/usr`: sets the base directory below which
    to install include files and the shared object.
+
 
 #### Header-only mode ####
 libxprec can also be used in header-only mode, which does not require

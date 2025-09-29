@@ -21,7 +21,7 @@ endif()
 # Configure project
 project(
     XPrec
-    LANGUAGES CXX
+    LANGUAGES C CXX
     VERSION "${XPREC_VERSION}"
     DESCRIPTION "library for emulated extended-precision arithmetic"
     )
@@ -30,7 +30,7 @@ project(
 # Building
 
 add_library(xprec SHARED
-    src/cinterface.cpp
+    src/impl.c
     src/circular.cpp
     src/exp.cpp
     src/floats.cpp
@@ -78,7 +78,7 @@ install(TARGETS xprec
     )
 install(DIRECTORY include/
     DESTINATION "${XPREC_INSTALL_INCLUDEDIR}"
-    PATTERN "ddouble-header-only.h" EXCLUDE
+    PATTERN "ddouble-header-only.hpp" EXCLUDE
     )
 
 if (XPREC_INSTALL_CMAKE_PACKAGE)

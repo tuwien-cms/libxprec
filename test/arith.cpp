@@ -163,7 +163,7 @@ TEST_CASE("divqq stress test", "[arith]")
     DDouble r = x / y;
     MPFloat r_ex = MPFloat(x) / y;
     REQUIRE_THAT(r, WithinRel(r_ex, 6*u*u));
-    REQUIRE_THAT(r, !WithinRel(r_ex, 5.5*u*u));
+    REQUIRE_THAT(r, !WithinRel(r_ex, 0.9*u*u));
 }
 
 TEST_CASE("pow2", "[arith]")

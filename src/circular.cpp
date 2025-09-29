@@ -128,16 +128,20 @@ static DDouble sin_sector(DDouble x, int sector)
     }
 }
 
-XPREC_API_EXPORT
-DDouble sin(DDouble x)
+static inline DDouble _sin(DDouble x)
 {
     int sector;
     x = remainder_pi2(x, sector);
     return sin_sector(x, sector);
 }
 
-XPREC_API_EXPORT
-DDouble cos(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_sin(xprec_ddouble x)
+{
+    return _sin(x);
+}
+
+static inline DDouble _cos(DDouble x)
 {
     // For small values, we shall use the cosine directly
     using xprec::numbers::pi_4;
@@ -150,24 +154,33 @@ DDouble cos(DDouble x)
     return sin_sector(x, (sector + 1) % 4);
 }
 
-XPREC_API_EXPORT
-void sincos(DDouble x, DDouble &s, DDouble &c)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_cos(xprec_ddouble x)
+{
+    return _cos(x);
+}
+
+static void sincos(DDouble x, DDouble &s, DDouble &c)
 {
     // XXX This should be improved
     s = sin(x);
     c = cos(x);
 }
 
-XPREC_API_EXPORT
-DDouble tan(DDouble x)
+static inline DDouble _tan(DDouble x)
 {
     DDouble s, c;
     sincos(x, s, c);
     return s / c;
 }
 
-XPREC_API_EXPORT
-DDouble asin(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_tan(xprec_ddouble x)
+{
+    return _tan(x);
+}
+
+static inline DDouble _asin(DDouble x)
 {
     // Compute a approximation to double precision
     DDouble y0 = std::asin(x.hi());
@@ -191,8 +204,13 @@ DDouble asin(DDouble x)
     return y;
 }
 
-XPREC_API_EXPORT
-DDouble acos(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_asin(xprec_ddouble x)
+{
+    return _asin(x);
+}
+
+static inline DDouble _acos(DDouble x)
 {
     // Compute a approximation to double precision
     DDouble y0 = std::acos(x.hi());
@@ -218,8 +236,13 @@ DDouble acos(DDouble x)
     return y0;
 }
 
-XPREC_API_EXPORT
-DDouble atan(DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_acos(xprec_ddouble x)
+{
+    return _acos(x);
+}
+
+static inline DDouble _atan(DDouble x)
 {
     // For large values, use reflection formula
     if (std::fabs(x.hi()) > 1.0) {
@@ -243,8 +266,13 @@ DDouble atan(DDouble x)
     return y0;
 }
 
-XPREC_API_EXPORT
-DDouble atan2(DDouble y, DDouble x)
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_atan(xprec_ddouble x)
+{
+    return _atan(x);
+}
+
+static inline DDouble _atan2(DDouble y, DDouble x)
 {
     using xprec::numbers::pi;
     using xprec::numbers::pi_half;
@@ -261,6 +289,12 @@ DDouble atan2(DDouble y, DDouble x)
     if (x.hi() < 0)
         res = copysign(pi, y).add_small(res);
     return res;
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_atan2(xprec_ddouble x, xprec_ddouble y)
+{
+    return _atan2(x, y);
 }
 
 } // namespace xprec

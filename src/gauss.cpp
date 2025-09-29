@@ -14,8 +14,7 @@
 
 namespace xprec {
 
-XPREC_API_EXPORT
-void gauss_chebyshev(int n, DDouble x[], DDouble w[])
+static inline void _gauss_chebyshev(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
         return;
@@ -26,6 +25,12 @@ void gauss_chebyshev(int n, DDouble x[], DDouble w[])
         if (w != nullptr)
             w[i] = fact;
     }
+}
+
+extern "C" XPREC_API_EXPORT
+void xprec_gauss_chebyshev(int n, xprec_ddouble x[], xprec_ddouble w[])
+{
+    _gauss_chebyshev(n, (DDouble *)x, (DDouble *)w);
 }
 
 static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
@@ -51,14 +56,13 @@ static void leg_deriv(int N, DDouble x, DDouble &Pn, DDouble &dPn)
     }
 }
 
-XPREC_API_EXPORT
-void gauss_legendre(int n, DDouble x[], DDouble w[])
+static inline void _gauss_legendre(int n, DDouble x[], DDouble w[])
 {
     if (n < 1)
         return;
 
     // Initial guess for x: Gauss-Chebyshev nodes
-    gauss_chebyshev(n, x);
+    _gauss_chebyshev(n, x, nullptr);
 
     // Perform Newton iteration to refine x
     // store derivatives in w for later use
@@ -87,5 +91,12 @@ void gauss_legendre(int n, DDouble x[], DDouble w[])
         }
     }
 }
+
+extern "C" XPREC_API_EXPORT
+void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[])
+{
+    _gauss_legendre(n, (DDouble *)x, (DDouble *)w);
+}
+
 
 } /* namespace xprec */

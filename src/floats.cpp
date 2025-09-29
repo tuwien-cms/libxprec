@@ -14,8 +14,7 @@
 
 namespace xprec {
 
-XPREC_API_EXPORT
-DDouble nextafter(DDouble x, DDouble y)
+static inline DDouble _nextafter(DDouble x, DDouble y)
 {
     using dd_limits = std::numeric_limits<DDouble>;
 
@@ -54,6 +53,12 @@ DDouble nextafter(DDouble x, DDouble y)
     // Otherwise, simply return
     assert (z != x);
     return z;
+}
+
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_nextafter(xprec_ddouble x, xprec_ddouble y)
+{
+    return _nextafter(x, y);
 }
 
 }
