@@ -137,6 +137,7 @@ inline DDouble operator/(DDouble x, double y) { return xprec_div_qd(x, y); }
 inline DDouble operator/(DDouble x, DDouble y) { return xprec_div_qq(x, y); }
 
 inline DDouble reciprocal(DDouble y) { return xprec_reciprocal_q(y); }
+inline DDouble square(DDouble x) { return xprec_square(x); }
 
 inline bool operator==(DDouble x, DDouble y) { return xprec_equal(x, y); }
 inline bool operator!=(DDouble x, DDouble y) { return xprec_not_equal(x, y); }
@@ -198,6 +199,7 @@ inline DDouble operator/(ExDouble a, ExDouble b) { return xprec_div_dd((double)a
 
 inline DDouble reciprocal(ExDouble y) { return xprec_reciprocal_d((double)y); }
 inline DDouble sqrt(ExDouble y) { return xprec_sqrt_d((double)y); }
+inline DDouble square(ExDouble x) { return xprec_mul_dd((double)x, (double)x); }
 
 /**
  * Class for wrapping a power of two.

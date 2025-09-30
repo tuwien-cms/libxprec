@@ -321,3 +321,12 @@ inline xprec_ddouble xprec_invsqrt(xprec_ddouble x)
     double y_lo = fma(-delta_x / (2 * x.hi), y0.hi, y0.lo);
     return xprec_addfast_dd(y0.hi, y_lo);
 }
+
+inline xprec_ddouble xprec_square(xprec_ddouble x)
+{
+    // Simple squaring algorithm
+    // Cost 7 flops
+    xprec_ddouble y = xprec_mul_dd(x.hi, x.hi);
+    double y_lo = fma(2 * x.lo, x.hi, y.lo);
+    return xprec_addfast_dd(y.hi, y_lo);
+}

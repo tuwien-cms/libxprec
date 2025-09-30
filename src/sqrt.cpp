@@ -37,15 +37,15 @@ static inline DDouble _hypot(DDouble x, DDouble y)
         // For large values, scale down to avoid overflow
         x *= SMALL;
         y *= SMALL;
-        return sqrt((x * x).add_small(y * y)) * LARGE;
+        return sqrt(square(x).add_small(square(y))) * LARGE;
     } else if (greater_in_magnitude(SMALL, x)) {
         // For small values, scale up to avoid underflow
         x *= LARGE;
         y *= LARGE;
-        return sqrt((x * x).add_small(y * y)) * SMALL;
+        return sqrt(square(x).add_small(square(y))) * SMALL;
     } else {
         // We're fine
-        return sqrt((x * x).add_small(y * y));
+        return sqrt(square(x).add_small(square(y)));
     }
 }
 

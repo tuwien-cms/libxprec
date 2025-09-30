@@ -17,14 +17,14 @@ XPREC_API_EXPORT
 DDouble trig_complement(DDouble x)
 {
     if (std::fabs(x.hi()) > 0.9)
-        return sqrt(ExDouble(1.0).add_small(-x * x));
+        return sqrt(ExDouble(1.0).add_small(-square(x)));
 
     // Search for a zero of f(y) = y^2 + x^2 - 1
     ExDouble y0 = std::sqrt(std::fma(x.hi(), -x.hi(), 1));
 
     // Newton-Ralphson iteration
     //      y = y - f(y) / f'(y) = y - (y^2 + x^2 - 1) / 2 y
-    double dy = -0.5 * (y0 * y0 + x * x - 1.0).hi() / (double)y0;
+    double dy = -0.5 * (y0 * y0 + square(x) - 1.0).hi() / (double)y0;
     DDouble y = y0.add_small(dy);
     return y;
 }
@@ -36,7 +36,7 @@ static DDouble sin_kernel(DDouble x, int n = 13)
     assert(n >= 0 && n <= 13);
 
     // Taylor series of the sin around 0
-    DDouble xsq = -x * x;
+    DDouble xsq = -square(x);
     DDouble r = x;
     DDouble xpow = x;
     int i = 3;
@@ -65,7 +65,7 @@ static DDouble cos_kernel(DDouble x, int n = 13)
     assert(n >= 0 && n <= 13);
 
     // Taylor series of the cos around 0
-    DDouble xsq = -x * x;
+    DDouble xsq = -square(x);
     DDouble xpow = xsq;
     DDouble r = ExDouble(1.0).add_small(PowerOfTwo(0.5) * xpow);
     int i = 4;
@@ -261,7 +261,7 @@ static inline DDouble _atan(DDouble x)
 
     sincos(y0, s, c);
     x0 = s / c;
-    y0 += (x - x0) * c * c;
+    y0 += (x - x0) * square(c);
 
     return y0;
 }
