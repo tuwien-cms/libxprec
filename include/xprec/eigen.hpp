@@ -28,4 +28,12 @@ struct NumTraits<xprec::DDouble> : GenericNumTraits<xprec::DDouble>
     };
 };
 
+template <>
+bool JacobiRotation<xprec::DDouble>::makeJacobi(
+        const xprec::DDouble& x, const xprec::DDouble& y, const xprec::DDouble& z)
+{
+    // Optimized implementation for quad precision.
+    return xprec::jacobi2x2(x, y, z, m_c, m_s);
+}
+
 } /* namespace Eigen */

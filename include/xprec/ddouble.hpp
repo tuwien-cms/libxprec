@@ -330,6 +330,12 @@ inline DDouble invsqrt(DDouble x) { return xprec_invsqrt(x); };
 /** Trigonometric complement sqrt(1 - x*x) to full precision. */
 DDouble trig_complement(DDouble x);
 
+/** Compute Jacobi rotation for a 2 x 2 matrix [x y; y z] */
+inline bool jacobi2x2(DDouble x, DDouble y, DDouble z, DDouble &c, DDouble &s)
+{
+    return xprec_jacobi2x2(x, y, z, (xprec_ddouble *)&c, (xprec_ddouble *)&s);
+}
+
 } /* namespace xprec*/
 
 namespace std {

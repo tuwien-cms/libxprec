@@ -107,8 +107,15 @@ xprec_ddouble xprec_sinh(xprec_ddouble a);
 xprec_ddouble xprec_tan(xprec_ddouble a);
 xprec_ddouble xprec_tanh(xprec_ddouble a);
 
+// Utilities
+
 void xprec_gauss_chebyshev(int n, xprec_ddouble x[], xprec_ddouble w[]);
 void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
+
+// Linear algebra
+
+bool xprec_jacobi2x2(xprec_ddouble x, xprec_ddouble y, xprec_ddouble z,
+                     xprec_ddouble *c, xprec_ddouble *s);
 
 #include "internal/arith.h"
 #include "internal/checks.h"

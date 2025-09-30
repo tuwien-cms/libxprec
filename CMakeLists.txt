@@ -37,6 +37,7 @@ add_library(xprec SHARED
     src/gauss.cpp
     src/hyperbolic.cpp
     src/io.cpp
+    src/linalg.cpp
     src/sqrt.cpp
     )
 if(NOT MSVC)
