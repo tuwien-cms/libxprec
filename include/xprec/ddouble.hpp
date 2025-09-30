@@ -324,6 +324,9 @@ inline void gauss_legendre(int n, DDouble x[], DDouble w[] = nullptr)
     xprec_gauss_legendre(n, (xprec_ddouble *)x, (xprec_ddouble *)w);
 }
 
+/* Inverse square root 1/sqrt(x) */
+inline DDouble invsqrt(DDouble x) { return xprec_invsqrt(x); };
+
 /** Trigonometric complement sqrt(1 - x*x) to full precision. */
 DDouble trig_complement(DDouble x);
 

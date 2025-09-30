@@ -10,6 +10,8 @@
 
 using xprec::DDouble;
 
+MPFloat invsqrt(MPFloat x) { return 1/sqrt(x); }
+
 TEST_CASE("hypot", "[fn]")
 {
     const double ulp = 2.4651903288156619e-32;
@@ -48,5 +50,27 @@ TEST_CASE("sqrt", "[fn]")
     x = 1.0;
     while ((x /= 0.992) <= 1e290) {
         CMP_UNARY(sqrt, x, 2 * ulp);
+    }
+}
+
+TEST_CASE("inv sqrt", "[fn]")
+{
+    const double ulp = 2.4651903288156619e-32;
+    REQUIRE(isnan(invsqrt(DDouble(-1.0))));
+    REQUIRE(isinf(invsqrt(DDouble(0.0))));
+    REQUIRE(iszero(invsqrt(DDouble(INFINITY))));
+
+    CMP_UNARY(invsqrt, 1.0, 3.0 * ulp);
+    CMP_UNARY(invsqrt, 0.25, 3.0 * ulp);
+    CMP_UNARY(invsqrt, 4.0, 3.0 * ulp);
+
+    DDouble x = 1.0;
+    while ((x *= 0.9935) > 1e-290) {
+        CMP_UNARY(invsqrt, x, 3 * ulp);
+    }
+
+    x = 1.0;
+    while ((x /= 0.9938) <= 1e290) {
+        CMP_UNARY(invsqrt, x, 3 * ulp);
     }
 }
