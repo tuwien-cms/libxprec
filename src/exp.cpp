@@ -20,7 +20,7 @@ namespace xprec {
 inline DDouble expm1_kernel_taylor(DDouble x, int nquad, int n)
 {
     assert(std::fabs(x.hi()) < 1.0);
-    DDouble xpow = x * x;
+    DDouble xpow = square(x);
     DDouble r = x.add_small(PowerOfTwo(0.5) * xpow);
     int k = 3;
     for (; k <= nquad; ++k) {

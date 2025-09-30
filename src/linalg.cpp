@@ -21,10 +21,10 @@ static bool _jacobi2x2(DDouble x, DDouble y, DDouble z, DDouble *c, DDouble *s)
     }
 
     DDouble tau = (x - z) / deno;
-    DDouble w = sqrt(tau * tau + 1.0);
+    DDouble w = sqrt(square(tau) + 1.0);
     DDouble ww = copysign(w, tau);
     DDouble t = reciprocal(ww.add_small(tau));
-    DDouble n = invsqrt(t * t + 1.0);
+    DDouble n = invsqrt(square(t) + 1.0);
 
     *s = (y / abs(y)) * abs(t) * n;
     if (t.hi() > 0)

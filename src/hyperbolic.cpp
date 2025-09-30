@@ -43,7 +43,7 @@ static DDouble sinh_kernel(DDouble x)
     assert(_internal::greater_in_magnitude(0.155, x.hi()));
 
     // Taylor series of the sinh around 0
-    DDouble xsq = x * x;
+    DDouble xsq = square(x);
     DDouble r = x;
     DDouble xpow = x;
     for (int i = 3; i <= 17; i += 2) {
@@ -91,7 +91,7 @@ static DDouble tanh_kernel(DDouble x)
 
     // Continued fraction expansion of the tanh
     // Abramowitz and Stegun 4.5.70
-    DDouble xsq = x * x;
+    DDouble xsq = square(x);
     DDouble r;
     r = xsq / 19.0;
     r = xsq / (r + 17.0);
@@ -145,7 +145,7 @@ static inline DDouble _acosh(DDouble x)
     // can do nothing against the precision limit in x + ...
     DDouble arg = x;
     if (arg.hi() <= 1e16)
-        arg = arg.add_small(sqrt(arg * arg - 1.0));
+        arg = arg.add_small(sqrt(square(arg) - 1.0));
     else
         arg = PowerOfTwo(2.0) * arg;
 
@@ -179,7 +179,7 @@ static inline DDouble _asinh(DDouble x)
     // cannot overflow.
     DDouble arg = fabs(x);
     if (arg.hi() <= 1e16)
-        arg = sqrt(arg * arg + 1.0).add_small(arg);
+        arg = sqrt(square(arg) + 1.0).add_small(arg);
     else
         // XXX for very large values this may still overflow.
         arg = PowerOfTwo(2.0) * arg;
