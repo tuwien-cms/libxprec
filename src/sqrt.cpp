@@ -55,6 +55,36 @@ xprec_ddouble xprec_hypot(xprec_ddouble x, xprec_ddouble y)
     return _hypot(x, y);
 }
 
+extern "C" XPREC_API_EXPORT
+xprec_ddouble xprec_invsqrt(xprec_ddouble x)
+{
+    // Use strategy similar to Karp to compute 1/sqrt(x)
+    // cost 12 flops (3 of which divisions), observed error 3 u^2
+
+    // First, give an approximation to sqrt(x)
+    double sqrt_x0 = std::sqrt(x.hi);
+    if (x.hi <= 0 || !isfinite(x.hi)) {
+        xprec_ddouble r = {1/sqrt_x0, 0};
+        return r;
+    }
+
+    // The correction term is then given by the lo part and the difference
+    // to the exact sqrt
+    double delta_x = fma(-sqrt_x0, sqrt_x0, x.hi) + x.lo;
+
+    // Compute 1/sqrt_x0 to quad precision
+    xprec_ddouble y0 = xprec_reciprocal_d(sqrt_x0);
+
+    // Correct using first-order expansion
+    //
+    //  1/sqrt(x0 + delta_x) = 1/sqrt(x0) - delta_x / (2 * sqrt(x0)**3) + ...
+    //
+    // The correction term can be computed in double precision, but it is
+    // important to use fma, as sqrt(x0)**3 may overflow.
+    double y_lo = fma(-delta_x / (2 * x.hi), y0.hi, y0.lo);
+    return xprec_addfast_dd(y0.hi, y_lo);
+}
+
 static inline DDouble _modf(DDouble x, DDouble &i)
 {
     i = trunc(x);

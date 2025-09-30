@@ -57,6 +57,8 @@ inline xprec_ddouble xprec_reciprocal_q(xprec_ddouble a);
 inline xprec_ddouble xprec_sqrt_d(double a);
 inline xprec_ddouble xprec_sqrt_q(xprec_ddouble a);
 
+inline xprec_ddouble xprec_square(xprec_ddouble x);
+
 // Checks and relations
 
 inline xprec_ddouble xprec_max(xprec_ddouble a, xprec_ddouble b);
@@ -108,6 +110,8 @@ xprec_ddouble xprec_tan(xprec_ddouble a);
 xprec_ddouble xprec_tanh(xprec_ddouble a);
 
 // Utilities
+
+xprec_ddouble xprec_invsqrt(xprec_ddouble x);
 
 void xprec_gauss_chebyshev(int n, xprec_ddouble x[], xprec_ddouble w[]);
 void xprec_gauss_legendre(int n, xprec_ddouble x[], xprec_ddouble w[]);
