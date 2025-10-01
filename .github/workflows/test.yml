@@ -12,6 +12,14 @@ jobs:
       matrix:
         include:
           - os: ubuntu-24.04
+            compiler:
+            cc: gcc
+            cxx: g++
+
+          - os: ubuntu-24.04
+            compiler: clang
+            cc: clang
+            cxx: clang++
 
     name: |
       ${{ matrix.os }}
@@ -24,13 +32,15 @@ jobs:
 
       - name: Install APT dependencies
         run: |
-          sudo apt-get install libmpfr-dev libeigen3-dev catch2
+          sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.compiler }}
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v2.0.0
         with:
           options: |
             XPREC_BUILD_TESTING=ON
+            CMAKE_C_COMPILER='${{ matrix.cc }}'
+            CMAKE_CXX_COMPILER='${{ matrix.cxx }}'
           run-build: true
 
       - name: Run tests
