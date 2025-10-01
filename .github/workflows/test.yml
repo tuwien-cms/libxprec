@@ -22,7 +22,7 @@ jobs:
             cxx: clang++
 
           - os: ubuntu-24.04
-            packages: intel-oneapi-compiler-dpcpp-cp
+            packages: intel-oneapi-compiler-dpcpp-cpp
             cc: icx
             cxx: icpx
 
