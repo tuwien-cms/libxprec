@@ -12,27 +12,39 @@ jobs:
       matrix:
         include:
           - os: ubuntu-24.04
-            compiler:
+            packages:
             cc: gcc
             cxx: g++
 
           - os: ubuntu-24.04
-            compiler: clang
+            packages: clang
             cc: clang
             cxx: clang++
 
+          - os: ubuntu-24.04
+            packages: intel-oneapi-compiler-dpcpp-cp
+            cc: icx
+            cxx: icpx
+
     name: |
-      ${{ matrix.os }}
+      ${{ matrix.os }} ${{ matrix.cc }}
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Check out project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - uses: gerlero/add-apt-repository@v1
+        if: startsWith(matrix.packages, 'intel')
+        with:
+          uri: https://apt.repos.intel.com/oneapi all main
+          key: https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          suite: all
 
       - name: Install APT dependencies
         run: |
-          sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.compiler }}
+          sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v2.0.0
@@ -63,7 +75,7 @@ jobs:
 
     steps:
       - name: Check out project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install dependencies with brew
         run: |
@@ -96,7 +108,7 @@ jobs:
 
     steps:
       - name: Check out project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v2.0.0
