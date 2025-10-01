@@ -55,8 +55,8 @@ jobs:
           ${{ matrix.cc == 'icx' }} && \
             source /opt/intel/oneapi/setvars.sh
           cmake -B build \
-            -DXPREC_BUILD_TESTING=ON
-            -DCMAKE_C_COMPILER='${{ matrix.cc }}'
+            -DXPREC_BUILD_TESTING=ON \
+            -DCMAKE_C_COMPILER='${{ matrix.cc }}' \
             -DCMAKE_CXX_COMPILER='${{ matrix.cxx }}'
           cmake --build build
 
