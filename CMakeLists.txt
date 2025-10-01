@@ -43,6 +43,10 @@ add_library(xprec SHARED
 if(NOT MSVC)
     target_compile_options(xprec PRIVATE -Wall -Wextra -pedantic)
 endif()
+# Intel compilers require strict floating point mode for extended precision
+if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    target_compile_options(xprec PRIVATE -fp-model=strict)
+endif()
 target_include_directories(xprec PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
