@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v5
 
       - uses: gerlero/add-apt-repository@v1
-        if: ${{ matrix.repo && true }}
+        if: ${{ matrix.repo }}
         with:
           uri: ${{ matrix.repo }}
           key: ${{ matrix.repokey }}
@@ -46,7 +46,7 @@ jobs:
       - uses: gerlero/apt-install@v1
         with:
           packages: curlibmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
-          update: ${{ matrix.repo && true }}
+          update: ${{ matrix.repo != '' }}
 
       - name: CMake configure and build
         uses: threeal/cmake-action@v2.0.0
