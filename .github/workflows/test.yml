@@ -12,7 +12,6 @@ jobs:
       matrix:
         include:
           - os: ubuntu-24.04
-            packages:
             cc: gcc
             cxx: g++
 
@@ -22,6 +21,8 @@ jobs:
             cxx: clang++
 
           - os: ubuntu-24.04
+            repo: https://apt.repos.intel.com/oneapi
+            repokey: https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
             packages: intel-oneapi-compiler-dpcpp-cpp
             cc: icx
             cxx: icpx
@@ -35,29 +36,34 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v5
 
-      - uses: gerlero/add-apt-repository@v1
-        if: startsWith(matrix.packages, 'intel')
+      - name: Add APT repository
+        uses: gerlero/add-apt-repository@v1
+        if: ${{ matrix.repo }}
         with:
-          uri: https://apt.repos.intel.com/oneapi
-          key: https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          uri: ${{ matrix.repo }}
+          key: ${{ matrix.repokey }}
           suite: all
 
-      - name: Install APT dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
-
-      - name: CMake configure and build
-        uses: threeal/cmake-action@v2.0.0
+      - name: Install APT packages
+        uses: gerlero/apt-install@v1
         with:
-          options: |
-            XPREC_BUILD_TESTING=ON
-            CMAKE_C_COMPILER='${{ matrix.cc }}'
-            CMAKE_CXX_COMPILER='${{ matrix.cxx }}'
-          run-build: true
+          packages: libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
+          update: ${{ matrix.repo != '' }}
+
+      - name: CMake configure
+        run: |
+          ${{ matrix.cc == 'icx' }} && \
+            source /opt/intel/oneapi/setvars.sh
+          cmake -B build \
+            -DXPREC_BUILD_TESTING=ON \
+            -DCMAKE_C_COMPILER='${{ matrix.cc }}' \
+            -DCMAKE_CXX_COMPILER='${{ matrix.cxx }}'
+          cmake --build build
 
       - name: Run tests
         run: |
+          ${{ matrix.cc == 'icx' }} && \
+            source /opt/intel/oneapi/setvars.sh
           build/test/tests
 
   # Job for MacOS
