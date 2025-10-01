@@ -48,13 +48,12 @@ jobs:
           sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
 
       - name: CMake configure and build
-        uses: threeal/cmake-action@v2.0.0
-        with:
-          options: |
-            XPREC_BUILD_TESTING=ON
-            CMAKE_C_COMPILER='${{ matrix.cc }}'
-            CMAKE_CXX_COMPILER='${{ matrix.cxx }}'
-          run-build: true
+        run: |
+          if [ -f /opt/intel/oneapi/setvars.sh ]; then
+            source /opt/intel/oneapi/setvars.sh
+          fi
+          cmake -S . -B build -DXPREC_BUILD_TESTING=ON -DCMAKE_C_COMPILER=${{ matrix.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          cmake --build build
 
       - name: Run tests
         run: |
