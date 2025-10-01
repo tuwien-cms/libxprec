@@ -32,19 +32,19 @@ inline bool xprec_is_valid(xprec_ddouble x)
 // to override it. For GCC, that change must be permanent, since push_options
 // stops GCC from inlining the corresponding functions.
 //
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
+#if defined(_MSC_VER)
+#   pragma float_control(precise, on, push)
+#elif defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+    // do nothing
+#elif defined(__GNUC__)
 #   pragma GCC optimize ("-fno-associative-math")
-#elif defined(_MSC_VER)
-#   pragma float_control(precise, on, push)
-#elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
-#   pragma float_control(precise, on, push)
 #endif
 
 inline xprec_ddouble xprec_addfast_dd(double a, double b)
 {
     // M. Joldes, et al., ACM Trans. Math. Softw. 44, 1-27 (2018)
     // Algorithm 1: cost 3 flops
-    #if defined(__clang__) && !defined(__INTEL_LLVM_COMPILER)
+    #if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
     #   pragma clang fp reassociate (off)
     #endif
     double s = a + b;
@@ -57,7 +57,7 @@ inline xprec_ddouble xprec_addfast_dd(double a, double b)
 inline xprec_ddouble xprec_add_dd(double a, double b)
 {
     // Algorithm 2: cost 6 flops
-    #if defined(__clang__) && !defined(__INTEL_LLVM_COMPILER)
+    #if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
     #   pragma clang fp reassociate (off)
     #endif
     double s = a + b;
@@ -71,7 +71,7 @@ inline xprec_ddouble xprec_add_dd(double a, double b)
 }
 
 // Restore old FP settings
-#if defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#if defined(_MSC_VER)
 #   pragma float_control(pop)
 #endif
 

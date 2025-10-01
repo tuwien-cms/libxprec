@@ -37,10 +37,6 @@ target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(tests PRIVATE MPFR::MPFR)
 target_link_libraries(tests PRIVATE XPrec::xprec)
 target_compile_options(tests PRIVATE -Wall -Wextra)
-# Intel compilers require strict floating point mode for extended precision
-if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    target_compile_options(tests PRIVATE -fp-model=strict)
-endif()
 
 if (TARGET Eigen3::Eigen)
     target_sources(tests PRIVATE eigen.cpp)
