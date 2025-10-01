@@ -47,9 +47,9 @@ endif()
 # Intel, INSANELY, by default enables unsafe and breaking
 # math optimziations. We have to disable them here.
 # XXX pragmas seem to fail ...
-if (CMAKE_C_COMPILER_ID STREQUAL IntelLLVM)
-    target_compile_options(xprec PUBLIC -fp-model=precise)
-endif()
+#if (CMAKE_C_COMPILER_ID STREQUAL IntelLLVM)
+#    target_compile_options(xprec PUBLIC -fp-model=precise)
+#endif()
 
 target_include_directories(xprec PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
