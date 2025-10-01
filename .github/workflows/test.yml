@@ -57,6 +57,9 @@ jobs:
 
       - name: Run tests
         run: |
+          if [ -f /opt/intel/oneapi/setvars.sh ]; then
+            source /opt/intel/oneapi/setvars.sh
+          fi
           build/test/tests
 
   # Job for MacOS
