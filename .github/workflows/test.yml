@@ -38,12 +38,13 @@ jobs:
       - uses: gerlero/add-apt-repository@v1
         if: startsWith(matrix.packages, 'intel')
         with:
-          uri: https://apt.repos.intel.com/oneapi all main
+          uri: https://apt.repos.intel.com/oneapi
           key: https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           suite: all
 
       - name: Install APT dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
 
       - name: CMake configure and build
