@@ -1,24 +1,20 @@
-name: Build/test suite
+name: Unit test suite
 
 on:
-  push:
-    branches:
-      mainline
-  pull_request:
-    branches:
-      mainline
+  push
 
 jobs:
-  build:
+  # Job for Debian Linux
+  # ====================
+
+  debian:
     strategy:
       matrix:
         include:
           - os: ubuntu-24.04
-          - os: macos-latest
-          - os: windows-latest
 
     name: |
-      test ${{ matrix.os }}
+      ${{ matrix.os }}
 
     runs-on: ${{ matrix.os }}
 
@@ -26,13 +22,40 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v4
 
-      - name: Install Linux dependencies
-        if: startsWith(matrix.os, 'ubuntu')
+      - name: Install APT dependencies
         run: |
           sudo apt-get install libmpfr-dev libeigen3-dev catch2
 
-      - name: Install MacOS dependencies
-        if: startsWith(matrix.os, 'macos')
+      - name: CMake configure and build
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          options: |
+            XPREC_BUILD_TESTING=ON
+          run-build: true
+
+      - name: Run tests
+        run: |
+          build/test/tests
+
+  # Job for MacOS
+  # =============
+
+  macos:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+
+    name: |
+      ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Install dependencies with brew
         run: |
           brew install mpfr catch2 eigen
 
@@ -40,10 +63,34 @@ jobs:
         uses: threeal/cmake-action@v2.0.0
         with:
           options: |
-            XPREC_BUILD_TESTING=${{ startsWith(matrix.os, 'windows') && 'OFF' || 'ON' }}
+            XPREC_BUILD_TESTING=ON
           run-build: true
 
       - name: Run tests
-        if: (!startsWith(matrix.os, 'windows'))
         run: |
           build/test/tests
+
+  # Job for Windows
+  # ===============
+
+  windows:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+
+    name: |
+      ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: CMake configure and build
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          options: |
+            XPREC_BUILD_TESTING=OFF
+          run-build: true
