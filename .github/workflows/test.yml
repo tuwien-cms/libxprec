@@ -45,7 +45,7 @@ jobs:
 
       - uses: gerlero/apt-install@v1
         with:
-          packages: curlibmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
+          packages: libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
           update: ${{ matrix.repo != '' }}
 
       - name: CMake configure and build
