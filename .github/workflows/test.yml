@@ -36,29 +36,34 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v5
 
-      - uses: gerlero/add-apt-repository@v1
+      - name: Add APT repository
+        uses: gerlero/add-apt-repository@v1
         if: ${{ matrix.repo }}
         with:
           uri: ${{ matrix.repo }}
           key: ${{ matrix.repokey }}
           suite: all
 
-      - uses: gerlero/apt-install@v1
+      - name: Install APT packages
+        uses: gerlero/apt-install@v1
         with:
           packages: libmpfr-dev libeigen3-dev catch2 ${{ matrix.packages }}
           update: ${{ matrix.repo != '' }}
 
-      - name: CMake configure and build
-        uses: threeal/cmake-action@v2.0.0
-        with:
-          options: |
-            XPREC_BUILD_TESTING=ON
-            CMAKE_C_COMPILER='${{ matrix.cc }}'
-            CMAKE_CXX_COMPILER='${{ matrix.cxx }}'
-          run-build: true
+      - name: CMake configure
+        run: |
+          ${{ matrix.cc == 'icx' }} && \
+            source /opt/intel/oneapi/setvars.sh
+          cmake -B build \
+            -DXPREC_BUILD_TESTING=ON
+            -DCMAKE_C_COMPILER='${{ matrix.cc }}'
+            -DCMAKE_CXX_COMPILER='${{ matrix.cxx }}'
+          cmake --build build
 
       - name: Run tests
         run: |
+          ${{ matrix.cc == 'icx' }} && \
+            source /opt/intel/oneapi/setvars.sh
           build/test/tests
 
   # Job for MacOS
